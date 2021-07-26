@@ -10,6 +10,7 @@ const rl = readline.createInterface({
 });
 
 var UniqueRecs = [];
+var CountRecs = [];
 
 rl.on('line', (string) => {
 	// First test - remove header records by testing for #)
@@ -24,12 +25,14 @@ rl.on('line', (string) => {
 		nextpos = IPAdd.length + 46;
     	CurrentLine = (IPAdd + ' ' + string.substring(nextpos));
 		if (UniqueRecs.includes(CurrentLine)) {
-
+			CountRecs[UniqueRecs.indexOf(CurrentLine)] = CountRecs[UniqueRecs.indexOf(CurrentLine)] + 1;
 		} else {
 			UniqueRecs.push(CurrentLine);
+			CountRecs.push(1);
 		}
 	}
 })
 .on('close', function() {
 	console.log(UniqueRecs);
+	console.log(CountRecs);
 });
