@@ -27,7 +27,7 @@ rl.on('line', (string) => {
     	CurrentLine = (IPAdd + ' ' + string.substring(nextpos));
 		if (UniqueRecs.includes(CurrentLine)) {
 			CountRecs[UniqueRecs.indexOf(CurrentLine)] = CountRecs[UniqueRecs.indexOf(CurrentLine)] + 1;
-		} else {
+		} else if (CurrentLine != ' ') {
 			UniqueRecs.push(CurrentLine);
 			CountRecs.push(1);
 		}
@@ -46,8 +46,9 @@ rl.on('line', (string) => {
 	// Loop array of unique records
 	var counter = 0;
 	UniqueRecs.forEach(function(element){
-	worksheet.addRow({IPADD: element.substring(0,element.indexOf(' ')), RECORD: element.substring(element.indexOf(' ')), COUNT: CountRecs[counter]});
-	counter++;
+			worksheet.addRow({IPADD: element.substring(0,element.indexOf(' ')), 
+			RECORD: element.substring(element.indexOf(' ')), COUNT: CountRecs[counter]});
+		counter++;
 	})
 	workbook.xlsx.writeFile("output.xlsx");
 });
