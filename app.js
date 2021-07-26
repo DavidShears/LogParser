@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const readline = require('readline');
+var Excel = require('exceljs');
 
 const rl = readline.createInterface({
     input: fs.createReadStream('error.php'),
@@ -33,6 +34,19 @@ rl.on('line', (string) => {
 	}
 })
 .on('close', function() {
-	console.log(UniqueRecs);
-	console.log(CountRecs);
+	// Set up workbook and worksheet
+	var workbook = new Excel.Workbook();
+	var worksheet = workbook.addWorksheet("Error Logging");
+	worksheet.columns = [
+		{ header: "Record", key:"RECORD"},
+		{ header: "Times Found", key:"COUNT"}
+	];
+	worksheet.getRow(1).font = { name: "Calibri", size: 11, bold: true};
+	// Loop array of unique records
+	var counter = 0;
+	UniqueRecs.forEach(function(element){
+	worksheet.addRow({RECORD: element, COUNT: CountRecs[counter]});
+	counter++;
+	})
+	workbook.xlsx.writeFile("output.xlsx");
 });
