@@ -12,6 +12,8 @@ const rl = readline.createInterface({
 
 var UniqueRecs = [];
 var CountRecs = [];
+var FirstDate = [];
+var LastDate = [];
 
 rl.on('line', (string) => {
 	// First test - remove header records by testing for #)
@@ -27,9 +29,12 @@ rl.on('line', (string) => {
     	CurrentLine = (IPAdd + ' ' + string.substring(nextpos));
 		if (UniqueRecs.includes(CurrentLine)) {
 			CountRecs[UniqueRecs.indexOf(CurrentLine)] = CountRecs[UniqueRecs.indexOf(CurrentLine)] + 1;
+			LastDate[UniqueRecs.indexOf(CurrentLine)] = date + ' ' + time;
 		} else if (CurrentLine != ' ') {
 			UniqueRecs.push(CurrentLine);
 			CountRecs.push(1);
+			FirstDate.push(date + ' ' + time);
+			LastDate.push(date + ' ' + time);
 		}
 	}
 })
@@ -40,14 +45,17 @@ rl.on('line', (string) => {
 	worksheet.columns = [
 		{ header: "IP Address", key:"IPADD"},
 		{ header: "Record", key:"RECORD"},
-		{ header: "Times Found", key:"COUNT"}
+		{ header: "Times Found", key:"COUNT"},
+		{ header: "First Found", key:"FIRST"},
+		{ header: "Last Found", key:"LAST"}
 	];
 	worksheet.getRow(1).font = { name: "Calibri", size: 11, bold: true};
 	// Loop array of unique records
 	var counter = 0;
 	UniqueRecs.forEach(function(element){
 			worksheet.addRow({IPADD: element.substring(0,element.indexOf(' ')), 
-			RECORD: element.substring(element.indexOf(' ')), COUNT: CountRecs[counter]});
+			RECORD: element.substring(element.indexOf(' ')), COUNT: CountRecs[counter], 
+			FIRST: FirstDate[counter], LAST: LastDate[counter]});
 		counter++;
 	})
 	workbook.xlsx.writeFile("output.xlsx");
