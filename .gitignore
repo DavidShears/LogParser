@@ -75,5 +75,6 @@ typings/
 # FuseBox cache
 .fusebox/
 
-# Actual logfile
+# Actual logfile and output
 error.php
+output.xlsx
