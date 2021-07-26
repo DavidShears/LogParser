@@ -1,0 +1,22 @@
+{
+  "name": "logparser",
+  "version": "1.0.0",
+  "description": "Parse Joomla error log",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DavidShears/LogParser.git"
+  },
+  "author": "David Shears",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DavidShears/LogParser/issues"
+  },
+  "homepage": "https://github.com/DavidShears/LogParser#readme",
+  "dependencies": {
+    "exceljs": "^4.2.1"
+  }
+}
