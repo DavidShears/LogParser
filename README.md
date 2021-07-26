@@ -3,5 +3,5 @@ Parsing error.php from Joomla - Read all records and output an array of unique c
 
 ## To-do:
 1. ~~Combine both sets in the output to give record & count side-by-side~~ Handled by ExcelJS (although could be neater inline processing.)
-2. Currently capturing date & time, add "last date/time" to the output.
+2. ~~Currently capturing date & time, add "last date/time" to the output.~~ Extra logic added for first & last date found
 3. ~~Output somewhere other than console (either CSV file or email.)~~ Handled by ExcelJS
