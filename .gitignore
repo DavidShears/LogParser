@@ -78,3 +78,4 @@ typings/
 # Actual logfile and output
 error.php
 output.xlsx
+~$output.xlsx
