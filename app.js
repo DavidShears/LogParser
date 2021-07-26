@@ -38,6 +38,7 @@ rl.on('line', (string) => {
 	var workbook = new Excel.Workbook();
 	var worksheet = workbook.addWorksheet("Error Logging");
 	worksheet.columns = [
+		{ header: "IP Address", key:"IPADD"},
 		{ header: "Record", key:"RECORD"},
 		{ header: "Times Found", key:"COUNT"}
 	];
@@ -45,7 +46,7 @@ rl.on('line', (string) => {
 	// Loop array of unique records
 	var counter = 0;
 	UniqueRecs.forEach(function(element){
-	worksheet.addRow({RECORD: element, COUNT: CountRecs[counter]});
+	worksheet.addRow({IPADD: element.substring(0,element.indexOf(' ')), RECORD: element.substring(element.indexOf(' ')), COUNT: CountRecs[counter]});
 	counter++;
 	})
 	workbook.xlsx.writeFile("output.xlsx");
