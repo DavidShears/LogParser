@@ -41,14 +41,18 @@ rl.on('line', (string) => {
 		var time = string.substring(11,19);
 		// Extract IP address
 		if (logtype == 'IIS') {
-			// Position varies by 1 digit depending on GET/POST request
-			if (string.indexOf('GET') !== -1) {
-				var urlreq = string.substring(string.indexOf('GET') + 4,string.indexOf(' ',string.indexOf('GET') + 4));
-			} else if (string.indexOf('POST') !== -1) {
-				var urlreq = string.substring(string.indexOf('POST') + 5,string.indexOf(' ',string.indexOf('POST') + 5));
-			} else if (string.indexOf('HEAD') !== -1) {
-				var urlreq = string.substring(string.indexOf('HEAD') + 5,string.indexOf(' ',string.indexOf('HEAD') + 5));
+			// Start of URL will be first instance of a forward slash
+			// End of URL will be before the port number, normally 443/80
+			// If URL is under a certain length then IIS appears to add a - before the port
+			// So test for both scenarios
+			var urlend = string.indexOf(' 443 ');
+			if (urlend == -1) {
+				var urlend = string.indexOf(' 80 ');
 			}
+			if (string.lastIndexOf(' - ',urlend) !== -1) {
+				var urlend = string.indexOf(' - ');
+			}
+			var urlreq = string.substring(string.indexOf('/'),urlend);
 			// Figure out where IP address is
 			var IPStart = string.indexOf(' HTTP');
 			var IPStart = string.lastIndexOf(' ',IPStart - 1);
