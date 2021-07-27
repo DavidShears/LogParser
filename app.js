@@ -8,8 +8,6 @@ var Excel = require('exceljs');
 // Add option to specify log type - if anything other than IIS assume original Joomla logic
 var logtype = process.argv.slice(2);
 
-console.log(logtype);
-
 if (logtype == 'IIS') {
 		var rl = readline.createInterface({
 			input: fs.createReadStream('IIS.log'),
@@ -48,6 +46,8 @@ rl.on('line', (string) => {
 				var urlreq = string.substring(string.indexOf('GET') + 4,string.indexOf(' ',string.indexOf('GET') + 4));
 			} else if (string.indexOf('POST') !== -1) {
 				var urlreq = string.substring(string.indexOf('POST') + 5,string.indexOf(' ',string.indexOf('POST') + 5));
+			} else if (string.indexOf('HEAD') !== -1) {
+				var urlreq = string.substring(string.indexOf('HEAD') + 5,string.indexOf(' ',string.indexOf('HEAD') + 5));
 			}
 			// Figure out where IP address is
 			var IPStart = string.indexOf(' HTTP');
