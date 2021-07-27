@@ -44,10 +44,10 @@ rl.on('line', (string) => {
 		// Extract IP address
 		if (logtype == 'IIS') {
 			// Position varies by 1 digit depending on GET/POST request
-			if (string.indexOf('GET') !== 0) {
-				var urlreq = string.substring(53,string.indexOf(' ',53));
-			} else if (string.indexOf('POST') !== 0) {
-				var urlreq = string.substring(54,string.indexOf(' ',54));
+			if (string.indexOf('GET') !== -1) {
+				var urlreq = string.substring(string.indexOf('GET') + 4,string.indexOf(' ',string.indexOf('GET') + 4));
+			} else if (string.indexOf('POST') !== -1) {
+				var urlreq = string.substring(string.indexOf('POST') + 5,string.indexOf(' ',string.indexOf('POST') + 5));
 			}
 			// Figure out where IP address is
 			var IPStart = string.indexOf(' HTTP');
