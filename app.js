@@ -46,11 +46,14 @@ rl.on('line', (string) => {
 			// Position varies by 1 digit depending on GET/POST request
 			if (string.indexOf('GET') !== 0) {
 				var urlreq = string.substring(53,string.indexOf(' ',53));
-				var IPStart = string.indexOf(' ',53) + 9;
 			} else if (string.indexOf('POST') !== 0) {
 				var urlreq = string.substring(54,string.indexOf(' ',54));
 			}
-			var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
+			// Figure out where IP address is
+			var IPStart = string.indexOf(' HTTP');
+			var IPStart = string.lastIndexOf(' ',IPStart - 1);
+			var IPAdd = string.substring(IPStart + 1,string.indexOf(' ',IPStart + 1));
+			// Build CurrentLine from the various elements we've picked up
 			CurrentLine = (IPAdd + ' ' + urlreq);
 		} else {
 			// Starts in position 31, end at next tab character
