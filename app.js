@@ -4,11 +4,31 @@ const fs = require('fs');
 const readline = require('readline');
 var Excel = require('exceljs');
 
-const rl = readline.createInterface({
+
+// Add option to specify log type - if anything other than IIS assume original Joomla logic
+var logtype = process.argv.slice(2);
+
+console.log(logtype);
+
+if (logtype == 'IIS') {
+		var rl = readline.createInterface({
+			input: fs.createReadStream('IIS.log'),
+			output: process.stdout,
+			terminal: false
+		});
+} else {
+		var rl = readline.createInterface({
+			input: fs.createReadStream('error.php'),
+			output: process.stdout,
+			terminal: false
+		});
+}
+
+/* const rl = readline.createInterface({
     input: fs.createReadStream('error.php'),
     output: process.stdout,
     terminal: false
-});
+}); */
 
 var UniqueRecs = [];
 var CountRecs = [];
@@ -22,11 +42,23 @@ rl.on('line', (string) => {
 		var date = string.substring(0,10);
 		var time = string.substring(11,19);
 		// Extract IP address
-		// Starts in position 31, end at next tab character
-		var IPAdd = string.substring(31,string.indexOf('	',31));
-		// Add 46 characters to length - gets us to error message
-		nextpos = IPAdd.length + 46;
-    	CurrentLine = (IPAdd + ' ' + string.substring(nextpos));
+		if (logtype == 'IIS') {
+			// Position varies by 1 digit depending on GET/POST request
+			if (string.indexOf('GET') !== 0) {
+				var urlreq = string.substring(53,string.indexOf(' ',53));
+				var IPStart = string.indexOf(' ',53) + 9;
+			} else if (string.indexOf('POST') !== 0) {
+				var urlreq = string.substring(54,string.indexOf(' ',54));
+			}
+			var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
+			CurrentLine = (IPAdd + ' ' + urlreq);
+		} else {
+			// Starts in position 31, end at next tab character
+			var IPAdd = string.substring(31,string.indexOf('	',31));
+			// Add 46 characters to length - gets us to error message
+			nextpos = IPAdd.length + 46;
+			CurrentLine = (IPAdd + ' ' + string.substring(nextpos));
+		}
 		if (UniqueRecs.includes(CurrentLine)) {
 			CountRecs[UniqueRecs.indexOf(CurrentLine)] = CountRecs[UniqueRecs.indexOf(CurrentLine)] + 1;
 			LastDate[UniqueRecs.indexOf(CurrentLine)] = date + ' ' + time;
