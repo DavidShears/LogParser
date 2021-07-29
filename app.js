@@ -37,8 +37,7 @@ rl.on('line', (string) => {
 	// First test - remove header records by testing for #)
 	if (string.indexOf('#') !== 0) {
 		// Extract date and time
-		var date = string.substring(0,10);
-		var time = string.substring(11,19);
+		var datetime = string.substring(0,19);
 		// Extract IP address
 		if (logtype == 'IIS') {
 			// Start of URL will be first instance of a forward slash
@@ -75,12 +74,18 @@ rl.on('line', (string) => {
 		// If it isn't then add to arrays and stamp first date
 		if (UniqueRecs.includes(CurrentLine)) {
 			CountRecs[UniqueRecs.indexOf(CurrentLine)] = CountRecs[UniqueRecs.indexOf(CurrentLine)] + 1;
-			LastDate[UniqueRecs.indexOf(CurrentLine)] = date + ' ' + time;
+			// New test - although log normally in date/time order lets not assume that and only update
+			// the date/time if we're happy it's more recent
+			var DateLast = new Date(LastDate[UniqueRecs.indexOf(CurrentLine)]);
+			var DateNew = new Date(datetime);
+			if (DateNew > DateLast) {
+				LastDate[UniqueRecs.indexOf(CurrentLine)] = datetime;
+			}
 		} else if (CurrentLine != ' ') {
 			UniqueRecs.push(CurrentLine);
 			CountRecs.push(1);
-			FirstDate.push(date + ' ' + time);
-			LastDate.push(date + ' ' + time);
+			FirstDate.push(datetime);
+			LastDate.push(datetime);
 		}
 	}
 })
