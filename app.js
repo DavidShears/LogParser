@@ -77,9 +77,12 @@ rl.on('line', (string) => {
 			// New test - although log normally in date/time order lets not assume that and only update
 			// the date/time if we're happy it's more recent
 			var DateLast = new Date(LastDate[UniqueRecs.indexOf(CurrentLine)]);
+			var DateFirst = new Date(LastDate[UniqueRecs.indexOf(CurrentLine)]);
 			var DateNew = new Date(datetime);
 			if (DateNew > DateLast) {
 				LastDate[UniqueRecs.indexOf(CurrentLine)] = datetime;
+			} else if (DateNew < DateFirst) {
+				FirstDate[UniqueRecs.indexOf(CurrentLine)] = datetime;
 			}
 		} else if (CurrentLine != ' ') {
 			UniqueRecs.push(CurrentLine);
