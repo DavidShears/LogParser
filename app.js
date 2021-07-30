@@ -57,18 +57,25 @@ rl.on('line', (string) => {
 			var IPStart = string.lastIndexOf(' ',IPStart - 1);
 			var IPAdd = string.substring(IPStart + 1,string.indexOf(' ',IPStart + 1));
 			// Get HTTP status, currently achieved by looking for substatus
-			// which seems to always return 0 - apart from 403 & 404 errors:
-			// https://en.wikipedia.org/wiki/HTTP_403#Substatus_error_codes_for_IIS
-			// https://en.wikipedia.org/wiki/404.php#Microsoft_Internet_Server_404_substatus_error_codes
-			if (string.indexOf(' 404 ') == -1 && string.indexOf(' 403 ') == -1) {
-				var HTTPend = string.indexOf(' 0 ');
-				var HTTPstat = string.substring(HTTPend - 3, HTTPend);
-			} else {
-				if (string.indexOf(' 404 ') == -1) {
+			// which seems to always return 0 - apart from where IIS introduces substatuses
+			// https://docs.microsoft.com/en-GB/troubleshoot/iis/http-status-code
+			if (string.indexOf(' 400 ') != -1) {
+					var HTTPstat = '400';
+			} else if (string.indexOf(' 401 ') != -1) {
+					var HTTPstat = '401';
+			} else if (string.indexOf(' 403 ') != -1) {
 					var HTTPstat = '403';
-				} else {
+			} else if (string.indexOf(' 404 ') != -1) {
 					var HTTPstat = '404';
-				}
+			} else if (string.indexOf(' 500 ') != -1) {
+					var HTTPstat = '500';
+			} else if (string.indexOf(' 502 ') != -1) {
+					var HTTPstat = '502';
+			} else if (string.indexOf(' 503 ') != -1) {
+					var HTTPstat = '503';
+			} else {
+					var HTTPend = string.indexOf(' 0 ');
+					var HTTPstat = string.substring(HTTPend - 3, HTTPend);	
 			}
 			// Build CurrentLine from the various elements we've picked up
 			CurrentLine = (IPAdd + ' ' + urlreq + ' ' + HTTPstat);
@@ -82,7 +89,7 @@ rl.on('line', (string) => {
 		}
 		// Test if record is already in array - if it is then increment counter and update last date
 		// If it isn't then add to arrays and stamp first date
-		if (UniqueRecs.includes(CurrentLine)) {
+		if (UniqueRecs.includes(CurrentLine) && CurrentLine != ' ') {
 			CountRecs[UniqueRecs.indexOf(CurrentLine)] = CountRecs[UniqueRecs.indexOf(CurrentLine)] + 1;
 			// New test - although log normally in date/time order lets not assume that and only update
 			// the date/time if we're happy it's more recent
@@ -132,8 +139,9 @@ rl.on('line', (string) => {
 		// Again additional column for IIS records
 		if (logtype == 'IIS') {
 			worksheet.addRow({IPADD: element.substring(0,element.indexOf(' ')), 
-				RECORD: element.substring(element.indexOf(' '),element.lastIndexOf(' ')), HTTPSTAT: element.substring(element.lastIndexOf(' ')),
-				COUNT: CountRecs[counter], FIRST: FirstDate[counter], LAST: LastDate[counter]});
+				RECORD: element.substring(element.indexOf(' '),element.lastIndexOf(' ')), 
+				HTTPSTAT: element.substring(element.lastIndexOf(' ')), COUNT: CountRecs[counter], 
+				FIRST: FirstDate[counter], LAST: LastDate[counter]});
 		} else {
 			worksheet.addRow({IPADD: element.substring(0,element.indexOf(' ')), 
 				RECORD: element.substring(element.indexOf(' ')), COUNT: CountRecs[counter], 
