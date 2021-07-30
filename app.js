@@ -57,13 +57,18 @@ rl.on('line', (string) => {
 			var IPStart = string.lastIndexOf(' ',IPStart - 1);
 			var IPAdd = string.substring(IPStart + 1,string.indexOf(' ',IPStart + 1));
 			// Get HTTP status, currently achieved by looking for substatus
-			// which seems to always return 0 - apart from 404 errors:
+			// which seems to always return 0 - apart from 403 & 404 errors:
+			// https://en.wikipedia.org/wiki/HTTP_403#Substatus_error_codes_for_IIS
 			// https://en.wikipedia.org/wiki/404.php#Microsoft_Internet_Server_404_substatus_error_codes
-			if (string.indexOf(' 404 ') == -1) {
+			if (string.indexOf(' 404 ') == -1 && string.indexOf(' 403 ') == -1) {
 				var HTTPend = string.indexOf(' 0 ');
 				var HTTPstat = string.substring(HTTPend - 3, HTTPend);
 			} else {
-				var HTTPstat = '404';
+				if (string.indexOf(' 404 ') == -1) {
+					var HTTPstat = '403';
+				} else {
+					var HTTPstat = '404';
+				}
 			}
 			// Build CurrentLine from the various elements we've picked up
 			CurrentLine = (IPAdd + ' ' + urlreq + ' ' + HTTPstat);
