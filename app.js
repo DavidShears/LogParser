@@ -59,7 +59,7 @@ rl.on('line', (string) => {
 			// Get HTTP status, currently achieved by looking for substatus
 			// which seems to always return 0 - apart from 404 errors:
 			// https://en.wikipedia.org/wiki/404.php#Microsoft_Internet_Server_404_substatus_error_codes
-			if (string.indexOf(' 404 ') !== -1) {
+			if (string.indexOf(' 404 ') == -1) {
 				var HTTPend = string.indexOf(' 0 ');
 				var HTTPstat = string.substring(HTTPend - 3, HTTPend);
 			} else {
