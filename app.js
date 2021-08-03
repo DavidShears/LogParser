@@ -4,7 +4,6 @@ const fs = require('fs');
 const readline = require('readline');
 var Excel = require('exceljs');
 
-
 // Add option to specify log type - if anything other than IIS assume original Joomla logic
 var logtype = process.argv.slice(2);
 
@@ -22,12 +21,6 @@ if (logtype == 'IIS') {
 		});
 }
 
-/* const rl = readline.createInterface({
-    input: fs.createReadStream('error.php'),
-    output: process.stdout,
-    terminal: false
-}); */
-
 var UniqueRecs = [];
 var CountRecs = [];
 var FirstDate = [];
@@ -35,7 +28,7 @@ var LastDate = [];
 
 rl.on('line', (string) => {
 	// First test - remove header records by testing for #)
-	if (string.indexOf('#') !== 0) {
+	if (string.indexOf('#') !== -1) {
 		// Extract date and time
 		var datetime = string.substring(0,19);
 		// Extract IP address
