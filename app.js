@@ -28,7 +28,7 @@ var LastDate = [];
 
 rl.on('line', (string) => {
 	// First test - remove header records by testing for #)
-	if (string.indexOf('#') !== -1) {
+	if (string.indexOf('#') !== 0) {
 		// Extract date and time
 		var datetime = string.substring(0,19);
 		// Extract IP address
@@ -74,10 +74,17 @@ rl.on('line', (string) => {
 			CurrentLine = (IPAdd + ' ' + urlreq + ' ' + HTTPstat);
 		// else use Joomla logic
 		} else {
+			// Handle older version of Joomla logging
+			if (string.indexOf('Joomla FAILURE') !== -1) {
+				var IPAdd = string.substring(25,string.indexOf('	',25));
+				// Add 46 characters to length - gets us to error message
+				nextpos = IPAdd.length + 43;
+			} else {
 			// Starts in position 31, end at next tab character
-			var IPAdd = string.substring(31,string.indexOf('	',31));
-			// Add 46 characters to length - gets us to error message
-			nextpos = IPAdd.length + 46;
+				var IPAdd = string.substring(31,string.indexOf('	',31));
+				// Add 46 characters to length - gets us to error message
+				nextpos = IPAdd.length + 46;
+			}
 			CurrentLine = (IPAdd + ' ' + string.substring(nextpos));
 		}
 		// Test if record is already in array - if it is then increment counter and update last date
