@@ -9,7 +9,13 @@ Tested on 133mb IIS file with approx. 12 minute runtime.
 
 
 ## Running
-node app.js IIS - to trigger new logic
+node app.js IIS - to trigger new logic and get detailed results
+
+node app.js IIS summstat - summarise by IP & HTTP status (exclude url request)
+
+node app.js IIS summurl - summarise by IP & url request (exclude HTTP status)
+
+node app.js IIS summip - summarise by IP (exclude HTTP status & url request)
 
 node app.js (or any parm after) - to trigger original Joomla logic
 

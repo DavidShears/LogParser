@@ -5,7 +5,11 @@ const readline = require('readline');
 var Excel = require('exceljs');
 
 // Add option to specify log type - if anything other than IIS assume original Joomla logic
-var logtype = process.argv.slice(2);
+
+var args = process.argv;
+
+var logtype = args[2];
+var modetype = args[3];
 
 if (logtype == 'IIS') {
 		var rl = readline.createInterface({
@@ -71,7 +75,22 @@ rl.on('line', (string) => {
 					var HTTPstat = string.substring(HTTPend - 3, HTTPend);	
 			}
 			// Build CurrentLine from the various elements we've picked up
-			CurrentLine = (IPAdd + ' ' + urlreq + ' ' + HTTPstat);
+			// If a mode has been specified, use that
+			switch (modetype) {
+				case 'summstat':
+					CurrentLine = (IPAdd + ' ' + HTTPstat);
+					break;
+				case 'summurl':
+					CurrentLine = (IPAdd + ' ' + urlreq);
+					break;
+				case 'summip':
+					CurrentLine = (IPAdd);
+					break;
+				default:
+					CurrentLine = (IPAdd + ' ' + urlreq + ' ' + HTTPstat);
+					break;
+			}
+			//CurrentLine = (IPAdd + ' ' + urlreq + ' ' + HTTPstat);
 		// else use Joomla logic
 		} else {
 			// Handle older version of Joomla logging
@@ -115,14 +134,54 @@ rl.on('line', (string) => {
 	var worksheet = workbook.addWorksheet("Error Logging");
 	// If in IIS mode then include column for HTTP status code
 	if (logtype == 'IIS') {
-		worksheet.columns = [
-			{ header: "IP Address", key:"IPADD"},
-			{ header: "Record", key:"RECORD"},
-			{ header: "HTTP Status", key:"HTTPSTAT"},
-			{ header: "Times Found", key:"COUNT"},
-			{ header: "First Found", key:"FIRST"},
-			{ header: "Last Found", key:"LAST"}
-		]
+		switch (modetype) {
+			case 'detail':
+				worksheet.columns = [
+					{ header: "IP Address", key:"IPADD"},
+					{ header: "Record", key:"RECORD"},
+					{ header: "HTTP Status", key:"HTTPSTAT"},
+					{ header: "Times Found", key:"COUNT"},
+					{ header: "First Found", key:"FIRST"},
+					{ header: "Last Found", key:"LAST"}
+				];
+				break;
+			case 'summstat':
+				worksheet.columns = [
+					{ header: "IP Address", key:"IPADD"},
+					{ header: "HTTP Status", key:"HTTPSTAT"},
+					{ header: "Times Found", key:"COUNT"},
+					{ header: "First Found", key:"FIRST"},
+					{ header: "Last Found", key:"LAST"}
+				];
+				break;
+			case 'summurl':
+				worksheet.columns = [
+					{ header: "IP Address", key:"IPADD"},
+					{ header: "Record", key:"RECORD"},
+					{ header: "Times Found", key:"COUNT"},
+					{ header: "First Found", key:"FIRST"},
+					{ header: "Last Found", key:"LAST"}
+				];
+				break;
+			case 'summip':
+				worksheet.columns = [
+					{ header: "IP Address", key:"IPADD"},
+					{ header: "Times Found", key:"COUNT"},
+					{ header: "First Found", key:"FIRST"},
+					{ header: "Last Found", key:"LAST"}
+				];
+				break;
+			default:
+				worksheet.columns = [
+					{ header: "IP Address", key:"IPADD"},
+					{ header: "Record", key:"RECORD"},
+					{ header: "HTTP Status", key:"HTTPSTAT"},
+					{ header: "Times Found", key:"COUNT"},
+					{ header: "First Found", key:"FIRST"},
+					{ header: "Last Found", key:"LAST"}
+				];
+				break;
+		}
 	} else {
 		worksheet.columns = [
 			{ header: "IP Address", key:"IPADD"},
@@ -136,17 +195,47 @@ rl.on('line', (string) => {
 	// Loop array of unique records
 	var counter = 0;
 	UniqueRecs.forEach(function(element){
+		const rowdef = [];
 		// Again additional column for IIS records
 		if (logtype == 'IIS') {
-			worksheet.addRow({IPADD: element.substring(0,element.indexOf(' ')), 
-				RECORD: element.substring(element.indexOf(' '),element.lastIndexOf(' ')), 
-				HTTPSTAT: element.substring(element.lastIndexOf(' ')), COUNT: CountRecs[counter], 
-				FIRST: FirstDate[counter], LAST: LastDate[counter]});
+			switch (modetype) {
+				case 'summstat':
+					rowdef[1] = element.substring(0,element.indexOf(' '));
+					rowdef[2] = element.substring(element.lastIndexOf(' '));
+					rowdef[3] = CountRecs[counter];
+					rowdef[4] = FirstDate[counter];
+					rowdef[5] = LastDate[counter];
+					break;
+				case 'summurl':
+					rowdef[1] = element.substring(0,element.indexOf(' '));
+					rowdef[2] = element.substring(element.indexOf(' '));
+					rowdef[3] = CountRecs[counter];
+					rowdef[4] = FirstDate[counter];
+					rowdef[5] = LastDate[counter];
+					break;
+				case 'summip':
+					rowdef[1] = element
+					rowdef[2] = CountRecs[counter];
+					rowdef[3] = FirstDate[counter];
+					rowdef[4] = LastDate[counter];
+					break;
+				default:
+					rowdef[1] = element.substring(0,element.indexOf(' '));
+					rowdef[2] = element.substring(element.indexOf(' '),element.lastIndexOf(' '));
+					rowdef[3] = element.substring(element.lastIndexOf(' '));
+					rowdef[4] = CountRecs[counter];
+					rowdef[5] = FirstDate[counter];
+					rowdef[6] = LastDate[counter];
+					break;
+			}
 		} else {
-			worksheet.addRow({IPADD: element.substring(0,element.indexOf(' ')), 
-				RECORD: element.substring(element.indexOf(' ')), COUNT: CountRecs[counter], 
-				FIRST: FirstDate[counter], LAST: LastDate[counter]});
+			rowdef[1] = element.substring(0,element.indexOf(' '));
+			rowdef[2] = element.substring(element.indexOf(' '));
+			rowdef[3] = CountRecs[counter];
+			rowdef[4] = FirstDate[counter];
+			rowdef[5] = LastDate[counter];
 		}
+		worksheet.addRow(rowdef);
 		counter++;
 	})
 	workbook.xlsx.writeFile("output.xlsx");
