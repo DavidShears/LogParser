@@ -134,54 +134,37 @@ rl.on('line', (string) => {
 	var worksheet = workbook.addWorksheet("Error Logging");
 	// If in IIS mode then include column for HTTP status code
 	if (logtype == 'IIS') {
+		// Build column headings depending on mode, all require IP address
+		var coldef = [];
+		var counter = 0;
+		coldef[counter] = { header: "IP Address", key:"IPADD"};
+		counter++;
 		switch (modetype) {
-			case 'detail':
-				worksheet.columns = [
-					{ header: "IP Address", key:"IPADD"},
-					{ header: "Record", key:"RECORD"},
-					{ header: "HTTP Status", key:"HTTPSTAT"},
-					{ header: "Times Found", key:"COUNT"},
-					{ header: "First Found", key:"FIRST"},
-					{ header: "Last Found", key:"LAST"}
-				];
-				break;
 			case 'summstat':
-				worksheet.columns = [
-					{ header: "IP Address", key:"IPADD"},
-					{ header: "HTTP Status", key:"HTTPSTAT"},
-					{ header: "Times Found", key:"COUNT"},
-					{ header: "First Found", key:"FIRST"},
-					{ header: "Last Found", key:"LAST"}
-				];
+				coldef[counter] = { header: "HTTP Status", key:"HTTPSTAT"};
+				counter++;
 				break;
 			case 'summurl':
-				worksheet.columns = [
-					{ header: "IP Address", key:"IPADD"},
-					{ header: "Record", key:"RECORD"},
-					{ header: "Times Found", key:"COUNT"},
-					{ header: "First Found", key:"FIRST"},
-					{ header: "Last Found", key:"LAST"}
-				];
+				coldef[counter] = { header: "Record", key:"RECORD"};
+				counter++;
 				break;
 			case 'summip':
-				worksheet.columns = [
-					{ header: "IP Address", key:"IPADD"},
-					{ header: "Times Found", key:"COUNT"},
-					{ header: "First Found", key:"FIRST"},
-					{ header: "Last Found", key:"LAST"}
-				];
 				break;
 			default:
-				worksheet.columns = [
-					{ header: "IP Address", key:"IPADD"},
-					{ header: "Record", key:"RECORD"},
-					{ header: "HTTP Status", key:"HTTPSTAT"},
-					{ header: "Times Found", key:"COUNT"},
-					{ header: "First Found", key:"FIRST"},
-					{ header: "Last Found", key:"LAST"}
-				];
+				coldef[counter] = { header: "Record", key:"RECORD"};
+				counter++;
+				coldef[counter] = { header: "HTTP Status", key:"HTTPSTAT"};
+				counter++;
 				break;
 		}
+		// All then have the final 3 columns the same
+		coldef[counter] = { header: "Times Found", key:"COUNT"};
+		counter++;
+		coldef[counter] = { header: "First Found", key:"FIRST"};
+		counter++;
+		coldef[counter] = { header: "Last Found", key:"LAST"};
+		counter++;
+		worksheet.columns = coldef;
 	} else {
 		worksheet.columns = [
 			{ header: "IP Address", key:"IPADD"},
