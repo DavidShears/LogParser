@@ -77,6 +77,5 @@ typings/
 
 # Actual logfile and output
 error*.php
-IIS*.log
 output*.xlsx
 ~$output*.xlsx
