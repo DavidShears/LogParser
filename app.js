@@ -8,8 +8,12 @@ var Excel = require('exceljs');
 
 var args = process.argv;
 
-var logtype = args[2];
-var modetype = args[3];
+if (args[2] != null) {
+	var logtype = args[2].toUpperCase();
+}
+if (args[3] != null) {
+	var modetype = args[3].toLowerCase();
+}
 
 if (logtype == 'IIS') {
 		var rl = readline.createInterface({
@@ -112,12 +116,12 @@ rl.on('line', (string) => {
 			CountRecs[UniqueRecs.indexOf(CurrentLine)] = CountRecs[UniqueRecs.indexOf(CurrentLine)] + 1;
 			// New test - although log normally in date/time order lets not assume that and only update
 			// the date/time if we're happy it's more recent
-			var DateLast = new Date(LastDate[UniqueRecs.indexOf(CurrentLine)]);
-			var DateFirst = new Date(LastDate[UniqueRecs.indexOf(CurrentLine)]);
+			/* var DateLast = new Date(LastDate[UniqueRecs.indexOf(CurrentLine)]);
+			var DateFirst = new Date(LastDate[UniqueRecs.indexOf(CurrentLine)]); */
 			var DateNew = new Date(datetime);
-			if (DateNew > DateLast) {
+			if (DateNew > new Date(LastDate[UniqueRecs.indexOf(CurrentLine)])) {
 				LastDate[UniqueRecs.indexOf(CurrentLine)] = datetime;
-			} else if (DateNew < DateFirst) {
+			} else if (DateNew < new Date(LastDate[UniqueRecs.indexOf(CurrentLine)])) {
 				FirstDate[UniqueRecs.indexOf(CurrentLine)] = datetime;
 			}
 		} else if (CurrentLine != ' ') {
