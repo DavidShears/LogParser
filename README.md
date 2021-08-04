@@ -5,7 +5,7 @@ Reads all records into a set of 4 arrays, one for each data point, and then goes
 
 Also has the option to pass in 'IIS' to instead parse IIS logs (tested on IIS 8.5)
 
-Tested on 133mb IIS file with approx. 12 minute runtime.
+Tested on 134mb IIS file with approx. 10 minute runtime.
 
 
 ## Running
@@ -26,5 +26,5 @@ ExcelJS is used to generate spreadsheet output.
 1. ~~Combine both sets in the output to give record & count side-by-side~~ Handled by ExcelJS (although could be neater inline processing.)
 2. ~~Currently capturing date & time, add "last date/time" to the output.~~ Extra logic added for first & last date found
 3. ~~Output somewhere other than console (either CSV file or email.)~~ Handled by ExcelJS
-4. Optimize runtime, additional logic to handle non-date ordered logs and 404/403 exceptions appears to have raised the processing time.
+4. ~~Optimize runtime, additional logic to handle non-date ordered logs and 404/403 exceptions appears to have raised the processing time.~~ Amending date handling took approx. 25% off runtime.
 5. Find a unique identifier to avoid list of if statements for HTTP status (perhaps pass in the URL of the website as another parameter?)
