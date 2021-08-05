@@ -27,4 +27,4 @@ ExcelJS is used to generate spreadsheet output.
 2. ~~Currently capturing date & time, add "last date/time" to the output.~~ Extra logic added for first & last date found
 3. ~~Output somewhere other than console (either CSV file or email.)~~ Handled by ExcelJS
 4. ~~Optimize runtime, additional logic to handle non-date ordered logs and 404/403 exceptions appears to have raised the processing time.~~ Amending date handling took approx. 25% off runtime.
-5. Find a unique identifier to avoid list of if statements for HTTP status (perhaps pass in the URL of the website as another parameter?)
+5. ~~Find a unique identifier to avoid list of if statements for HTTP status (perhaps pass in the URL of the website as another parameter?)~~ Replace hardcoded list of HTTP status exceptions with regex statement

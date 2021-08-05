@@ -57,27 +57,11 @@ rl.on('line', (string) => {
 			var IPStart = string.indexOf(' HTTP');
 			var IPStart = string.lastIndexOf(' ',IPStart - 1);
 			var IPAdd = string.substring(IPStart + 1,string.indexOf(' ',IPStart + 1));
-			// Get HTTP status, currently achieved by looking for substatus
-			// which seems to always return 0 - apart from where IIS introduces substatuses
-			// https://docs.microsoft.com/en-GB/troubleshoot/iis/http-status-code
-			if (string.indexOf(' 400 ') != -1) {
-					var HTTPstat = '400';
-			} else if (string.indexOf(' 401 ') != -1) {
-					var HTTPstat = '401';
-			} else if (string.indexOf(' 403 ') != -1) {
-					var HTTPstat = '403';
-			} else if (string.indexOf(' 404 ') != -1) {
-					var HTTPstat = '404';
-			} else if (string.indexOf(' 500 ') != -1) {
-					var HTTPstat = '500';
-			} else if (string.indexOf(' 502 ') != -1) {
-					var HTTPstat = '502';
-			} else if (string.indexOf(' 503 ') != -1) {
-					var HTTPstat = '503';
-			} else {
-					var HTTPend = string.indexOf(' 0 ');
-					var HTTPstat = string.substring(HTTPend - 3, HTTPend);	
-			}
+			// Get HTTP status using Regex to find 3 digits followed by a series of 
+			// 5 spaces seperated by any number of digits
+			// 200 0 0 15669 344 546
+			var HTTPstart = string.search(/\d\d\d(?= (\d*) (\d*) (\d*) (\d*) (\d*))/g)
+			var HTTPstat = string.substring(HTTPstart,HTTPstart + 3);
 			// Build CurrentLine from the various elements we've picked up
 			// If a mode has been specified, use that
 			switch (modetype) {
