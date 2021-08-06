@@ -60,7 +60,7 @@ rl.on('line', (string) => {
 			// Get HTTP status using Regex to find 3 digits followed by a series of 
 			// 5 spaces seperated by any number of digits
 			// 200 0 0 15669 344 546
-			var HTTPstart = string.search(/\d\d\d(?= (\d*) (\d*) (\d*) (\d*) (\d*))/g)
+			var HTTPstart = string.search(/\d{3}(?=( (\d*)){5})/g);
 			var HTTPstat = string.substring(HTTPstart,HTTPstart + 3);
 			// Build CurrentLine from the various elements we've picked up
 			// If a mode has been specified, use that
