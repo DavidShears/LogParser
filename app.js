@@ -34,11 +34,52 @@ var CountRecs = [];
 var FirstDate = [];
 var LastDate = [];
 
-// Arrays for holding IPs flagged as internal/suspect/blocked
+// Arrays for holding IPs flagged
 // Will be used to build notes column
 var InternalIPs = [];
 var SuspectIPs = [];
 var badIPs = [];
+var botIPs = ["148.251.244.137",
+			"185.191.171.1",
+			"185.191.171.10",
+			"185.191.171.11",
+			"185.191.171.12",
+			"185.191.171.13",
+			"185.191.171.14",
+			"185.191.171.15",
+			"185.191.171.16",
+			"185.191.171.18",
+			"185.191.171.2",
+			"185.191.171.22",
+			"185.191.171.23",
+			"185.191.171.24",
+			"185.191.171.25",
+			"185.191.171.26",
+			"185.191.171.3",
+			"185.191.171.38",
+			"185.191.171.39",
+			"185.191.171.4",
+			"185.191.171.40",
+			"185.191.171.41",
+			"185.191.171.44",
+			"185.191.171.45",
+			"185.191.171.5",
+			"185.191.171.6",
+			"185.191.171.7",
+			"185.191.171.8",
+			"185.191.171.9",
+			"13.77.138.186",
+			"157.55.39.42",
+			"199.16.157.180",
+			"199.16.157.181",
+			"199.16.157.182",
+			"199.16.157.183",
+			"199.59.150.183",
+			"40.77.167.58",
+			"40.77.167.26",
+			"5.102.173.71",
+			"85.25.177.139"
+];
 
 rl.on('line', (string) => {
 	// First test - remove header records by testing for #)
@@ -234,6 +275,8 @@ function checkip(IPaddress){
 		return("Monitored Address");
 	} else if (badIPs.includes(IPaddress)) {
 		return("Blocked Address");
+	} else if (botIPs.includes(IPaddress)) {
+		return("Bot Address");
 	} else {
 		return("");
 	}
