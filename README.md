@@ -28,3 +28,4 @@ ExcelJS is used to generate spreadsheet output.
 3. ~~Output somewhere other than console (either CSV file or email.)~~ Handled by ExcelJS
 4. ~~Optimize runtime, additional logic to handle non-date ordered logs and 404/403 exceptions appears to have raised the processing time.~~ Amending date handling took approx. 25% off runtime.
 5. ~~Find a unique identifier to avoid list of if statements for HTTP status (perhaps pass in the URL of the website as another parameter?)~~ Replace hardcoded list of HTTP status exceptions with regex statement
+6. Amend checkip function to wildcard match, allow 123.123.123.x rather than having to list out each IP in the subnet.
