@@ -40,54 +40,20 @@ var InternalIPs = [];
 var SuspectIPs = [];
 var badIPs = [];
 var botIPs = ["148.251.244.137",
-			"185.191.171.1",
-			"185.191.171.10",
-			"185.191.171.11",
-			"185.191.171.12",
-			"185.191.171.13",
-			"185.191.171.14",
-			"185.191.171.15",
-			"185.191.171.16",
-			"185.191.171.18",
-			"185.191.171.19",
-			"185.191.171.2",
-			"185.191.171.22",
-			"185.191.171.23",
-			"185.191.171.24",
-			"185.191.171.25",
-			"185.191.171.26",
-			"185.191.171.3",
-			"185.191.171.33",
-			"185.191.171.36",
-			"185.191.171.37",
-			"185.191.171.38",
-			"185.191.171.39",
-			"185.191.171.4",
-			"185.191.171.40",
-			"185.191.171.41",
-			"185.191.171.42",
-			"185.191.171.44",
-			"185.191.171.45",
-			"185.191.171.5",
-			"185.191.171.6",
-			"185.191.171.7",
-			"185.191.171.8",
-			"185.191.171.9",
 			"13.77.138.186",
-			"157.55.39.42",
-			"199.16.157.180",
-			"199.16.157.181",
-			"199.16.157.182",
-			"199.16.157.183",
-			"199.59.150.183",
-			"40.77.167.58",
-			"40.77.167.26",
 			"5.102.173.71",
 			"85.25.177.139",
 			"144.76.60.198",
 			"178.63.26.114",
 			"216.18.204.198",
-			"62.210.151.70"
+			"62.210.151.70",
+			//twitterbot range
+			"199.16.157.",
+			//semrush bot range
+			"185.191.171.",
+			// Bing bot ranges
+			"157.55.39.",
+			"40.77.167.49"
 ];
 
 rl.on('line', (string) => {
@@ -278,14 +244,18 @@ rl.on('line', (string) => {
 // If found then return note value
 
 function checkip(IPaddress){
-	if (InternalIPs.includes(IPaddress)) {
+	// Allow a 3 part match i.e. 127.0.0.* - currently only for bots
+	var subnet = IPaddress.substring(0,IPaddress.lastIndexOf('.') + 1)
+	if (InternalIPs.includes(IPaddress) ) {
 		return("Internal Address");
-	} else if (SuspectIPs.includes(IPaddress)) {
+	} else if (SuspectIPs.includes(IPaddress) ) {
 		return("Monitored Address");
-	} else if (badIPs.includes(IPaddress)) {
+	} else if (badIPs.includes(IPaddress) ) {
 		return("Blocked Address");
 	} else if (botIPs.includes(IPaddress)) {
 		return("Bot Address");
+	} else if (botIPs.includes(subnet) && botIPs[botIPs.indexOf(subnet)].substr(-1) == '.'){
+		return ("Bot Subnet");
 	} else {
 		return("");
 	}
