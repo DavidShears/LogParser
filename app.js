@@ -34,6 +34,12 @@ var CountRecs = [];
 var FirstDate = [];
 var LastDate = [];
 
+// Arrays for holding IPs flagged as internal/suspect/blocked
+// Will be used to build notes column
+var InternalIPs = [];
+var SuspectIPs = [];
+var badIPs = [];
+
 rl.on('line', (string) => {
 	// First test - remove header records by testing for #)
 	if (string.indexOf('#') !== 0) {
@@ -143,12 +149,14 @@ rl.on('line', (string) => {
 				counter++;
 				break;
 		}
-		// All then have the final 3 columns the same
+		// All then have the final 4 columns the same
 		coldef[counter] = { header: "Times Found", key:"COUNT"};
 		counter++;
 		coldef[counter] = { header: "First Found", key:"FIRST"};
 		counter++;
 		coldef[counter] = { header: "Last Found", key:"LAST"};
+		counter++;
+		coldef[counter] = { header: "Notes", key:"NOTES"};
 		counter++;
 		worksheet.columns = coldef;
 	} else {
@@ -157,7 +165,8 @@ rl.on('line', (string) => {
 			{ header: "Record", key:"RECORD"},
 			{ header: "Times Found", key:"COUNT"},
 			{ header: "First Found", key:"FIRST"},
-			{ header: "Last Found", key:"LAST"}
+			{ header: "Last Found", key:"LAST"},
+			{ header: "Notes", key:"NOTES"}
 		];
 	}
 	worksheet.getRow(1).font = { name: "Calibri", size: 11, bold: true};
@@ -174,6 +183,7 @@ rl.on('line', (string) => {
 					rowdef[3] = CountRecs[counter];
 					rowdef[4] = FirstDate[counter];
 					rowdef[5] = LastDate[counter];
+					rowdef[6] = checkip(element.substring(0,element.indexOf(' ')));
 					break;
 				case 'summurl':
 					rowdef[1] = element.substring(0,element.indexOf(' '));
@@ -181,12 +191,14 @@ rl.on('line', (string) => {
 					rowdef[3] = CountRecs[counter];
 					rowdef[4] = FirstDate[counter];
 					rowdef[5] = LastDate[counter];
+					rowdef[6] = checkip(element.substring(0,element.indexOf(' ')));
 					break;
 				case 'summip':
 					rowdef[1] = element
 					rowdef[2] = CountRecs[counter];
 					rowdef[3] = FirstDate[counter];
 					rowdef[4] = LastDate[counter];
+					rowdef[5] = checkip(element.substring(0,element.indexOf(' ')));
 					break;
 				default:
 					rowdef[1] = element.substring(0,element.indexOf(' '));
@@ -195,6 +207,7 @@ rl.on('line', (string) => {
 					rowdef[4] = CountRecs[counter];
 					rowdef[5] = FirstDate[counter];
 					rowdef[6] = LastDate[counter];
+					rowdef[7] = checkip(element.substring(0,element.indexOf(' ')));
 					break;
 			}
 		} else {
@@ -203,9 +216,25 @@ rl.on('line', (string) => {
 			rowdef[3] = CountRecs[counter];
 			rowdef[4] = FirstDate[counter];
 			rowdef[5] = LastDate[counter];
+			rowdef[6] = checkip(element.substring(0,element.indexOf(' ')));
 		}
 		worksheet.addRow(rowdef);
 		counter++;
 	})
 	workbook.xlsx.writeFile("output.xlsx");
 });
+
+// Function to test IP address against each of the three arrays
+// If found then return note value
+
+function checkip(IPaddress){
+	if (InternalIPs.includes(IPaddress)) {
+		return("Internal Address");
+	} else if (SuspectIPs.includes(IPaddress)) {
+		return("Monitored Address");
+	} else if (badIPs.includes(IPaddress)) {
+		return("Blocked Address");
+	} else {
+		return("");
+	}
+};

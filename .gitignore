@@ -79,3 +79,4 @@ typings/
 error*.php
 output*.xlsx
 ~$output*.xlsx
+IPArrays.txt
