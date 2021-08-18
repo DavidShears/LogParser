@@ -79,4 +79,5 @@ typings/
 error*.php
 output*.xlsx
 ~$output*.xlsx
+# Internal use only - list of IPs for Internal/Suspicious/Blocked arrays
 IPArrays.txt
