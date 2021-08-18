@@ -197,36 +197,32 @@ rl.on('line', (string) => {
 				case 'summstat':
 					rowdef[1] = element.substring(0,element.indexOf(' '));
 					rowdef[2] = element.substring(element.lastIndexOf(' '));
-					rowdef[3] = CountRecs[counter];
-					rowdef[4] = FirstDate[counter];
-					rowdef[5] = LastDate[counter];
-					rowdef[6] = Notes[counter];
+					var nextcol = 3;
 					break;
 				case 'summurl':
 					rowdef[1] = element.substring(0,element.indexOf(' '));
 					rowdef[2] = element.substring(element.indexOf(' '));
-					rowdef[3] = CountRecs[counter];
-					rowdef[4] = FirstDate[counter];
-					rowdef[5] = LastDate[counter];
-					rowdef[6] = Notes[counter];
+					var nextcol = 3;
 					break;
 				case 'summip':
 					rowdef[1] = element
-					rowdef[2] = CountRecs[counter];
-					rowdef[3] = FirstDate[counter];
-					rowdef[4] = LastDate[counter];
-					rowdef[5] = Notes[counter];
+					var nextcol = 2;
 					break;
 				default:
 					rowdef[1] = element.substring(0,element.indexOf(' '));
 					rowdef[2] = element.substring(element.indexOf(' '),element.lastIndexOf(' '));
 					rowdef[3] = element.substring(element.lastIndexOf(' '));
-					rowdef[4] = CountRecs[counter];
-					rowdef[5] = FirstDate[counter];
-					rowdef[6] = LastDate[counter];
-					rowdef[7] = Notes[counter];
+					var nextcol = 4;
 					break;
 			}
+			// All then have the final 4 columns the same
+			rowdef[nextcol] = CountRecs[counter];
+			nextcol++;
+			rowdef[nextcol] = FirstDate[counter];
+			nextcol++;
+			rowdef[nextcol] = LastDate[counter];
+			nextcol++;
+			rowdef[nextcol] = Notes[counter];
 		} else {
 			rowdef[1] = element.substring(0,element.indexOf(' '));
 			rowdef[2] = element.substring(element.indexOf(' '));
@@ -289,7 +285,7 @@ function checkbot(string,IPAdd) {
 			return("Googlebot address!");
 		}
 	}
-	if (string.indexOf('AhrefsBot') != -1) {
+	if (string.indexOf('AhrefsBot') != -1 || string.indexOf('AhrefsSiteAudit') != -1) {
 		var found = checkip(IPAdd);
 		if (found == '') {
 			return("New AhrefsBot address!");
@@ -313,7 +309,7 @@ function checkbot(string,IPAdd) {
 			return("Applebot address!");
 		}
 	}
-	if (string.indexOf('SemrushBot') != -1) {
+	if (string.indexOf('SemrushBot') != -1 || string.indexOf('SiteAuditBot') != -1) {
 		var found = checkip(IPAdd);
 		if (found == '') {
 			return("New SemrushBot address!");
@@ -356,9 +352,41 @@ function checkbot(string,IPAdd) {
 	if (string.indexOf('DotBot') != -1) {
 		var found = checkip(IPAdd);
 		if (found == '') {
-			return("New DotBot address!");
+			return("New OpenSiteExplorer address!");
 		} else {
-			return("DotBot address!");
+			return("OpenSiteExplorer address!");
+		}
+	}
+	if (string.indexOf('Twitterbot') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New Twitterbot address!");
+		} else {
+			return("Twitterbot address!");
+		}
+	}
+	if (string.indexOf('IonCrawl') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New Ionos address!");
+		} else {
+			return("Ionos address!");
+		}
+	}
+	if (string.indexOf('nominet.uk') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New nominet address!");
+		} else {
+			return("nominet address!");
+		}
+	}
+	if (string.indexOf('CCBot') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New CommonCrawl address!");
+		} else {
+			return("CommonCrawl address!");
 		}
 	}
 	return("");
