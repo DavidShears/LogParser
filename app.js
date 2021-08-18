@@ -33,6 +33,7 @@ var UniqueRecs = [];
 var CountRecs = [];
 var FirstDate = [];
 var LastDate = [];
+var Notes = [];
 
 // Arrays for holding IPs flagged
 // Will be used to build notes column
@@ -120,6 +121,19 @@ rl.on('line', (string) => {
 			CountRecs.push(1);
 			FirstDate.push(DateNew);
 			LastDate.push(DateNew);
+			var checkedip = checkip(IPAdd);
+			Notes.push(checkedip);
+			//Debugging - check if there's a bot agent identifier but IP isn't in bot ranges
+			/* var checkedbot = checkbot(string,IPAdd);
+			if (checkedip != "" && checkedbot != "") {
+				Notes.push(checkedip + ", " + checkedbot);
+			} else if (checkedip == "") {
+				Notes.push(checkedbot);
+			} else if (checkedbot == "") {
+				Notes.push(checkedip);
+			} else {
+				Notes.push("");
+			} */
 		}
 	}
 })
@@ -186,7 +200,7 @@ rl.on('line', (string) => {
 					rowdef[3] = CountRecs[counter];
 					rowdef[4] = FirstDate[counter];
 					rowdef[5] = LastDate[counter];
-					rowdef[6] = checkip(element.substring(0,element.indexOf(' ')));
+					rowdef[6] = Notes[counter];
 					break;
 				case 'summurl':
 					rowdef[1] = element.substring(0,element.indexOf(' '));
@@ -194,14 +208,14 @@ rl.on('line', (string) => {
 					rowdef[3] = CountRecs[counter];
 					rowdef[4] = FirstDate[counter];
 					rowdef[5] = LastDate[counter];
-					rowdef[6] = checkip(element.substring(0,element.indexOf(' ')));
+					rowdef[6] = Notes[counter];
 					break;
 				case 'summip':
 					rowdef[1] = element
 					rowdef[2] = CountRecs[counter];
 					rowdef[3] = FirstDate[counter];
 					rowdef[4] = LastDate[counter];
-					rowdef[5] = checkip(element.substring(0,element.indexOf(' ')));
+					rowdef[5] = Notes[counter];
 					break;
 				default:
 					rowdef[1] = element.substring(0,element.indexOf(' '));
@@ -210,7 +224,7 @@ rl.on('line', (string) => {
 					rowdef[4] = CountRecs[counter];
 					rowdef[5] = FirstDate[counter];
 					rowdef[6] = LastDate[counter];
-					rowdef[7] = checkip(element.substring(0,element.indexOf(' ')));
+					rowdef[7] = Notes[counter];
 					break;
 			}
 		} else {
@@ -219,7 +233,7 @@ rl.on('line', (string) => {
 			rowdef[3] = CountRecs[counter];
 			rowdef[4] = FirstDate[counter];
 			rowdef[5] = LastDate[counter];
-			rowdef[6] = checkip(element.substring(0,element.indexOf(' ')));
+			rowdef[6] = Notes[counter];
 		}
 		worksheet.addRow(rowdef);
 		counter++;
@@ -247,3 +261,105 @@ function checkip(IPaddress){
 		return("");
 	}
 };
+
+
+//Debugging function - check for various bot agents and see if we already have the IP address on record
+function checkbot(string,IPAdd) {
+	if (string.indexOf('MJ12bot') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New MJ12bot address!");
+		} else {
+			return("MJ12bot address!");
+		}
+	}
+	if (string.indexOf('bingbot') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New bingbot address!");
+		} else {
+			return("bingbot address!");
+		}
+	}
+	if (string.indexOf('Googlebot') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New Googlebot address!");
+		} else {
+			return("Googlebot address!");
+		}
+	}
+	if (string.indexOf('AhrefsBot') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New AhrefsBot address!");
+		} else {
+			return("AhrefsBot address!");
+		}
+	}
+	if (string.indexOf('PetalBot') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New PetalBot address!");
+		} else {
+			return("PetalBot address!");
+		}
+	}
+	if (string.indexOf('Applebot') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New Applebot address!");
+		} else {
+			return("Applebot address!");
+		}
+	}
+	if (string.indexOf('SemrushBot') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New SemrushBot address!");
+		} else {
+			return("SemrushBot address!");
+		}
+	}
+	if (string.indexOf('Mail.RU_Bot') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New Mail.ru address!");
+		} else {
+			return("Mail.ru address!");
+		}
+	}
+	if (string.indexOf('ZoominfoBot') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New ZoominfoBot address!");
+		} else {
+			return("ZoominfoBot address!");
+		}
+	}
+	if (string.indexOf('baidu') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New baidu address!");
+		} else {
+			return("baidu address!");
+		}
+	}
+	if (string.indexOf('Qwantify') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New Qwantify address!");
+		} else {
+			return("Qwantify address!");
+		}
+	}
+	if (string.indexOf('DotBot') != -1) {
+		var found = checkip(IPAdd);
+		if (found == '') {
+			return("New DotBot address!");
+		} else {
+			return("DotBot address!");
+		}
+	}
+	return("");
+}
