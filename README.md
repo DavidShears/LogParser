@@ -23,6 +23,10 @@ node app.js IIS summurl - summarise by IP & url request (exclude HTTP status)
 
 node app.js IIS summip - summarise by IP (exclude HTTP status & url request)
 
+node app.js IIS (summstat/summurl/summip if required) agent - only use checkbot, not checkip to report on bots
+
+node app.js IIS (summstat/summurl/summip if required) ip - only use checkip, not checkbot to report on bots
+
 node app.js (or any parm not listed above) - trigger original Joomla logic
 
 ## Requirements

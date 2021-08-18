@@ -11,8 +11,20 @@ var args = process.argv;
 if (args[2] != null) {
 	var logtype = args[2].toUpperCase();
 }
+
+// check if 2nd parameter (third argument) is a mode or a bot report type
 if (args[3] != null) {
-	var modetype = args[3].toLowerCase();
+	if (args[3].substring(0,3) == "summ") {
+		var modetype = args[3].toLowerCase();
+	} else {
+		var bottype = args[3].toLowerCase();	
+	}
+}
+
+
+// 3rd parameter (4th argument) will be a bot report type if 3rd was a mode
+if (args[4] != null) {
+	var bottype = args[4].toLowerCase();
 }
 
 if (logtype == 'IIS') {
@@ -125,7 +137,9 @@ rl.on('line', (string) => {
 			var checkedip = checkip(IPAdd);
 			/* Notes.push(checkedip); */
 			//Debugging - check if there's a bot agent identifier but IP isn't in bot ranges
-			var checkedbot = checkbot(string,IPAdd);
+			if (bottype != "ip") {
+				var checkedbot = checkbot(string,IPAdd);
+			}
 			if (checkedip != "" && checkedbot != "") {
 				Notes.push(checkedip + ", " + checkedbot);
 			} else if (checkedip == "") {
@@ -250,9 +264,9 @@ function checkip(IPaddress){
 		return("Monitored Address");
 	} else if (badIPs.includes(IPaddress) ) {
 		return("Blocked Address");
-	} else if (botIPs.includes(IPaddress)) {
+	} else if (botIPs.includes(IPaddress) && bottype != "agent") {
 		return("Bot Address");
-	} else if (botIPs.includes(subnet) && botIPs[botIPs.indexOf(subnet)].substr(-1) == '.'){
+	} else if (botIPs.includes(subnet) && botIPs[botIPs.indexOf(subnet)].substr(-1) == '.' && bottype != "agent"){
 		return ("Bot Subnet");
 	} else {
 		return("");
@@ -265,9 +279,13 @@ function checkbot(string,IPAdd) {
 	let i = 0;
 	while (botagents[i]) {
 		if (string.indexOf(botagents[i]) != -1) {
-			var found = checkip(IPAdd);
-			if (found == '') {
-				return("New " + botagents[i] + " address!");
+			if (bottype != "agent"){
+				var found = checkip(IPAdd);
+				if (found == '') {
+					return("New " + botagents[i] + " address!");
+				} else {
+					return(botagents[i] + " address!");
+				}
 			} else {
 				return(botagents[i] + " address!");
 			}
