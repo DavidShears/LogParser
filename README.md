@@ -35,4 +35,4 @@ ExcelJS is used to generate spreadsheet output.
 4. ~~Optimize runtime, additional logic to handle non-date ordered logs and 404/403 exceptions appears to have raised the processing time.~~ Amending date handling took approx. 25% off runtime.
 5. ~~Find a unique identifier to avoid list of if statements for HTTP status (perhaps pass in the URL of the website as another parameter?)~~ Replace hardcoded list of HTTP status exceptions with regex statement
 6. ~~Amend checkip function to wildcard match, allow 123.123.123.x rather than having to list out each IP in the subnet.~~ Added draft wildcard logic for botIP matches
-7. Identify suitable method to extract useragent so lookup against array possible rather than list of "if" statements in checkbot function.
+7. ~~Identify suitable method to extract useragent so lookup against array possible rather than list of "if" statements in checkbot function.~~ Replaced with while loop over array.

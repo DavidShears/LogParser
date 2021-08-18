@@ -43,6 +43,7 @@ var badIPs = [];
 
 // botIPs array moved to external javascript file
 var botIPs = require('./bots.js').botIPs;
+var botagents = require('./bots.js').botagents;
 
 rl.on('line', (string) => {
 	// First test - remove header records by testing for #)
@@ -122,9 +123,9 @@ rl.on('line', (string) => {
 			FirstDate.push(DateNew);
 			LastDate.push(DateNew);
 			var checkedip = checkip(IPAdd);
-			Notes.push(checkedip);
+			/* Notes.push(checkedip); */
 			//Debugging - check if there's a bot agent identifier but IP isn't in bot ranges
-			/* var checkedbot = checkbot(string,IPAdd);
+			var checkedbot = checkbot(string,IPAdd);
 			if (checkedip != "" && checkedbot != "") {
 				Notes.push(checkedip + ", " + checkedbot);
 			} else if (checkedip == "") {
@@ -133,7 +134,7 @@ rl.on('line', (string) => {
 				Notes.push(checkedip);
 			} else {
 				Notes.push("");
-			} */
+			}
 		}
 	}
 })
@@ -261,133 +262,25 @@ function checkip(IPaddress){
 
 //Debugging function - check for various bot agents and see if we already have the IP address on record
 function checkbot(string,IPAdd) {
-	if (string.indexOf('MJ12bot') != -1) {
+	let i = 0;
+	while (botagents[i]) {
+		if (string.indexOf(botagents[i]) != -1) {
+			var found = checkip(IPAdd);
+			if (found == '') {
+				return("New " + botagents[i] + " address!");
+			} else {
+				return(botagents[i] + " address!");
+			}
+		}
+		i++;
+	}
+	return("");
+/*	if (string.indexOf('MJ12bot') != -1) {
 		var found = checkip(IPAdd);
 		if (found == '') {
 			return("New MJ12bot address!");
 		} else {
 			return("MJ12bot address!");
 		}
-	}
-	if (string.indexOf('bingbot') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New bingbot address!");
-		} else {
-			return("bingbot address!");
-		}
-	}
-	if (string.indexOf('Googlebot') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New Googlebot address!");
-		} else {
-			return("Googlebot address!");
-		}
-	}
-	if (string.indexOf('AhrefsBot') != -1 || string.indexOf('AhrefsSiteAudit') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New AhrefsBot address!");
-		} else {
-			return("AhrefsBot address!");
-		}
-	}
-	if (string.indexOf('PetalBot') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New PetalBot address!");
-		} else {
-			return("PetalBot address!");
-		}
-	}
-	if (string.indexOf('Applebot') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New Applebot address!");
-		} else {
-			return("Applebot address!");
-		}
-	}
-	if (string.indexOf('SemrushBot') != -1 || string.indexOf('SiteAuditBot') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New SemrushBot address!");
-		} else {
-			return("SemrushBot address!");
-		}
-	}
-	if (string.indexOf('Mail.RU_Bot') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New Mail.ru address!");
-		} else {
-			return("Mail.ru address!");
-		}
-	}
-	if (string.indexOf('ZoominfoBot') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New ZoominfoBot address!");
-		} else {
-			return("ZoominfoBot address!");
-		}
-	}
-	if (string.indexOf('baidu') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New baidu address!");
-		} else {
-			return("baidu address!");
-		}
-	}
-	if (string.indexOf('Qwantify') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New Qwantify address!");
-		} else {
-			return("Qwantify address!");
-		}
-	}
-	if (string.indexOf('DotBot') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New OpenSiteExplorer address!");
-		} else {
-			return("OpenSiteExplorer address!");
-		}
-	}
-	if (string.indexOf('Twitterbot') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New Twitterbot address!");
-		} else {
-			return("Twitterbot address!");
-		}
-	}
-	if (string.indexOf('IonCrawl') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New Ionos address!");
-		} else {
-			return("Ionos address!");
-		}
-	}
-	if (string.indexOf('nominet.uk') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New nominet address!");
-		} else {
-			return("nominet address!");
-		}
-	}
-	if (string.indexOf('CCBot') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New CommonCrawl address!");
-		} else {
-			return("CommonCrawl address!");
-		}
-	}
-	return("");
+	} */
 }
