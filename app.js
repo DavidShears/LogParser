@@ -14,13 +14,12 @@ if (args[2] != null) {
 
 // check if 2nd parameter (third argument) is a mode or a bot report type
 if (args[3] != null) {
-	if (args[3].substring(0,3) == "summ") {
+	if (args[3].substring(0,4) == "summ") {
 		var modetype = args[3].toLowerCase();
 	} else {
 		var bottype = args[3].toLowerCase();	
 	}
 }
-
 
 // 3rd parameter (4th argument) will be a bot report type if 3rd was a mode
 if (args[4] != null) {
@@ -129,6 +128,7 @@ rl.on('line', (string) => {
 			} else if (DateNew < FirstDate[UniqueRecs.indexOf(CurrentLine)]) {
 				FirstDate[UniqueRecs.indexOf(CurrentLine)] = DateNew;
 			}
+		// Record not in array - write as long as there's an IP Address
 		} else if (IPAdd != '' && IPAdd != ' ') {
 			UniqueRecs.push(CurrentLine);
 			CountRecs.push(1);
@@ -278,7 +278,8 @@ function checkip(IPaddress){
 function checkbot(string,IPAdd) {
 	let i = 0;
 	while (botagents[i]) {
-		if (string.indexOf(botagents[i]) != -1) {
+		var tempstring = string.toLowerCase();
+		if (tempstring.indexOf(botagents[i]) != -1) {
 			if (bottype != "agent"){
 				var found = checkip(IPAdd);
 				if (found == '') {

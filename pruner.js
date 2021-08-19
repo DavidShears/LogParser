@@ -19,7 +19,7 @@ var botagents = require('./bots.js').botagents;
 rl.on('line', (string) => {
 	// replace false positives, such as checking robots.txt and any files with 'bot' in the name
 	string = string.replace(/robots.txt/gi,"");
-	string = string.replace("logobottom.png","");
+	string = string.replace(/bottom/gi,"");
 	if (string.indexOf('Bot') != -1 || string.indexOf('bot') != -1) {
 		var unknown = checkbot(string);
 		if (unknown == '') {
@@ -51,7 +51,8 @@ rl.on('line', (string) => {
 function checkbot(string) {
 	let i = 0;
 	while (botagents[i]) {
-		if (string.indexOf(botagents[i]) != -1) {
+		var tempstring = string.toLowerCase();
+		if (tempstring.indexOf(botagents[i]) != -1) {
 				return(botagents[i] + " address!");
 			}
 		i++;
