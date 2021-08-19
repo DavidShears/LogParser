@@ -239,6 +239,7 @@ var botagents = [
 	"exabot-thumbnails",
 	"fullstorybot",
 	"googlebot",
+	"indeedbot",
 	"ioncrawl",
 	"linguee",
 	"linkedinbot",

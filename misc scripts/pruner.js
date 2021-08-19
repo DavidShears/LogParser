@@ -14,7 +14,7 @@ var Excel = require('exceljs');
 
 var Recs = [];
 
-var botagents = require('./bots.js').botagents;
+var botagents = require('../includes/bots.js').botagents;
 
 rl.on('line', (string) => {
 	// replace false positives, such as checking robots.txt and any files with 'bot' in the name
