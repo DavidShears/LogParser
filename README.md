@@ -29,6 +29,8 @@ node app.js IIS (summstat/summurl/summip if required) ip - only use checkip, not
 
 node app.js (or any parm not listed above) - trigger original Joomla logic
 
+node pruner.js - to run a quick script aimed at identifying any botagents not already registered in bots.js (IIS only)
+
 ## Requirements
 ExcelJS is used to generate spreadsheet output.
 
