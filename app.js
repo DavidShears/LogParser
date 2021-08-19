@@ -102,17 +102,15 @@ rl.on('line', (string) => {
 					CurrentLine = (IPAdd + ' ' + urlreq + ' ' + HTTPstat);
 					break;
 			}
-			//CurrentLine = (IPAdd + ' ' + urlreq + ' ' + HTTPstat);
 		// else use Joomla logic
 		} else {
+			var IPStart = string.search(/(\d*\.){3}\d*/g);
+			var IPAdd = string.substring(IPStart,string.indexOf('	',IPStart));
 			// Handle older version of Joomla logging
 			if (string.indexOf('Joomla FAILURE') !== -1) {
-				var IPAdd = string.substring(25,string.indexOf('	',25));
-				// Add 46 characters to length - gets us to error message
+				// Add 43 characters to length - gets us to error message
 				nextpos = IPAdd.length + 43;
 			} else {
-			// Starts in position 31, end at next tab character
-				var IPAdd = string.substring(31,string.indexOf('	',31));
 				// Add 46 characters to length - gets us to error message
 				nextpos = IPAdd.length + 46;
 			}
