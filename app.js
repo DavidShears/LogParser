@@ -51,7 +51,6 @@ var Notes = [];
 var InternalIPs = [];
 var SuspectIPs = [];
 var badIPs = [];
-
 // botIPs array moved to external javascript file
 var botIPs = require('./includes/bots.js').botIPs;
 var botagents = require('./includes/bots.js').botagents;
@@ -75,10 +74,13 @@ rl.on('line', (string) => {
 				var urlend = string.indexOf(' - ');
 			}
 			var urlreq = string.substring(string.indexOf('/'),urlend);
-			// Figure out where IP address is
-			var IPStart = string.indexOf(' HTTP');
-			var IPStart = string.lastIndexOf(' ',IPStart - 1);
-			var IPAdd = string.substring(IPStart + 1,string.indexOf(' ',IPStart + 1));
+			// IIS not displaying ? in url request so put it back in
+			urlreq = urlreq.replace(" ","?");
+			// Figure out where IP address is - search for 3 sets of digits
+			// with a decimal inbetween, followed by a 4th set of digits.
+			// Must also have 10 spaces preceeding it to not pick up host IP
+			var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
+			var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
 			// Get HTTP status using Regex to find 3 digits followed by a series of 
 			// 5 spaces seperated by any number of digits
 			// 200 0 0 15669 344 546
