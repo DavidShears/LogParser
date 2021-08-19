@@ -53,8 +53,8 @@ var SuspectIPs = [];
 var badIPs = [];
 
 // botIPs array moved to external javascript file
-var botIPs = require('./bots.js').botIPs;
-var botagents = require('./bots.js').botagents;
+var botIPs = require('./includes/bots.js').botIPs;
+var botagents = require('./includes/bots.js').botagents;
 
 rl.on('line', (string) => {
 	// First test - remove header records by testing for #)
