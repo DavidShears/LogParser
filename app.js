@@ -8,6 +8,7 @@ var Excel = require('exceljs');
 var functions = require('./includes/logparse-process.js');
 var checkip = functions.checkip;
 var checkbot = functions.checkbot;
+var buildline = functions.buildline;
 
 // Add option to specify log type - if anything other than IIS assume original Joomla logic
 
@@ -56,94 +57,42 @@ rl.on('line', (string) => {
 	if (string.indexOf('#') !== 0) {
 		// Extract date and time
 		var datetime = string.substring(0,19);
-		// Extract IP address
-		if (logtype == 'IIS') {
-			// Start of URL will be first instance of a forward slash
-			// End of URL will be before the port number, normally 443/80
-			// If URL is under a certain length then IIS appears to add a - before the port
-			// So test for both scenarios
-			var urlend = string.indexOf(' 443 ');
-			if (urlend == -1) {
-				var urlend = string.indexOf(' 80 ');
-			}
-			if (string.lastIndexOf(' - ',urlend) !== -1) {
-				var urlend = string.indexOf(' - ');
-			}
-			var urlreq = string.substring(string.indexOf('/'),urlend);
-			// IIS not displaying ? in url request so put it back in
-			urlreq = urlreq.replace(" ","?");
-			// Figure out where IP address is - search for 3 sets of digits
-			// with a decimal inbetween, followed by a 4th set of digits.
-			// Must also have 10 spaces preceeding it to not pick up host IP
-			var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
-			var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
-			// Get HTTP status using Regex to find 3 digits followed by a series of 
-			// 5 spaces seperated by any number of digits
-			// 200 0 0 15669 344 546
-			var HTTPstart = string.search(/\d{3}(?=( (\d*)){5})/g);
-			var HTTPstat = string.substring(HTTPstart,HTTPstart + 3);
-			// Build CurrentLine from the various elements we've picked up
-			// If a mode has been specified, use that
-			switch (modetype) {
-				case 'summstat':
-					CurrentLine = (IPAdd + ' ' + HTTPstat);
-					break;
-				case 'summurl':
-					CurrentLine = (IPAdd + ' ' + urlreq);
-					break;
-				case 'summip':
-					CurrentLine = (IPAdd);
-					break;
-				default:
-					CurrentLine = (IPAdd + ' ' + urlreq + ' ' + HTTPstat);
-					break;
-			}
-		// else use Joomla logic
-		} else {
-			var IPStart = string.search(/(\d*\.){3}\d*/g);
-			var IPAdd = string.substring(IPStart,string.indexOf('	',IPStart));
-			// Handle older version of Joomla logging
-			if (string.indexOf('Joomla FAILURE') !== -1) {
-				// Add 43 characters to length - gets us to error message
-				nextpos = IPAdd.length + 43;
+		var CurrentLine = buildline(string,logtype,modetype);
+		if (CurrentLine != "") {
+			// Test if record is already in array - if it is then increment counter and update last date
+			// If it isn't then add to arrays and stamp first date
+			var DateNew = new Date(datetime);
+			if (UniqueRecs.includes(CurrentLine)) {
+				CountRecs[UniqueRecs.indexOf(CurrentLine)] = CountRecs[UniqueRecs.indexOf(CurrentLine)] + 1;
+				// New test - although log normally in date/time order lets not assume that and only update
+				// the date/time if we're happy it's more recent
+				if (DateNew > LastDate[UniqueRecs.indexOf(CurrentLine)]) {
+					LastDate[UniqueRecs.indexOf(CurrentLine)] = DateNew;
+				} else if (DateNew < FirstDate[UniqueRecs.indexOf(CurrentLine)]) {
+					FirstDate[UniqueRecs.indexOf(CurrentLine)] = DateNew;
+				}
+			// Record not in array - write as long as there's an IP Address
 			} else {
-				// Add 46 characters to length - gets us to error message
-				nextpos = IPAdd.length + 46;
-			}
-			CurrentLine = (IPAdd + ' ' + string.substring(nextpos));
-		}
-		// Test if record is already in array - if it is then increment counter and update last date
-		// If it isn't then add to arrays and stamp first date
-		var DateNew = new Date(datetime);
-		if (UniqueRecs.includes(CurrentLine)) {
-			CountRecs[UniqueRecs.indexOf(CurrentLine)] = CountRecs[UniqueRecs.indexOf(CurrentLine)] + 1;
-			// New test - although log normally in date/time order lets not assume that and only update
-			// the date/time if we're happy it's more recent
-			if (DateNew > LastDate[UniqueRecs.indexOf(CurrentLine)]) {
-				LastDate[UniqueRecs.indexOf(CurrentLine)] = DateNew;
-			} else if (DateNew < FirstDate[UniqueRecs.indexOf(CurrentLine)]) {
-				FirstDate[UniqueRecs.indexOf(CurrentLine)] = DateNew;
-			}
-		// Record not in array - write as long as there's an IP Address
-		} else if (IPAdd != '' && IPAdd != ' ') {
-			UniqueRecs.push(CurrentLine);
-			CountRecs.push(1);
-			FirstDate.push(DateNew);
-			LastDate.push(DateNew);
-			var checkedip = checkip(IPAdd,bottype);
-			/* Notes.push(checkedip); */
-			//Debugging - check if there's a bot agent identifier but IP isn't in bot ranges
-			if (bottype != "ip") {
-				var checkedbot = checkbot(string,IPAdd,bottype);
-			}
-			if (checkedip != "" && checkedbot != "") {
-				Notes.push(checkedip + ", " + checkedbot);
-			} else if (checkedip == "") {
-				Notes.push(checkedbot);
-			} else if (checkedbot == "") {
-				Notes.push(checkedip);
-			} else {
-				Notes.push("");
+				UniqueRecs.push(CurrentLine);
+				CountRecs.push(1);
+				FirstDate.push(DateNew);
+				LastDate.push(DateNew);
+				var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
+				var checkedip = checkip(IPAdd,bottype);
+				/* Notes.push(checkedip); */
+				//Debugging - check if there's a bot agent identifier but IP isn't in bot ranges
+				if (bottype != "ip") {
+					var checkedbot = checkbot(string,IPAdd,bottype);
+				}
+				if (checkedip != "" && checkedbot != "") {
+					Notes.push(checkedip + ", " + checkedbot);
+				} else if (checkedip == "") {
+					Notes.push(checkedbot);
+				} else if (checkedbot == "") {
+					Notes.push(checkedip);
+				} else {
+					Notes.push("");
+				}
 			}
 		}
 	}

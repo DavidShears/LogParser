@@ -7,8 +7,73 @@ var badIPs = [];
 var botIPs = require('./bots.js').botIPs;
 var botagents = require('./bots.js').botagents;
 
+//buildline - accepts string from readline and builds for output
+function buildline(string,logtype,modetype){
+	// Extract IP address
+	if (logtype == 'IIS') {
+		// Start of URL will be first instance of a forward slash
+		// End of URL will be before the port number, normally 443/80
+		// If URL is under a certain length then IIS appears to add a - before the port
+		// So test for both scenarios
+		var urlend = string.indexOf(' 443 ');
+		if (urlend == -1) {
+			var urlend = string.indexOf(' 80 ');
+		}
+		if (string.lastIndexOf(' - ',urlend) !== -1) {
+			var urlend = string.indexOf(' - ');
+		}
+		var urlreq = string.substring(string.indexOf('/'),urlend);
+		// IIS not displaying ? in url request so put it back in
+		urlreq = urlreq.replace(" ","?");
+		// Figure out where IP address is - search for 3 sets of digits
+		// with a decimal inbetween, followed by a 4th set of digits.
+		// Must also have 10 spaces preceeding it to not pick up host IP
+		var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
+		var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
+		// Get HTTP status using Regex to find 3 digits followed by a series of 
+		// 5 spaces seperated by any number of digits
+		// 200 0 0 15669 344 546
+		var HTTPstart = string.search(/\d{3}(?=( (\d*)){5})/g);
+		var HTTPstat = string.substring(HTTPstart,HTTPstart + 3);
+		// Build CurrentLine from the various elements we've picked up
+		// If a mode has been specified, use that
+		switch (modetype) {
+			case 'summstat':
+				CurrentLine = (IPAdd + ' ' + HTTPstat);
+				break;
+			case 'summurl':
+				CurrentLine = (IPAdd + ' ' + urlreq);
+				break;
+			case 'summip':
+				CurrentLine = (IPAdd);
+				break;
+			default:
+				CurrentLine = (IPAdd + ' ' + urlreq + ' ' + HTTPstat);
+				break;
+		}
+	// else use Joomla logic
+	} else {
+		var IPStart = string.search(/(\d*\.){3}\d*/g);
+		var IPAdd = string.substring(IPStart,string.indexOf('	',IPStart));
+		// Handle older version of Joomla logging
+		if (string.indexOf('Joomla FAILURE') !== -1) {
+			// Add 43 characters to length - gets us to error message
+			nextpos = IPAdd.length + 43;
+		} else {
+			// Add 46 characters to length - gets us to error message
+			nextpos = IPAdd.length + 46;
+		}
+		CurrentLine = (IPAdd + ' ' + string.substring(nextpos));
+	}
+	if (IPAdd != '' && IPAdd != ' ') {
+		return(CurrentLine);
+	} else {
+		return("");
+	}
+}
 
-// Main function - called when user hits submit
+
+// webapp function - called when user hits submit
 function logparse(){
   var totalrecs = 0;
   document.getElementById("results").value = ("");
@@ -84,4 +149,4 @@ function checkbot(string,IPAdd,bottype) {
 	return("");
 }
 
-module.exports = {checkip,checkbot};
+module.exports = {checkip,checkbot,buildline};
