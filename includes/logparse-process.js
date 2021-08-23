@@ -43,7 +43,7 @@ function checkmode(){
     }
 }
 
-function checkip(IPaddress){
+function checkip(IPaddress,bottype){
 	// Allow a 3 part match i.e. 127.0.0.* - currently only for bots
 	var subnet = IPaddress.substring(0,IPaddress.lastIndexOf('.') + 1)
 	if (InternalIPs.includes(IPaddress) ) {
@@ -63,7 +63,7 @@ function checkip(IPaddress){
 
 
 //Debugging function - check for various bot agents and see if we already have the IP address on record
-function checkbot(string,IPAdd) {
+function checkbot(string,IPAdd,bottype) {
 	let i = 0;
 	while (botagents[i]) {
 		var tempstring = string.toLowerCase();

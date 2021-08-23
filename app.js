@@ -130,11 +130,11 @@ rl.on('line', (string) => {
 			CountRecs.push(1);
 			FirstDate.push(DateNew);
 			LastDate.push(DateNew);
-			var checkedip = checkip(IPAdd);
+			var checkedip = checkip(IPAdd,bottype);
 			/* Notes.push(checkedip); */
 			//Debugging - check if there's a bot agent identifier but IP isn't in bot ranges
 			if (bottype != "ip") {
-				var checkedbot = checkbot(string,IPAdd);
+				var checkedbot = checkbot(string,IPAdd,bottype);
 			}
 			if (checkedip != "" && checkedbot != "") {
 				Notes.push(checkedip + ", " + checkedbot);
