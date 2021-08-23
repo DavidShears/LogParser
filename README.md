@@ -34,6 +34,8 @@ node pruner.js - to run a quick script aimed at identifying any botagents not al
 ## Requirements
 ExcelJS is used to generate spreadsheet output.
 
+Express/ejs/socket.io are all planned to be used in the web facing version of the app. If running command line only these are not required.
+
 ## To-do:
 1. ~~Combine both sets in the output to give record & count side-by-side~~ Handled by ExcelJS (although could be neater inline processing.)
 2. ~~Currently capturing date & time, add "last date/time" to the output.~~ Extra logic added for first & last date found

@@ -18,5 +18,10 @@
   "homepage": "https://github.com/DavidShears/LogParser#readme",
   "dependencies": {
     "exceljs": "^4.3.0"
+  },
+  "optionalDependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "socket.io": "^4.1.3"
   }
 }
