@@ -14,6 +14,9 @@ var botIPs = [
 			"168.119.65.112",
 			"168.119.68.",
 			"195.154.122.",
+			// aihitbot
+			"78.129.165.8",
+			"88.150.241.101",
 			// Apple bot
 			"17.58.96.",
 			"17.58.97.88",
@@ -46,6 +49,11 @@ var botIPs = [
 			"162.55.86.53",
 			"213.239.210.231",
 			"94.130.9.115",
+			//ccbot
+			"3.235.56.11",
+			"3.235.60.144",
+			"3.236.124.77",
+			"34.204.185.54",
 			//CommonCrawl
 			"100.24.117.201",
 			"3.80.6.131",
@@ -232,6 +240,7 @@ var botagents = [
 	"ccbot",
 	"datagnionbot",
 	"df+bot",
+	"diffbot",
 	"discoverybot",
 	"domainstatsbot",
 	"dotbot",
@@ -281,5 +290,4 @@ var botagents = [
 	"zoominfobot"
 ]
 
-exports.botIPs = botIPs;
-exports.botagents = botagents;
+module.exports = {botIPs,botagents}

@@ -4,6 +4,11 @@ const fs = require('fs');
 const readline = require('readline');
 var Excel = require('exceljs');
 
+// checkip & checkbot outsourced
+var functions = require('./includes/logparse-process.js');
+var checkip = functions.checkip;
+var checkbot = functions.checkbot;
+
 // Add option to specify log type - if anything other than IIS assume original Joomla logic
 
 var args = process.argv;
@@ -45,15 +50,6 @@ var CountRecs = [];
 var FirstDate = [];
 var LastDate = [];
 var Notes = [];
-
-// Arrays for holding IPs flagged
-// Will be used to build notes column
-var InternalIPs = [];
-var SuspectIPs = [];
-var badIPs = [];
-// botIPs array moved to external javascript file
-var botIPs = require('./includes/bots.js').botIPs;
-var botagents = require('./includes/bots.js').botagents;
 
 rl.on('line', (string) => {
 	// First test - remove header records by testing for #)
@@ -251,55 +247,3 @@ rl.on('line', (string) => {
 	})
 	workbook.xlsx.writeFile("output.xlsx");
 });
-
-// Function to test IP address against each of the three arrays
-// If found then return note value
-
-function checkip(IPaddress){
-	// Allow a 3 part match i.e. 127.0.0.* - currently only for bots
-	var subnet = IPaddress.substring(0,IPaddress.lastIndexOf('.') + 1)
-	if (InternalIPs.includes(IPaddress) ) {
-		return("Internal Address");
-	} else if (SuspectIPs.includes(IPaddress) ) {
-		return("Monitored Address");
-	} else if (badIPs.includes(IPaddress) ) {
-		return("Blocked Address");
-	} else if (botIPs.includes(IPaddress) && bottype != "agent") {
-		return("Bot Address");
-	} else if (botIPs.includes(subnet) && botIPs[botIPs.indexOf(subnet)].substr(-1) == '.' && bottype != "agent"){
-		return ("Bot Subnet");
-	} else {
-		return("");
-	}
-};
-
-
-//Debugging function - check for various bot agents and see if we already have the IP address on record
-function checkbot(string,IPAdd) {
-	let i = 0;
-	while (botagents[i]) {
-		var tempstring = string.toLowerCase();
-		if (tempstring.indexOf(botagents[i]) != -1) {
-			if (bottype != "agent"){
-				var found = checkip(IPAdd);
-				if (found == '') {
-					return("New " + botagents[i] + " address!");
-				} else {
-					return(botagents[i] + " address!");
-				}
-			} else {
-				return(botagents[i] + " address!");
-			}
-		}
-		i++;
-	}
-	return("");
-/*	if (string.indexOf('MJ12bot') != -1) {
-		var found = checkip(IPAdd);
-		if (found == '') {
-			return("New MJ12bot address!");
-		} else {
-			return("MJ12bot address!");
-		}
-	} */
-}
