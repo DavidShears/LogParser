@@ -32,9 +32,7 @@ rl.on('line', (string) => {
 	var workbook = new Excel.Workbook();
 	var worksheet = workbook.addWorksheet("Bot Records");
 		var coldef = [];
-		var counter = 0;
-		coldef[counter] = { header: "Record", key:"RECORD"};
-		counter++;
+		coldef[0] = { header: "Record", key:"RECORD"};
 		worksheet.columns = coldef;
 	worksheet.getRow(1).font = { name: "Calibri", size: 11, bold: true};
 	// Loop array of unique records
@@ -47,6 +45,8 @@ rl.on('line', (string) => {
 	})
 	workbook.xlsx.writeFile("pruned.xlsx");
 });
+
+// stripdown version of normal checkbot function - just check if the agent is already known
 
 function checkbot(string) {
 	let i = 0;
