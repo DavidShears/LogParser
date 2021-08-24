@@ -15,9 +15,12 @@ Also has the option to pass in 'IIS' to instead parse IIS logs (tested on IIS 8.
 Tested on 142mb IIS file for detailed output with approx runtime of 12 minutes.
 
 ## Requirements
-ExcelJS is used to generate spreadsheet output.
+ExcelJS is used to generate spreadsheet output and is the only "required" dependency.
 
-Express/ejs/socket.io are all planned to be used in the web facing version of the app. If running command line only these are not required.
+Optional dependencies exist for the webapp version of the script:
+* Expressjs/ejs - to handle the general process
+* socket.io - used to pass progress from the server to the client (useful on larger files)
+* nodemailer - used to allow email of spreadsheet once extract is complete
 
 ## Running
 
