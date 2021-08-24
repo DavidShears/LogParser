@@ -8,7 +8,7 @@ var botIPs = require('./bots.js').botIPs;
 var botagents = require('./bots.js').botagents;
 
 //buildline - accepts string from readline and builds for output
-function buildline(string,logtype,modetype){
+function buildline(string,logtype,modetype,emailaddress){
 	// Extract IP address
 	if (logtype == 'IIS') {
 		// Start of URL will be first instance of a forward slash
@@ -123,24 +123,25 @@ function buildcols(logtype,modetype){
 
 // webapp function - called when user hits submit
 function logparse(){
-  var totalrecs = 0;
-  document.getElementById("results").value = ("");
+	var totalrecs = 0;
+  	document.getElementById("results").value = ("");
 	var socket = io();
 	// Get the values the user has entered
-  var logtype = (document.getElementById("logType").value);
+  	var logtype = (document.getElementById("logType").value);
 	var modetype = (document.getElementById("modeType").value);
 	var bottype = (document.getElementById("botType").value);
-  socket.emit('procfile', logtype, modetype, bottype);
+	var emailaddress = (document.getElementById("emailaddress").value);
+  	socket.emit('procfile', logtype, modetype, bottype, emailaddress);
 
-  socket.on('progress', function(reccnt) {
-    totalrecs = totalrecs + reccnt;
-    console.log('total records: ' + totalrecs);
-    document.getElementById("results").value = (totalrecs + " records read");
-  })
-  socket.on('finished', function() {
-    document.getElementById("results").value = 
-    document.getElementById("results").value + ", processing complete!";
-  })
+  	socket.on('progress', function(reccnt) {
+    	totalrecs = totalrecs + reccnt;
+    	console.log('total records: ' + totalrecs);
+    	document.getElementById("results").value = (totalrecs + " records read");
+  	})
+  	socket.on('finished', function() {
+    	document.getElementById("results").value = 
+    	document.getElementById("results").value + ", processing complete!";
+  	})
 }
 
 // checkmode disables non-applicable fields for Joomla processing
@@ -153,6 +154,19 @@ function checkmode(){
     else {
 		document.getElementById("modeType").disabled = true;
 		document.getElementById("botType").disabled = true;
+    }
+}
+
+// checkmail toggles email address field
+function checkmail(){
+    if (document.getElementById("email").checked == true) {
+        document.getElementById("emailaddress").disabled = false;
+		document.getElementById("emailaddress").placeholder = "please enter your email address";
+    }
+    else {
+		document.getElementById("emailaddress").disabled = true;
+		document.getElementById("emailaddress").placeholder = "";
+		document.getElementById("emailaddress").value = "";
     }
 }
 
