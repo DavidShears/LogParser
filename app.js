@@ -9,6 +9,7 @@ var functions = require('./includes/logparse-process.js');
 var checkip = functions.checkip;
 var checkbot = functions.checkbot;
 var buildline = functions.buildline;
+var buildcols = functions.buildcols;
 
 // Add option to specify log type - if anything other than IIS assume original Joomla logic
 
@@ -101,51 +102,9 @@ rl.on('line', (string) => {
 	// Set up workbook and worksheet
 	var workbook = new Excel.Workbook();
 	var worksheet = workbook.addWorksheet("Error Logging");
-	// If in IIS mode then include column for HTTP status code
-	if (logtype == 'IIS') {
-		// Build column headings depending on mode, all require IP address
-		var coldef = [];
-		var counter = 0;
-		coldef[counter] = { header: "IP Address", key:"IPADD"};
-		counter++;
-		switch (modetype) {
-			case 'summstat':
-				coldef[counter] = { header: "HTTP Status", key:"HTTPSTAT"};
-				counter++;
-				break;
-			case 'summurl':
-				coldef[counter] = { header: "Record", key:"RECORD"};
-				counter++;
-				break;
-			case 'summip':
-				break;
-			default:
-				coldef[counter] = { header: "Record", key:"RECORD"};
-				counter++;
-				coldef[counter] = { header: "HTTP Status", key:"HTTPSTAT"};
-				counter++;
-				break;
-		}
-		// All then have the final 4 columns the same
-		coldef[counter] = { header: "Times Found", key:"COUNT"};
-		counter++;
-		coldef[counter] = { header: "First Found", key:"FIRST"};
-		counter++;
-		coldef[counter] = { header: "Last Found", key:"LAST"};
-		counter++;
-		coldef[counter] = { header: "Notes", key:"NOTES"};
-		counter++;
-		worksheet.columns = coldef;
-	} else {
-		worksheet.columns = [
-			{ header: "IP Address", key:"IPADD"},
-			{ header: "Record", key:"RECORD"},
-			{ header: "Times Found", key:"COUNT"},
-			{ header: "First Found", key:"FIRST"},
-			{ header: "Last Found", key:"LAST"},
-			{ header: "Notes", key:"NOTES"}
-		];
-	}
+	// Call external function to generate column headers
+	var coldef = buildcols(logtype,modetype);
+    worksheet.columns = coldef;
 	worksheet.getRow(1).font = { name: "Calibri", size: 11, bold: true};
 	// Loop array of unique records
 	var counter = 0;

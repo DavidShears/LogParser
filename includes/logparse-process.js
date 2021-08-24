@@ -72,6 +72,54 @@ function buildline(string,logtype,modetype){
 	}
 }
 
+//buildcols - build column array and return
+function buildcols(logtype,modetype){
+	var coldef = [];
+	var counter = 0;
+	// If in IIS mode then include column for HTTP status code
+	if (logtype == 'IIS') {
+		// Build column headings depending on mode, all require IP address
+		coldef[counter] = { header: "IP Address", key:"IPADD"};
+		counter++;
+		switch (modetype) {
+			case 'summstat':
+				coldef[counter] = { header: "HTTP Status", key:"HTTPSTAT"};
+				counter++;
+				break;
+			case 'summurl':
+				coldef[counter] = { header: "Record", key:"RECORD"};
+				counter++;
+				break;
+			case 'summip':
+				break;
+			default:
+				coldef[counter] = { header: "Record", key:"RECORD"};
+				counter++;
+				coldef[counter] = { header: "HTTP Status", key:"HTTPSTAT"};
+				counter++;
+				break;
+		}
+		// All then have the final 4 columns the same
+		coldef[counter] = { header: "Times Found", key:"COUNT"};
+		counter++;
+		coldef[counter] = { header: "First Found", key:"FIRST"};
+		counter++;
+		coldef[counter] = { header: "Last Found", key:"LAST"};
+		counter++;
+		coldef[counter] = { header: "Notes", key:"NOTES"};
+	} else {
+		coldef[counter] = { header: "Record", key:"RECORD"}
+		counter++;
+		coldef[counter] = { header: "Times Found", key:"COUNT"}
+		counter++;
+		coldef[counter] = { header: "First Found", key:"FIRST"}
+		counter++;
+		coldef[counter] = { header: "Last Found", key:"LAST"}
+		counter++;
+		coldef[counter] = { header: "Notes", key:"NOTES"}
+	}
+	return (coldef)
+}
 
 // webapp function - called when user hits submit
 function logparse(){
@@ -89,7 +137,7 @@ function logparse(){
     console.log('total records: ' + totalrecs);
     document.getElementById("results").value = (totalrecs + " records read");
   })
-  socket.on('finished', function(reccnt) {
+  socket.on('finished', function() {
     document.getElementById("results").value = 
     document.getElementById("results").value + ", processing complete!";
   })
@@ -149,4 +197,4 @@ function checkbot(string,IPAdd,bottype) {
 	return("");
 }
 
-module.exports = {checkip,checkbot,buildline};
+module.exports = {checkip,checkbot,buildline,buildcols};
