@@ -54,9 +54,9 @@ io.on('connection', function(socket){
             var datetime = string.substring(0,19);
             var CurrentLine = buildline(string,logtype,modetype);
             if (CurrentLine != "") {
-            // Test if record is already in array - if it is then increment counter and update last date
-            // If it isn't then add to arrays and stamp first date
-            var DateNew = new Date(datetime);
+                // Test if record is already in array - if it is then increment counter and update last date
+                // If it isn't then add to arrays and stamp first date
+                var DateNew = new Date(datetime);
                 if (UniqueRecs.includes(CurrentLine)) {
                     CountRecs[UniqueRecs.indexOf(CurrentLine)] = CountRecs[UniqueRecs.indexOf(CurrentLine)] + 1;
                     // New test - although log normally in date/time order lets not assume that and only update
@@ -108,30 +108,30 @@ io.on('connection', function(socket){
         // Loop array of unique records
         var counter = 0;
         UniqueRecs.forEach(function(element){
-            const rowdef = [];
-            // Again additional column for IIS records
-            if (logtype == 'IIS') {
-                switch (modetype) {
-                    case 'summstat':
-                        rowdef[1] = element.substring(0,element.indexOf(' '));
-                        rowdef[2] = element.substring(element.lastIndexOf(' '));
-                        var nextcol = 3;
-                        break;
-                    case 'summurl':
-                        rowdef[1] = element.substring(0,element.indexOf(' '));
-                        rowdef[2] = element.substring(element.indexOf(' '));
-                        var nextcol = 3;
-                        break;
-                    case 'summip':
-                        rowdef[1] = element
-                        var nextcol = 2;
-                        break;
-                    default:
-                        rowdef[1] = element.substring(0,element.indexOf(' '));
-                        rowdef[2] = element.substring(element.indexOf(' '),element.lastIndexOf(' '));
-                        rowdef[3] = element.substring(element.lastIndexOf(' '));
-                        var nextcol = 4;
-                        break;
+        const rowdef = [];
+        // Again additional column for IIS records
+        if (logtype == 'IIS') {
+            switch (modetype) {
+                case 'summstat':
+                    rowdef[1] = element.substring(0,element.indexOf(' '));
+                    rowdef[2] = element.substring(element.lastIndexOf(' '));
+                    var nextcol = 3;
+                    break;
+                case 'summurl':
+                    rowdef[1] = element.substring(0,element.indexOf(' '));
+                    rowdef[2] = element.substring(element.indexOf(' '));
+                    var nextcol = 3;
+                    break;
+                case 'summip':
+                    rowdef[1] = element
+                    var nextcol = 2;
+                    break;
+                default:
+                    rowdef[1] = element.substring(0,element.indexOf(' '));
+                    rowdef[2] = element.substring(element.indexOf(' '),element.lastIndexOf(' '));
+                    rowdef[3] = element.substring(element.lastIndexOf(' '));
+                    var nextcol = 4;
+                    break;
                 }
                 // All then have the final 4 columns the same
                 rowdef[nextcol] = CountRecs[counter];
