@@ -22,6 +22,7 @@
   "optionalDependencies": {
     "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "nodemailer": "^6.6.3",
     "socket.io": "^4.1.3"
   }
 }
