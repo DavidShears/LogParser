@@ -157,24 +157,25 @@ io.on('connection', function(socket){
                 worksheet.addRow(rowdef);
                 counter++;
             })
-            workbook.xlsx.writeFile("output.xlsx");
-            
-            if (emailaddress != '') {
-                var message = {
-                    from: "mitc@mnis.co.uk",
-                    to: emailaddress,
-                    subject: "Download of results",
-                    html: "<b>Sent from IBM i</b>",
-                    attachments: [{
+            workbook.xlsx.writeFile("output.xlsx").then(() => {
+
+                if (emailaddress != '') {
+                    var message = {
+                        from: "mitc@mnis.co.uk",
+                        to: emailaddress,
+                        subject: "Download of results",
+                        html: "<b>Sent from IBM i</b>",
+                        attachments: [{
                         path: "./output.xlsx"
                     }]
                 }
-                transporter.sendMail(message, function(error, info) {
-                    if (error) {
-                        console.log(error);
-                    }
-                });
-            }
+                    transporter.sendMail(message, function(error, info) {
+                        if (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+            });
             socket.emit('finished');
         });
     })
