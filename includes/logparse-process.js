@@ -130,9 +130,10 @@ function checkip(IPaddress,bottype){
 		return("Monitored Address");
 	} else if (badIPs.includes(IPaddress) ) {
 		return("Blocked Address");
-	} else if (botIPs.includes(IPaddress) && bottype != "agent") {
+	} else if (botIPs.includes(IPaddress) && bottype != "agent" && bottype != "exclude") {
 		return("Bot Address");
-	} else if (botIPs.includes(subnet) && botIPs[botIPs.indexOf(subnet)].substr(-1) == '.' && bottype != "agent"){
+	} else if (botIPs.includes(subnet) && botIPs[botIPs.indexOf(subnet)].substr(-1) == '.' 
+				&& bottype != "agent" && bottype != "exclude"){
 		return ("Bot Subnet");
 	} else {
 		return("");
@@ -146,7 +147,7 @@ function checkbot(string,IPAdd,bottype) {
 	while (botagents[i]) {
 		var tempstring = string.toLowerCase();
 		if (tempstring.indexOf(botagents[i]) != -1) {
-			if (bottype != "agent"){
+			if (bottype != "agent" && bottype != "exclude"){
 				var found = checkip(IPAdd);
 				if (found == '') {
 					return("New " + botagents[i] + " address!");
@@ -182,10 +183,15 @@ function logparse(){
 
   	socket.emit('procfile', logtype, modetype, bottype, emailaddress);
 
-  	socket.on('progress', function(reccnt) {
+  	socket.on('progress', function(reccnt,excluded) {
     	totalrecs = totalrecs + reccnt;
-    	console.log('total records: ' + totalrecs);
-    	document.getElementById("results").value = (totalrecs + " records read");
+		// report on excluded records if there are any
+		if (excluded != 0) {
+			document.getElementById("results").value = (totalrecs + " records read, "
+			+ excluded + " records excluded");
+		} else {
+    		document.getElementById("results").value = (totalrecs + " records read");
+		}
   	})
   	socket.on('finished', function() {
 		// once complete put screen back to how it should be

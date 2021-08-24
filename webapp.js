@@ -29,6 +29,7 @@ webapp.set('view engine', 'ejs');
 
 io.on('connection', function(socket){
     var reccnt = 0;
+    var excludedreccnt = 0;
     socket.on('procfile',(logtype,modetype,bottype,emailaddress) => {
 
         if (logtype == 'IIS') {
@@ -53,8 +54,13 @@ io.on('connection', function(socket){
         var Notes = [];    
 
         rl.on('line', (string) => {
+            var IPAdd = "";
+            if (bottype == "exclude") {
+                var checkedbot = checkbot(string,IPAdd,bottype);
+            }
             // First test - remove header records by testing for #)
-            if (string.indexOf('#') !== 0) {
+            if ((string.indexOf('#') !== 0 && bottype != "exclude") ||
+                (string.indexOf('#') !== 0 && bottype == "exclude" && checkedbot == "")) {
                 // Extract date and time
                 var datetime = string.substring(0,19);
                 var CurrentLine = buildline(string,logtype,modetype);
@@ -81,7 +87,8 @@ io.on('connection', function(socket){
                         var checkedip = checkip(IPAdd,bottype);
                         /* Notes.push(checkedip); */
                         //Debugging - check if there's a bot agent identifier but IP isn't in bot ranges
-                        if (bottype != "ip") {
+                        // don't bother if running in exclude mode as already checked earlier.
+                        if (bottype != "ip" && bottype != "exclude") {
                             var checkedbot = checkbot(string,IPAdd,bottype);
                         }
                         if (checkedip != "" && checkedbot != "") {
@@ -96,10 +103,12 @@ io.on('connection', function(socket){
                     }
                 }
                 if (reccnt == 500) {
-                    socket.emit('progress',reccnt);
+                    socket.emit('progress',reccnt,excludedreccnt);
                     reccnt = 0;
                 }
                 reccnt += 1;
+            } else if (bottype == "exclude" && checkedbot != "") {
+                excludedreccnt +=1;
             }
         })
         .on('close', function() {

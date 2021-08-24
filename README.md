@@ -1,5 +1,5 @@
 # LogParser
-Parsing error.php from Joomla (tested on 3.9.2x, should also read logs back to 2.5.28) - Read all records and output a spreadsheet with all unique combinations of user/error along with count and last/first date it happened.
+Parsing error.php from Joomla (tested on 3.10.0, should also read logs back to 2.5.28) - Read all records and output a spreadsheet with all unique combinations of user/error along with count and last/first date it happened.
 
 Reads all records into a set of arrays, one for each data point, and then goes through array to dump each element as a row in the spreadsheet.
 
@@ -37,6 +37,8 @@ node app.js IIS summip - summarise by IP (exclude HTTP status & url request)
 node app.js IIS (summstat/summurl/summip if required) agent - only use checkbot, not checkip to report on bots
 
 node app.js IIS (summstat/summurl/summip if required) ip - only use checkip, not checkbot to report on bots
+
+node app.js IIS (summstat/summurl/summip if required) exclude - any bots found by agent will not be on the output file
 
 ### Misc Scripts
 

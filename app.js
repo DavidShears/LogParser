@@ -54,8 +54,13 @@ var LastDate = [];
 var Notes = [];
 
 rl.on('line', (string) => {
+	var IPAdd = "";
+    if (bottype == "exclude") {
+        var checkedbot = checkbot(string,IPAdd,bottype);
+    }
 	// First test - remove header records by testing for #)
-	if (string.indexOf('#') !== 0) {
+	if ((string.indexOf('#') !== 0 && bottype != "exclude") ||
+        (string.indexOf('#') !== 0 && bottype == "exclude" && checkedbot == "")) {
 		// Extract date and time
 		var datetime = string.substring(0,19);
 		var CurrentLine = buildline(string,logtype,modetype);
@@ -82,7 +87,8 @@ rl.on('line', (string) => {
 				var checkedip = checkip(IPAdd,bottype);
 				/* Notes.push(checkedip); */
 				//Debugging - check if there's a bot agent identifier but IP isn't in bot ranges
-				if (bottype != "ip") {
+				// don't bother if running in exclude mode as already checked earlier.
+				if (bottype != "ip" && bottype != "exclude") {
 					var checkedbot = checkbot(string,IPAdd,bottype);
 				}
 				if (checkedip != "" && checkedbot != "") {
