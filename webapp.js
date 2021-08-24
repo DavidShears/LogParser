@@ -158,6 +158,7 @@ io.on('connection', function(socket){
                 counter++;
             })
             workbook.xlsx.writeFile("output.xlsx");
+            
             if (emailaddress != '') {
                 var message = {
                     from: "mitc@mnis.co.uk",

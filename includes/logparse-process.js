@@ -121,55 +121,6 @@ function buildcols(logtype,modetype){
 	return (coldef)
 }
 
-// webapp function - called when user hits submit
-function logparse(){
-	var totalrecs = 0;
-  	document.getElementById("results").value = ("");
-	var socket = io();
-	// Get the values the user has entered
-  	var logtype = (document.getElementById("logType").value);
-	var modetype = (document.getElementById("modeType").value);
-	var bottype = (document.getElementById("botType").value);
-	var emailaddress = (document.getElementById("emailaddress").value);
-  	socket.emit('procfile', logtype, modetype, bottype, emailaddress);
-
-  	socket.on('progress', function(reccnt) {
-    	totalrecs = totalrecs + reccnt;
-    	console.log('total records: ' + totalrecs);
-    	document.getElementById("results").value = (totalrecs + " records read");
-  	})
-  	socket.on('finished', function() {
-    	document.getElementById("results").value = 
-    	document.getElementById("results").value + ", processing complete!";
-  	})
-}
-
-// checkmode disables non-applicable fields for Joomla processing
-function checkmode(){
-    var mode = document.getElementById("logType").value;
-    if (mode == 'IIS') {
-        document.getElementById("modeType").disabled = false;
-		document.getElementById("botType").disabled = false;
-    }
-    else {
-		document.getElementById("modeType").disabled = true;
-		document.getElementById("botType").disabled = true;
-    }
-}
-
-// checkmail toggles email address field
-function checkmail(){
-    if (document.getElementById("email").checked == true) {
-        document.getElementById("emailaddress").disabled = false;
-		document.getElementById("emailaddress").placeholder = "please enter your email address";
-    }
-    else {
-		document.getElementById("emailaddress").disabled = true;
-		document.getElementById("emailaddress").placeholder = "";
-		document.getElementById("emailaddress").value = "";
-    }
-}
-
 function checkip(IPaddress,bottype){
 	// Allow a 3 part match i.e. 127.0.0.* - currently only for bots
 	var subnet = IPaddress.substring(0,IPaddress.lastIndexOf('.') + 1)
@@ -209,6 +160,69 @@ function checkbot(string,IPAdd,bottype) {
 		i++;
 	}
 	return("");
+}
+
+// webapp function - called when user hits submit
+function logparse(){
+	var totalrecs = 0;
+  	document.getElementById("results").value = ("");
+	var socket = io();
+	// Get the values the user has entered
+  	var logtype = (document.getElementById("logType").value);
+	var modetype = (document.getElementById("modeType").value);
+	var bottype = (document.getElementById("botType").value);
+	var emailaddress = (document.getElementById("emailaddress").value);
+	// Disable input until we're done processing
+	document.getElementById("emailaddress").disabled = true;
+	document.getElementById("email").disabled = true;
+	document.getElementById("modeType").disabled = true;
+	document.getElementById("botType").disabled = true;
+	document.getElementById("logType").disabled = true;
+	document.getElementById("submitbutton").disabled = true;
+
+  	socket.emit('procfile', logtype, modetype, bottype, emailaddress);
+
+  	socket.on('progress', function(reccnt) {
+    	totalrecs = totalrecs + reccnt;
+    	console.log('total records: ' + totalrecs);
+    	document.getElementById("results").value = (totalrecs + " records read");
+  	})
+  	socket.on('finished', function() {
+		// once complete put screen back to how it should be
+		document.getElementById("logType").disabled = false;
+		document.getElementById("email").disabled = false;
+		document.getElementById("submitbutton").disabled = false;
+		checkmode();
+		checkmail();
+    	document.getElementById("results").value = 
+    	document.getElementById("results").value + ", processing complete!";
+  	})
+}
+
+// webapp function - checkmode disables non-applicable fields for Joomla processing
+function checkmode(){
+    var mode = document.getElementById("logType").value;
+    if (mode == 'IIS') {
+        document.getElementById("modeType").disabled = false;
+		document.getElementById("botType").disabled = false;
+    }
+    else {
+		document.getElementById("modeType").disabled = true;
+		document.getElementById("botType").disabled = true;
+    }
+}
+
+// webapp function - checkmail toggles email address field
+function checkmail(){
+    if (document.getElementById("email").checked == true) {
+        document.getElementById("emailaddress").disabled = false;
+		document.getElementById("emailaddress").placeholder = "please enter your email address";
+    }
+    else {
+		document.getElementById("emailaddress").disabled = true;
+		document.getElementById("emailaddress").placeholder = "";
+		document.getElementById("emailaddress").value = "";
+    }
 }
 
 module.exports = {checkip,checkbot,buildline,buildcols};
