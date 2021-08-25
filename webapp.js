@@ -54,10 +54,7 @@ io.on('connection', function(socket){
         var Notes = [];    
 
         rl.on('line', (string) => {
-            var IPAdd = "";
-            if (bottype == "exclude") {
-                var checkedbot = checkbot(string,IPAdd,bottype);
-            }
+            // if excluding blocked/internal addresses now a good time to find out if we have one
             if (blocked == "N" || internal == "N") {
                 if (logtype == "IIS") {
                     var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
@@ -67,6 +64,10 @@ io.on('connection', function(socket){
 		            var IPAdd = string.substring(IPStart,string.indexOf('	',IPStart));
                 }
                 var checkedip = checkip(IPAdd,bottype);
+            }
+            // likewise if we're excluding bots lets check it now
+            if (bottype == "exclude") {
+                var checkedbot = checkbot(string,IPAdd,bottype);
             }
             // First test - remove header records by testing for #
             if (
