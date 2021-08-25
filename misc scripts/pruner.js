@@ -6,11 +6,11 @@ const fs = require('fs');
 const readline = require('readline');
 var Excel = require('exceljs');
 
-		var rl = readline.createInterface({
-			input: fs.createReadStream('IIS.log'),
-			output: process.stdout,
-			terminal: false
-		});
+var rl = readline.createInterface({
+	input: fs.createReadStream('IIS.log'),
+	output: process.stdout,
+	terminal: false
+});
 
 var Recs = [];
 
@@ -31,9 +31,9 @@ rl.on('line', (string) => {
 	// Set up workbook and worksheet
 	var workbook = new Excel.Workbook();
 	var worksheet = workbook.addWorksheet("Bot Records");
-		var coldef = [];
-		coldef[0] = { header: "Record", key:"RECORD"};
-		worksheet.columns = coldef;
+	var coldef = [];
+	coldef[0] = { header: "Record", key:"RECORD"};
+	worksheet.columns = coldef;
 	worksheet.getRow(1).font = { name: "Calibri", size: 11, bold: true};
 	// Loop array of unique records
 	var counter = 0;

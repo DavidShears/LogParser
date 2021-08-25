@@ -58,7 +58,8 @@ rl.on('line', (string) => {
     if (bottype == "exclude") {
         var checkedbot = checkbot(string,IPAdd,bottype);
     }
-	// First test - remove header records by testing for #)
+	// First test - remove header records by testing for #
+    // Also good opportunity to test if we've asked to exclude bots
 	if ((string.indexOf('#') !== 0 && bottype != "exclude") ||
         (string.indexOf('#') !== 0 && bottype == "exclude" && checkedbot == "")) {
 		// Extract date and time
