@@ -195,8 +195,7 @@ function logparse(){
 
   	socket.emit('procfile', logtype, modetype, bottype, emailaddress, blocked, internal);
 
-  	socket.on('progress', function(reccnt,excluded) {
-    	totalrecs = totalrecs + reccnt;
+  	socket.on('progress', function(totalrecs,excluded) {
 		// report on excluded records if there are any
 		if (excluded != 0) {
 			document.getElementById("results").value = (totalrecs + " records read, "
@@ -205,17 +204,24 @@ function logparse(){
     		document.getElementById("results").value = (totalrecs + " records read");
 		}
   	})
-  	socket.on('finished', function() {
+  	socket.on('finished', function(totalrecs,excluded) {
 		// once complete put screen back to how it should be
 		document.getElementById("logType").disabled = false;
 		document.getElementById("email").disabled = false;
 		document.getElementById("submitbutton").disabled = false;
 		document.getElementById("blocked").disabled = false;
 		document.getElementById("internal").disabled = false;
+		document.getElementById("botType").disabled = false;
 		checkmode();
 		checkmail();
-    	document.getElementById("results").value = 
-    	document.getElementById("results").value + ", processing complete!";
+		if (excluded != 0) {
+    		document.getElementById("results").value = 
+    		"Processing Complete! " + totalrecs + " records included."
+			+ excluded + " records excluded.";
+		} else {
+			document.getElementById("results").value = 
+    		"Processing Complete! " + totalrecs + " records included."
+		}
   	})
 }
 
@@ -224,11 +230,9 @@ function checkmode(){
     var mode = document.getElementById("logType").value;
     if (mode == 'IIS') {
         document.getElementById("modeType").disabled = false;
-		document.getElementById("botType").disabled = false;
     }
     else {
 		document.getElementById("modeType").disabled = true;
-		document.getElementById("botType").disabled = true;
     }
 }
 

@@ -29,6 +29,7 @@ webapp.set('view engine', 'ejs');
 
 io.on('connection', function(socket){
     var reccnt = 0;
+    var totalreccnt = 0;
     var excludedreccnt = 0;
     socket.on('procfile',(logtype,modetype,bottype,emailaddress,blocked,internal) => {
 
@@ -58,8 +59,13 @@ io.on('connection', function(socket){
                 var checkedbot = checkbot(string,IPAdd,bottype);
             }
             if (blocked == "N" || internal == "N") {
-                var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
-		        var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
+                if (modetype == "IIS") {
+                    var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
+                    var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
+                } else {
+                    var IPStart = string.search(/(\d*\.){3}\d*/g);
+		            var IPAdd = string.substring(IPStart,string.indexOf('	',IPStart));
+                }
                 var checkedip = checkip(IPAdd,bottype);
             }
             // First test - remove header records by testing for #
@@ -115,11 +121,12 @@ io.on('connection', function(socket){
                         }
                     }
                 }
-                if (reccnt == 500) {
-                    socket.emit('progress',reccnt,excludedreccnt);
+                if (reccnt == 100) {
+                    socket.emit('progress',totalreccnt,excludedreccnt);
                     reccnt = 0;
                 }
                 reccnt += 1;
+                totalreccnt +=1;
             } else if ((bottype == "exclude" && checkedbot != "")
                         || (blocked == "N" && checkedip == "Blocked Address")
                         || (internal == "N" && checkedip == "Internal Address")) {
@@ -200,7 +207,7 @@ io.on('connection', function(socket){
                     });
                 }
             });
-            socket.emit('finished');
+            socket.emit('finished',totalreccnt,excludedreccnt);
         });
     })
 })
