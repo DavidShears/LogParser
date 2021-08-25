@@ -24,21 +24,13 @@ Optional dependencies exist for the webapp version of the script:
 
 ## Running
 
-node app.js (or any parm not listed) - trigger original Joomla logic
+node app.js - trigger original Joomla logic
 
 node app.js IIS - to trigger new logic and get detailed results
 
-node app.js IIS summstat - summarise by IP & HTTP status (exclude url request)
+node app.js IIS summ(stat/url/ip) - summarise by either IP & HTTP Status, IP & url requested, or just IP
 
-node app.js IIS summurl - summarise by IP & url request (exclude HTTP status)
-
-node app.js IIS summip - summarise by IP (exclude HTTP status & url request)
-
-node app.js IIS (summstat/summurl/summip if required) agent - only use checkbot, not checkip to report on bots
-
-node app.js IIS (summstat/summurl/summip if required) ip - only use checkip, not checkbot to report on bots
-
-node app.js IIS (summstat/summurl/summip if required) exclude - any bots found by agent will not be on the output file
+node app.js IIS (summstat/summurl/summip if required) (agent/ip/exclude) - only test for botagent, only test for botip, or exclude bots based on agent
 
 ### Misc Scripts
 
@@ -46,7 +38,7 @@ node "misc scripts"\pruner.js - to run a quick script aimed at identifying any b
 
 ### Browser Interface
 
-node webapp.js - runs a localhost http server on port 3007 as a front-end rather than using the commandline arguments above
+node webapp.js - runs a localhost http server on port 3007 as a front-end rather than using the commandline arguments above. Also allows email of spreadsheet once processing complete.
 
 ## To-do:
 1. ~~Combine both sets in the output to give record & count side-by-side~~ Handled by ExcelJS (although could be neater inline processing.)
@@ -57,3 +49,5 @@ node webapp.js - runs a localhost http server on port 3007 as a front-end rather
 6. ~~Amend checkip function to wildcard match, allow 123.123.123.x rather than having to list out each IP in the subnet.~~ Added draft wildcard logic for botIP matches
 7. ~~Identify suitable method to extract useragent so lookup against array possible rather than list of "if" statements in checkbot function.~~ Replaced with while loop over array.
 8. ~~Add browser interface to avoid need to specify arguments in commandline interface~~ webapp.js and associated ejs view created.
+9. Add option to upload log to webapp & option to download from browser as well as / instead of email.
+10. Add exclude Internal/Blocked logic from webapp back into commandline app
