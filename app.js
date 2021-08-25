@@ -59,9 +59,9 @@ rl.on('line', (string) => {
         var checkedbot = checkbot(string,IPAdd,bottype);
     }
 	// First test - remove header records by testing for #
-    // Also good opportunity to test if we've asked to exclude bots
-	if ((string.indexOf('#') !== 0 && bottype != "exclude") ||
-        (string.indexOf('#') !== 0 && bottype == "exclude" && checkedbot == "")) {
+	if ((string.indexOf('#') !== 0) && 
+	// Also good opportunity to test if we've asked to exclude bots
+		(bottype != "exclude"|| (bottype == "exclude" && checkedbot == "")))  {
 		// Extract date and time
 		var datetime = string.substring(0,19);
 		var CurrentLine = buildline(string,logtype,modetype);
