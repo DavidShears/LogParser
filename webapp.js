@@ -59,7 +59,7 @@ io.on('connection', function(socket){
                 var checkedbot = checkbot(string,IPAdd,bottype);
             }
             if (blocked == "N" || internal == "N") {
-                if (modetype == "IIS") {
+                if (logtype == "IIS") {
                     var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
                     var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
                 } else {
