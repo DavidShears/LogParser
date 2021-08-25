@@ -8,7 +8,7 @@ var botIPs = require('./bots.js').botIPs;
 var botagents = require('./bots.js').botagents;
 
 //buildline - accepts string from readline and builds for output
-function buildline(string,logtype,modetype,emailaddress){
+function buildline(string,logtype,modetype){
 	// Extract IP address
 	if (logtype == 'IIS') {
 		// Start of URL will be first instance of a forward slash
@@ -108,6 +108,8 @@ function buildcols(logtype,modetype){
 		counter++;
 		coldef[counter] = { header: "Notes", key:"NOTES"};
 	} else {
+		coldef[counter] = { header: "IP Address", key:"IPADD"}
+		counter++;
 		coldef[counter] = { header: "Record", key:"RECORD"}
 		counter++;
 		coldef[counter] = { header: "Times Found", key:"COUNT"}
@@ -173,6 +175,14 @@ function logparse(){
 	var modetype = (document.getElementById("modeType").value);
 	var bottype = (document.getElementById("botType").value);
 	var emailaddress = (document.getElementById("emailaddress").value);
+	var blocked = 'Y';
+	var internal = 'Y';
+	if (document.getElementById("blocked").checked == true) {
+		var blocked = 'N';
+	}
+	if (document.getElementById("internal").checked == true) {
+		var internal = 'N';
+	}
 	// Disable input until we're done processing
 	document.getElementById("emailaddress").disabled = true;
 	document.getElementById("email").disabled = true;
@@ -180,8 +190,10 @@ function logparse(){
 	document.getElementById("botType").disabled = true;
 	document.getElementById("logType").disabled = true;
 	document.getElementById("submitbutton").disabled = true;
+	document.getElementById("blocked").disabled = true;
+	document.getElementById("internal").disabled = true;
 
-  	socket.emit('procfile', logtype, modetype, bottype, emailaddress);
+  	socket.emit('procfile', logtype, modetype, bottype, emailaddress, blocked, internal);
 
   	socket.on('progress', function(reccnt,excluded) {
     	totalrecs = totalrecs + reccnt;
@@ -198,6 +210,8 @@ function logparse(){
 		document.getElementById("logType").disabled = false;
 		document.getElementById("email").disabled = false;
 		document.getElementById("submitbutton").disabled = false;
+		document.getElementById("blocked").disabled = false;
+		document.getElementById("internal").disabled = false;
 		checkmode();
 		checkmail();
     	document.getElementById("results").value = 

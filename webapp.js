@@ -30,7 +30,7 @@ webapp.set('view engine', 'ejs');
 io.on('connection', function(socket){
     var reccnt = 0;
     var excludedreccnt = 0;
-    socket.on('procfile',(logtype,modetype,bottype,emailaddress) => {
+    socket.on('procfile',(logtype,modetype,bottype,emailaddress,blocked,internal) => {
 
         if (logtype == 'IIS') {
             var rl = readline.createInterface({
@@ -46,7 +46,6 @@ io.on('connection', function(socket){
             });
         }
     
-
         var UniqueRecs = [];
         var CountRecs = [];
         var FirstDate = [];
@@ -58,9 +57,21 @@ io.on('connection', function(socket){
             if (bottype == "exclude") {
                 var checkedbot = checkbot(string,IPAdd,bottype);
             }
-            // First test - remove header records by testing for #)
-            if ((string.indexOf('#') !== 0 && bottype != "exclude") ||
-                (string.indexOf('#') !== 0 && bottype == "exclude" && checkedbot == "")) {
+            if (blocked == "N" || internal == "N") {
+                var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
+		        var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
+                var checkedip = checkip(IPAdd,bottype);
+            }
+            // First test - remove header records by testing for #
+            if (
+                (string.indexOf('#') !== 0) &&
+                // Also good opportunity to test if we've asked to exclude bots
+                (bottype != "exclude" || (bottype == "exclude" && checkedbot == "") ) && 
+                // Or we're excluding blocked IP addresses
+                (blocked != "N" || (blocked == "N" && checkedip != "Blocked Address") ) &&
+                // Or we're excluding internal IP addresses
+                (internal != "N" || (internal == "N" && checkedip != "Internal Address") ) )
+                {
                 // Extract date and time
                 var datetime = string.substring(0,19);
                 var CurrentLine = buildline(string,logtype,modetype);
@@ -83,10 +94,12 @@ io.on('connection', function(socket){
                         CountRecs.push(1);
                         FirstDate.push(DateNew);
                         LastDate.push(DateNew);
-                        var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
-                        var checkedip = checkip(IPAdd,bottype);
-                        /* Notes.push(checkedip); */
-                        //Debugging - check if there's a bot agent identifier but IP isn't in bot ranges
+                        // if blocked/internal excluded then we've already done this test
+                        if (blocked != "N" && internal != "N") {
+                            var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
+				            var checkedip = checkip(IPAdd,bottype);
+                        }
+                        //Check if there's a bot agent identifier but IP isn't in bot ranges
                         // don't bother if running in exclude mode as already checked earlier.
                         if (bottype != "ip" && bottype != "exclude") {
                             var checkedbot = checkbot(string,IPAdd,bottype);
@@ -107,7 +120,9 @@ io.on('connection', function(socket){
                     reccnt = 0;
                 }
                 reccnt += 1;
-            } else if (bottype == "exclude" && checkedbot != "") {
+            } else if ((bottype == "exclude" && checkedbot != "")
+                        || (blocked == "N" && checkedip == "Blocked Address")
+                        || (internal == "N" && checkedip == "Internal Address")) {
                 excludedreccnt +=1;
             }
         })
