@@ -35,18 +35,30 @@ io.on('connection', function(socket){
     socket.on('procfile',(logtype,modetype,bottype,emailaddress,blocked,internal) => {
 
         if (logtype == 'IIS') {
-            var rl = readline.createInterface({
-                input: fs.createReadStream('IIS.log'),
-                output: process.stdout,
-                terminal: false
-            });
+            // Check if file exists before building readline interface
+            if (fs.existsSync('IIS.log')) {
+                var rl = readline.createInterface({
+                    input: fs.createReadStream('IIS.log'),
+                    output: process.stdout,
+                    terminal: false
+                })
+            } else {
+                socket.emit('error','log file does not exist!');
+                return;
+            };
         } else {
-            var rl = readline.createInterface({
-                input: fs.createReadStream('error.php'),
-                output: process.stdout,
-                terminal: false
-            });
-        }
+            // Check if file exists before building readline interface
+            if (fs.existsSync('error.php')) {
+                var rl = readline.createInterface({
+                    input: fs.createReadStream('error.php'),
+                    output: process.stdout,
+                    terminal: false
+                })
+            } else {
+                socket.emit('error','log file does not exist!');
+                return;
+           }
+        };
     
         var UniqueRecs = [];
         var CountRecs = [];
@@ -204,7 +216,6 @@ io.on('connection', function(socket){
                 counter++;
             })
             workbook.xlsx.writeFile("output.xlsx").then(() => {
-
                 if (emailaddress != '') {
                     var message = {
                         from: "mitc@mnis.co.uk",
@@ -221,8 +232,13 @@ io.on('connection', function(socket){
                         }
                     });
                 }
+                socket.emit('finished',totalreccnt,excludedreccnt);
+            })
+            // Add error handling, primarily for if output file is locked
+            .catch(err => {
+                console.log(err);
+                socket.emit('error',err.message);
             });
-            socket.emit('finished',totalreccnt,excludedreccnt);
         });
     })
 })

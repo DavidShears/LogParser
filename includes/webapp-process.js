@@ -10,15 +10,7 @@ function logparse(){
     var blocked = (document.getElementById("blockedType").value);
     var internal = (document.getElementById("internalType").value);
     // Disable input until we're done processing
-    document.getElementById("emailaddress").disabled = true;
-    document.getElementById("email").disabled = true;
-    document.getElementById("modeType").disabled = true;
-    document.getElementById("botType").disabled = true;
-    document.getElementById("logType").disabled = true;
-    document.getElementById("submitbutton").disabled = true;
-    document.getElementById("resetbutton").disabled = true;
-    document.getElementById("blockedType").disabled = true;
-    document.getElementById("internalType").disabled = true;
+    lockscreen();
 
     socket.emit('procfile', logtype, modetype, bottype, emailaddress, blocked, internal);
 
@@ -33,16 +25,7 @@ function logparse(){
     })
     socket.on('finished', function(totalrecs,excluded) {
         // once complete put screen back to how it should be
-        document.getElementById("logType").disabled = false;
-        document.getElementById("email").disabled = false;
-        document.getElementById("submitbutton").disabled = false;
-        document.getElementById("resetbutton").disabled = false;
-        document.getElementById("blockedType").disabled = false;
-        document.getElementById("internalType").disabled = false;
-        document.getElementById("botType").disabled = false;
-        checkmode();
-        checkinclusion();
-        checkmail();
+        unlockscreen();
         if (excluded != 0) {
             document.getElementById("results").value = 
             "Processing Complete! " + totalrecs + " records included."
@@ -52,6 +35,12 @@ function logparse(){
             "Processing Complete! " + totalrecs + " records included."
         }
     })
+    socket.on('error', function(err) {
+        // if error occurred, display in results field then unlock screen
+        document.getElementById("results").value = 
+        err;
+        unlockscreen();
+    });
 }
 
 // webapp function - checkmode disables non-applicable fields for Joomla processing
@@ -114,4 +103,29 @@ function resetflags() {
     document.getElementById("email").checked == false;
     checkmail();
     document.getElementById("submitbutton").disabled = false;
+}
+
+function lockscreen() {
+    document.getElementById("emailaddress").disabled = true;
+    document.getElementById("email").disabled = true;
+    document.getElementById("modeType").disabled = true;
+    document.getElementById("botType").disabled = true;
+    document.getElementById("logType").disabled = true;
+    document.getElementById("submitbutton").disabled = true;
+    document.getElementById("resetbutton").disabled = true;
+    document.getElementById("blockedType").disabled = true;
+    document.getElementById("internalType").disabled = true;
+}
+
+function unlockscreen() {
+    document.getElementById("logType").disabled = false;
+    document.getElementById("email").disabled = false;
+    document.getElementById("submitbutton").disabled = false;
+    document.getElementById("resetbutton").disabled = false;
+    document.getElementById("blockedType").disabled = false;
+    document.getElementById("internalType").disabled = false;
+    document.getElementById("botType").disabled = false;
+    checkmode();
+    checkinclusion();
+    checkmail();
 }
