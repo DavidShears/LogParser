@@ -7,14 +7,8 @@ function logparse(){
     var modetype = (document.getElementById("modeType").value);
     var bottype = (document.getElementById("botType").value);
     var emailaddress = (document.getElementById("emailaddress").value);
-    var blocked = 'Y';
-    var internal = 'Y';
-    if (document.getElementById("blocked").checked == true) {
-        var blocked = 'N';
-    }
-    if (document.getElementById("internal").checked == true) {
-        var internal = 'N';
-    }
+    var blocked = (document.getElementById("blockedType").value);
+    var internal = (document.getElementById("internalType").value);
     // Disable input until we're done processing
     document.getElementById("emailaddress").disabled = true;
     document.getElementById("email").disabled = true;
@@ -22,8 +16,9 @@ function logparse(){
     document.getElementById("botType").disabled = true;
     document.getElementById("logType").disabled = true;
     document.getElementById("submitbutton").disabled = true;
-    document.getElementById("blocked").disabled = true;
-    document.getElementById("internal").disabled = true;
+    document.getElementById("resetbutton").disabled = true;
+    document.getElementById("blockedType").disabled = true;
+    document.getElementById("internalType").disabled = true;
 
     socket.emit('procfile', logtype, modetype, bottype, emailaddress, blocked, internal);
 
@@ -41,10 +36,12 @@ function logparse(){
         document.getElementById("logType").disabled = false;
         document.getElementById("email").disabled = false;
         document.getElementById("submitbutton").disabled = false;
-        document.getElementById("blocked").disabled = false;
-        document.getElementById("internal").disabled = false;
+        document.getElementById("resetbutton").disabled = false;
+        document.getElementById("blockedType").disabled = false;
+        document.getElementById("internalType").disabled = false;
         document.getElementById("botType").disabled = false;
         checkmode();
+        checkinclusion();
         checkmail();
         if (excluded != 0) {
             document.getElementById("results").value = 
@@ -68,6 +65,28 @@ function checkmode(){
     }
 }
 
+// webapp function - checkblocked disables bots & internal if "only" selected
+function checkinclusion(){
+    var blockedmode = document.getElementById("blockedType").value;
+    var internalmode = document.getElementById("internalType").value;
+    if (blockedmode == 'O') {
+        document.getElementById("internalType").disabled = true;
+        document.getElementById("internalType").value = 'N';
+        document.getElementById("botType").disabled = true;
+        document.getElementById("botType").value = 'exclude';
+    } else if (internalmode == 'O') {
+        document.getElementById("blockedType").disabled = true;
+        document.getElementById("blockedType").value = 'N';
+        document.getElementById("botType").disabled = true;
+        document.getElementById("botType").value = 'exclude';
+    }
+    else {
+        document.getElementById("blockedType").disabled = false;
+        document.getElementById("internalType").disabled = false;
+        document.getElementById("botType").disabled = false;
+    }
+}
+
 // webapp function - checkmail toggles email address field
 function checkmail(){
     if (document.getElementById("email").checked == true) {
@@ -79,4 +98,20 @@ function checkmail(){
         document.getElementById("emailaddress").placeholder = "";
         document.getElementById("emailaddress").value = "";
     }
+}
+
+// webapp function - resetflags sets everything back to default behaviour
+function resetflags() {
+    document.getElementById("logType").disabled = false;
+    document.getElementById("logType").value = 'Joomla';
+    document.getElementById("modeType").value = 'detail';
+    checkmode();
+    document.getElementById("blockedType").value = 'Y';
+    document.getElementById("internalType").value = 'Y';
+    document.getElementById("botType").value = 'default';
+    checkinclusion();
+    document.getElementById("email").disabled = false;
+    document.getElementById("email").checked == false;
+    checkmail();
+    document.getElementById("submitbutton").disabled = false;
 }

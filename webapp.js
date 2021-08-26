@@ -30,6 +30,7 @@ webapp.set('view engine', 'ejs');
 io.on('connection', function(socket){
     var reccnt = 0;
     var totalreccnt = 0;
+    var exccnt = 0;
     var excludedreccnt = 0;
     socket.on('procfile',(logtype,modetype,bottype,emailaddress,blocked,internal) => {
 
@@ -76,8 +77,12 @@ io.on('connection', function(socket){
                 (bottype != "exclude" || (bottype == "exclude" && checkedbot == "") ) && 
                 // Or we're excluding blocked IP addresses
                 (blocked != "N" || (blocked == "N" && checkedip != "Blocked Address") ) &&
+                // Or we're only after blocked IPs and this isn't one
+                (blocked != "O" || (blocked == "O" && checkedip == "Blocked Address") ) &&
                 // Or we're excluding internal IP addresses
-                (internal != "N" || (internal == "N" && checkedip != "Internal Address") ) )
+                (internal != "N" || (internal == "N" && checkedip != "Internal Address") ) &&
+                // Or we're only after internal IPs and this isn't one
+                (internal != "O" || (internal == "O" && checkedip == "Internal Address") ) )
                 {
                 // Extract date and time
                 var datetime = string.substring(0,19);
@@ -122,16 +127,25 @@ io.on('connection', function(socket){
                         }
                     }
                 }
-                if (reccnt == 100) {
+                if (reccnt == 100 || exccnt == 100) {
                     socket.emit('progress',totalreccnt,excludedreccnt);
                     reccnt = 0;
+                    exccnt = 0;
                 }
                 reccnt += 1;
                 totalreccnt +=1;
             } else if ((bottype == "exclude" && checkedbot != "")
                         || (blocked == "N" && checkedip == "Blocked Address")
-                        || (internal == "N" && checkedip == "Internal Address")) {
+                        || (blocked == "O" && checkedip != "Blocked Address")
+                        || (internal == "N" && checkedip == "Internal Address")
+                        || (internal == "O" && checkedip != "Internal Address")) {
+                exccnt +=1;
                 excludedreccnt +=1;
+                if (reccnt == 100 || exccnt == 100) {
+                    socket.emit('progress',totalreccnt,excludedreccnt);
+                    reccnt = 0;
+                    exccnt = 0;
+                }
             }
         })
         .on('close', function() {

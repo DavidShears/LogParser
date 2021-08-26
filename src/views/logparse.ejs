@@ -41,14 +41,20 @@
       </div>
       <div class="row">
         <div class="col-lg-12">
-          <label for="blocked">Exclude blocked IPs?</label>
-          <input type="checkbox" id="blocked">
+          <select class="browser-default custom-select" id="blockedType" onchange="checkinclusion()">
+            <option selected value='Y'>Include Blocked IPs</option>
+            <option value='N'>Exclude Blocked IPs</option>
+            <option value='O'>Only Blocked IPs</option>
+        </select>
         </div>
       </div>
       <div class="row">
         <div class="col-lg-12">
-          <label for="internal">Exclude internal IPs?</label>
-          <input type="checkbox" id="internal">
+          <select class="browser-default custom-select" id="internalType" onchange="checkinclusion()">
+            <option selected value='Y'>Include Internal IPs</option>
+            <option value='N'>Exclude Internal IPs</option>
+            <option value='O'>Only Internal IPs</option>
+        </select>
         </div>
       </div>
       <div class="row">
@@ -61,6 +67,11 @@
       <div class="row">
         <div class="col-lg-12">
         <button id="submitbutton" onclick="logparse()">submit</button>
+        <button id="resetbutton" onclick="resetflags()">reset</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
         <textarea rows="3" id="results" readonly style="border: none"></textarea>
         </div>
       </div>
