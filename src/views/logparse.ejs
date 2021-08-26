@@ -13,47 +13,52 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
+          <label for="logType">Log to process:</label>
           <select class="browser-default custom-select" id="logType" onchange="checkmode()">
-              <option selected value='Joomla'>Joomla (default)</option>
-              <option value='IIS'>IIS</option>
+            <option selected value='Joomla'>Joomla</option>
+            <option value='IIS'>IIS</option>
           </select>
         </div>
       </div>
       <div class="row">
         <div class="col-lg-12">
+          <label for="modeType">Level of detail:</label>
           <select class="browser-default custom-select" id="modeType" disabled="true">
-              <option selected value='detail'>detailed</option>
-              <option value='summurl'>summary (IP & URL)</option>
-              <option value='summstat'>summary (IP & status)</option>
-              <option value='summip'>summary (IP only)</option>
+            <option selected value='detail'>detailed</option>
+            <option value='summurl'>IP & URL</option>
+            <option value='summstat'>IP & status</option>
+            <option value='summip'>IP only</option>
           </select>
         </div>
       </div>
       <div class="row">
         <div class="col-lg-12">
+          <label for="botType">Bot inclusion:</label>
           <select class="browser-default custom-select" id="botType">
-              <option selected value='default'>IP & agent</option>
-              <option value='agent'>agent only</option>
-              <option value='ip'>IP only</option>
-              <option value='exclude'>No bots</option>
+            <option selected value='default'>IP & agent</option>
+            <option value='agent'>agent only</option>
+            <option value='ip'>IP only</option>
+            <option value='exclude'>No bots</option>
           </select>
         </div>
       </div>
       <div class="row">
         <div class="col-lg-12">
+          <label for="blockedType">Blocked IPs:</label>
           <select class="browser-default custom-select" id="blockedType" onchange="checkinclusion()">
-            <option selected value='Y'>Include Blocked IPs</option>
-            <option value='N'>Exclude Blocked IPs</option>
-            <option value='O'>Only Blocked IPs</option>
+            <option selected value='Y'>Include</option>
+            <option value='N'>Exclude</option>
+            <option value='O'>Only</option>
         </select>
         </div>
       </div>
       <div class="row">
         <div class="col-lg-12">
+          <label for="internalType">Internal IPs:</label>
           <select class="browser-default custom-select" id="internalType" onchange="checkinclusion()">
-            <option selected value='Y'>Include Internal IPs</option>
-            <option value='N'>Exclude Internal IPs</option>
-            <option value='O'>Only Internal IPs</option>
+            <option selected value='Y'>Include</option>
+            <option value='N'>Exclude</option>
+            <option value='O'>Only</option>
         </select>
         </div>
       </div>
