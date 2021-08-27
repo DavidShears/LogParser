@@ -32,13 +32,20 @@ node app.js - trigger original Joomla logic
 The following arguments can be passed in as well:
 * --log=IIS will trigger IIS logic instead of Joomla
 * --mode=(summstat/summurl/summip) summarise by either IP & HTTP Status, IP & url requested, or just IP. Only applicable when --log=IIS
-** If not passed then detailed output including IP/Status/Url will be provided.
+
+If not passed then detailed output including IP/Status/Url will be provided.
+
 * --bot=(agent/ip/exclude) only test for botagent, only test for botip, or exclude bots based on agent
-** If not passed then both agent & ip will be used to identify bots
+
+If not passed then both agent & ip will be used to identify bots
+
 * --internal=(Y/N/O) specifies whether IP addresses flagged as Internal should be included/excluded
-** If not passed then defaults to Y
+
+If not passed then defaults to Y
+
 * --blocked=(Y/N/O) specifies whether IP addresses flagged as Blocked should be included/excluded
-** If not passed then defaults to Y
+
+If not passed then defaults to Y
 
 An example call using all the above would be:
 node app.js --log=IIS --mode=summurl --bot=exclude --internal=N --blocked=N
