@@ -18,6 +18,21 @@ var buildcols = functions.buildcols;
 // Try using yargs to handle combinations of parameters
 var argv = require('yargs/yargs')(process.argv.slice(2)).argv;
 
+// Test if valid combination of arguments provided
+if (argv.blocked == 'O' && argv.internal == 'O') {
+	console.log('Both blocked & Internal set to only - cannot process');
+	return;
+}
+
+if (argv.log != 'IIS' && argv.mode != null) {
+	console.log('Mode passed without IIS log, mode will be ignored.');
+}
+
+if ((argv.bot != 'exclude' && argv.bot != null) && (argv.blocked == 'O' || argv.internal == 'O')) {
+	argv.bot == 'exclude';
+	console.log('bot passed as: ' + argv.bot + ' but Only flag set for Blocked/Internal, bot ignored');
+}
+
 if (argv.log == 'IIS') {
 		var rl = readline.createInterface({
 			input: fs.createReadStream('IIS.log'),
@@ -31,8 +46,6 @@ if (argv.log == 'IIS') {
 			terminal: false
 		});
 }
-
-console.log(argv)
 
 var UniqueRecs = [];
 var CountRecs = [];
