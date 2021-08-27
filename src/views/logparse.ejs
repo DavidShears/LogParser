@@ -62,6 +62,7 @@
         </select>
         </div>
       </div>
+      <% if (nodemailer != "") { %>
       <div class="row">
         <div class="col-lg-12">
           <label for="email">Email Output?</label>
@@ -69,6 +70,7 @@
           <input type="text" id="emailaddress" disabled="true">
         </div>
       </div>
+      <%}%>
       <div class="row">
         <div class="col-lg-12">
         <button id="submitbutton" onclick="logparse()">submit</button>

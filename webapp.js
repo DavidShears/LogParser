@@ -7,14 +7,20 @@ const port = process.env.PORT || 3007;
 const fs = require('fs');
 const readline = require('readline');
 var Excel = require('exceljs');
-var nodemailer = require('nodemailer');
-var transporter = nodemailer.createTransport({
-    host:"172.16.0.25",
-    port: 25,
-    tls: {
-        rejectUnauthorized: false
-    }
-});
+// Test whether nodemailer is installed
+try {
+    var nodemailer = require('nodemailer');
+    var transporter = nodemailer.createTransport({
+        host:"172.16.0.25",
+        port: 25,
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+} catch (er) {
+    var nodemailer = "";
+}
+
 
 var functions = require('./includes/logparse-process.js');
 var checkip = functions.checkip;
@@ -68,6 +74,7 @@ io.on('connection', function(socket){
 
         rl.on('line', (string) => {
             // if excluding blocked/internal addresses now a good time to find out if we have one
+            // This also catches blocked/internal being set to only since the other flag will be N
             if (blocked == "N" || internal == "N") {
                 if (logtype == "IIS") {
                     var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
@@ -217,20 +224,23 @@ io.on('connection', function(socket){
             })
             workbook.xlsx.writeFile("output.xlsx").then(() => {
                 if (emailaddress != '') {
-                    var message = {
-                        from: "mitc@mnis.co.uk",
-                        to: emailaddress,
-                        subject: "Download of results",
-                        html: "<b>Sent from IBM i</b>",
-                        attachments: [{
-                        path: "./output.xlsx"
-                    }]
-                }
-                    transporter.sendMail(message, function(error, info) {
-                        if (error) {
-                            console.log(error);
+                    if (nodemailer != '') {
+                        var message = {
+                            from: "mitc@mnis.co.uk",
+                            to: emailaddress,
+                            subject: "Download of results",
+                            html: "<b>Sent from IBM i</b>",
+                            attachments: [{
+                            path: "./output.xlsx"
+                            }]
                         }
-                    });
+                        transporter.sendMail(message, function(error, info) {
+                            if (error) {
+                                console.log(error);
+                            }
+                            
+                        });
+                    }
                 }
                 socket.emit('finished',totalreccnt,excludedreccnt);
             })
@@ -244,7 +254,9 @@ io.on('connection', function(socket){
 })
 
 webapp.get('/',function(req, res){
-    res.render('logparse');
+    res.render('logparse', {
+        nodemailer
+    });
 });
 
 //http version of the listen

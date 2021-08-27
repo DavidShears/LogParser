@@ -6,7 +6,9 @@ function logparse(){
     var logtype = (document.getElementById("logType").value);
     var modetype = (document.getElementById("modeType").value);
     var bottype = (document.getElementById("botType").value);
-    var emailaddress = (document.getElementById("emailaddress").value);
+    if (document.getElementById("emailaddress") != null) {
+        var emailaddress = (document.getElementById("emailaddress").value);
+    }
     var blocked = (document.getElementById("blockedType").value);
     var internal = (document.getElementById("internalType").value);
     // Disable input until we're done processing
@@ -99,15 +101,19 @@ function resetflags() {
     document.getElementById("internalType").value = 'Y';
     document.getElementById("botType").value = 'default';
     checkinclusion();
-    document.getElementById("email").disabled = false;
-    document.getElementById("email").checked == false;
-    checkmail();
+    if (document.getElementById("emailaddress") != null) {
+        document.getElementById("email").disabled = false;
+        document.getElementById("email").checked == false;
+        checkmail();
+    };
     document.getElementById("submitbutton").disabled = false;
 }
 
 function lockscreen() {
-    document.getElementById("emailaddress").disabled = true;
-    document.getElementById("email").disabled = true;
+    if (document.getElementById("emailaddress") != null) {
+        document.getElementById("emailaddress").disabled = true;
+        document.getElementById("email").disabled = true;
+    }
     document.getElementById("modeType").disabled = true;
     document.getElementById("botType").disabled = true;
     document.getElementById("logType").disabled = true;
@@ -119,7 +125,10 @@ function lockscreen() {
 
 function unlockscreen() {
     document.getElementById("logType").disabled = false;
-    document.getElementById("email").disabled = false;
+    if (document.getElementById("emailaddress") != null) {
+        document.getElementById("email").disabled = false;
+        checkmail();
+    }
     document.getElementById("submitbutton").disabled = false;
     document.getElementById("resetbutton").disabled = false;
     document.getElementById("blockedType").disabled = false;
@@ -127,5 +136,4 @@ function unlockscreen() {
     document.getElementById("botType").disabled = false;
     checkmode();
     checkinclusion();
-    checkmail();
 }
