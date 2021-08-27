@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/DavidShears/LogParser#readme",
   "dependencies": {
-    "exceljs": "^4.3.0"
+    "exceljs": "^4.3.0",
+    "yargs": "^17.1.1"
   },
   "optionalDependencies": {
     "ejs": "^3.1.6",

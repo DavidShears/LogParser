@@ -4,6 +4,8 @@ const fs = require('fs');
 const readline = require('readline');
 var Excel = require('exceljs');
 
+
+
 // checkip & checkbot outsourced
 var functions = require('./includes/logparse-process.js');
 var checkip = functions.checkip;
@@ -13,27 +15,10 @@ var buildcols = functions.buildcols;
 
 // Add option to specify log type - if anything other than IIS assume original Joomla logic
 
-var args = process.argv;
+// Try using yargs to handle combinations of parameters
+var argv = require('yargs/yargs')(process.argv.slice(2)).argv;
 
-if (args[2] != null) {
-	var logtype = args[2].toUpperCase();
-}
-
-// check if 2nd parameter (third argument) is a mode or a bot report type
-if (args[3] != null) {
-	if (args[3].substring(0,4) == "summ") {
-		var modetype = args[3].toLowerCase();
-	} else {
-		var bottype = args[3].toLowerCase();	
-	}
-}
-
-// 3rd parameter (4th argument) will be a bot report type if 3rd was a mode
-if (args[4] != null) {
-	var bottype = args[4].toLowerCase();
-}
-
-if (logtype == 'IIS') {
+if (argv.log == 'IIS') {
 		var rl = readline.createInterface({
 			input: fs.createReadStream('IIS.log'),
 			output: process.stdout,
@@ -47,6 +32,8 @@ if (logtype == 'IIS') {
 		});
 }
 
+console.log(argv)
+
 var UniqueRecs = [];
 var CountRecs = [];
 var FirstDate = [];
@@ -54,17 +41,37 @@ var LastDate = [];
 var Notes = [];
 
 rl.on('line', (string) => {
-	var IPAdd = "";
-    if (bottype == "exclude") {
-        var checkedbot = checkbot(string,IPAdd,bottype);
+	// if excluding blocked/internal addresses now a good time to find out if we have one
+    // This also catches blocked/internal being set to only since the other flag will be N
+    if (argv.blocked == "N" || argv.internal == "N") {
+        if (argv.log == "IIS") {
+            var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
+            var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
+        } else {
+            var IPStart = string.search(/(\d*\.){3}\d*/g);
+		    var IPAdd = string.substring(IPStart,string.indexOf('	',IPStart));
+        }
+        var checkedip = checkip(IPAdd,argv.bot);
+	}
+    if (argv.bot == "exclude") {
+        var checkedbot = checkbot(string,IPAdd,argv.bot);
     }
 	// First test - remove header records by testing for #
 	if ((string.indexOf('#') !== 0) && 
 	// Also good opportunity to test if we've asked to exclude bots
-		(bottype != "exclude"|| (bottype == "exclude" && checkedbot == "")))  {
+		(argv.bot != "exclude"|| (argv.bot == "exclude" && checkedbot == "")) &&
+		// Or we're excluding blocked IP addresses
+		(argv.blocked != "N" || (argv.blocked == "N" && checkedip != "Blocked Address") ) &&
+		// Or we're only after blocked IPs and this isn't one
+		(argv.blocked != "O" || (argv.blocked == "O" && checkedip == "Blocked Address") ) &&
+		// Or we're excluding internal IP addresses
+		(argv.internal != "N" || (argv.internal == "N" && checkedip != "Internal Address") ) &&
+		// Or we're only after internal IPs and this isn't one
+		(argv.internal != "O" || (argv.internal == "O" && checkedip == "Internal Address") ) )
+		{
 		// Extract date and time
 		var datetime = string.substring(0,19);
-		var CurrentLine = buildline(string,logtype,modetype);
+		var CurrentLine = buildline(string,argv.log,argv.mode);
 		if (CurrentLine != "") {
 			// Test if record is already in array - if it is then increment counter and update last date
 			// If it isn't then add to arrays and stamp first date
@@ -84,13 +91,16 @@ rl.on('line', (string) => {
 				CountRecs.push(1);
 				FirstDate.push(DateNew);
 				LastDate.push(DateNew);
-				var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
-				var checkedip = checkip(IPAdd,bottype);
+				// if blocked/internal excluded then we've already done this test
+				if (argv.blocked != "N" && argv.internal != "N") {
+					var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
+					var checkedip = checkip(IPAdd,argv.bot);
+				}
 				/* Notes.push(checkedip); */
 				//Debugging - check if there's a bot agent identifier but IP isn't in bot ranges
 				// don't bother if running in exclude mode as already checked earlier.
-				if (bottype != "ip" && bottype != "exclude") {
-					var checkedbot = checkbot(string,IPAdd,bottype);
+				if (argv.bot != "ip" && argv.bot != "exclude") {
+					var checkedbot = checkbot(string,IPAdd,argv.bot);
 				}
 				if (checkedip != "" && checkedbot != "") {
 					Notes.push(checkedip + ", " + checkedbot);
@@ -110,7 +120,7 @@ rl.on('line', (string) => {
 	var workbook = new Excel.Workbook();
 	var worksheet = workbook.addWorksheet("Error Logging");
 	// Call external function to generate column headers
-	var coldef = buildcols(logtype,modetype);
+	var coldef = buildcols(argv.log,argv.mode);
     worksheet.columns = coldef;
 	worksheet.getRow(1).font = { name: "Calibri", size: 11, bold: true};
 	// Loop array of unique records
@@ -118,8 +128,8 @@ rl.on('line', (string) => {
 	UniqueRecs.forEach(function(element){
 		const rowdef = [];
 		// Again additional column for IIS records
-		if (logtype == 'IIS') {
-			switch (modetype) {
+		if (argv.log == 'IIS') {
+			switch (argv.mode) {
 				case 'summstat':
 					rowdef[1] = element.substring(0,element.indexOf(' '));
 					rowdef[2] = element.substring(element.lastIndexOf(' '));

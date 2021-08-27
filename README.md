@@ -15,7 +15,8 @@ Also has the option to pass in 'IIS' to instead parse IIS logs (tested on IIS 8.
 Tested on 142mb IIS file for detailed output with approx runtime of 12 minutes.
 
 ## Requirements
-ExcelJS is used to generate spreadsheet output and is the only "required" dependency.
+ExcelJS is used to generate spreadsheet output in both command line and webapp modes.
+Yargs is used in the command line application to handle the various arguments that can be passed in.
 
 Optional dependencies exist for the webapp version of the script:
 * Expressjs/ejs - to handle the general process
@@ -24,21 +25,33 @@ Optional dependencies exist for the webapp version of the script:
 
 ## Running
 
+### Command Line
+
 node app.js - trigger original Joomla logic
 
-node app.js IIS - to trigger new logic and get detailed results
+The following arguments can be passed in as well:
+* --log=IIS will trigger IIS logic instead of Joomla
+* --mode=(summstat/summurl/summip) summarise by either IP & HTTP Status, IP & url requested, or just IP. Only applicable when --log=IIS
+** If not passed then detailed output including IP/Status/Url will be provided.
+* --bot=(agent/ip/exclude) only test for botagent, only test for botip, or exclude bots based on agent
+** If not passed then both agent & ip will be used to identify bots
+* --internal=(Y/N/O) specifies whether IP addresses flagged as Internal should be included/excluded
+** If not passed then defaults to Y
+* --blocked=(Y/N/O) specifies whether IP addresses flagged as Blocked should be included/excluded
+** If not passed then defaults to Y
 
-node app.js IIS summ(stat/url/ip) - summarise by either IP & HTTP Status, IP & url requested, or just IP
+An example call using all the above would be:
+node app.js --log=IIS --mode=summurl --bot=exclude --internal=N --blocked=N
 
-node app.js IIS (summstat/summurl/summip if required) (agent/ip/exclude) - only test for botagent, only test for botip, or exclude bots based on agent
+### Browser Interface
+
+node webapp.js - runs a localhost http server on port 3007 as a front-end rather than using the commandline arguments above. Also allows email of spreadsheet once processing complete.
 
 ### Misc Scripts
 
 node "misc scripts"\pruner.js - to run a quick script aimed at identifying any botagents not already registered in bots.js (IIS only)
 
-### Browser Interface
 
-node webapp.js - runs a localhost http server on port 3007 as a front-end rather than using the commandline arguments above. Also allows email of spreadsheet once processing complete.
 
 ## To-do:
 1. ~~Combine both sets in the output to give record & count side-by-side~~ Handled by ExcelJS (although could be neater inline processing.)
@@ -50,4 +63,4 @@ node webapp.js - runs a localhost http server on port 3007 as a front-end rather
 7. ~~Identify suitable method to extract useragent so lookup against array possible rather than list of "if" statements in checkbot function.~~ Replaced with while loop over array.
 8. ~~Add browser interface to avoid need to specify arguments in commandline interface~~ webapp.js and associated ejs view created.
 9. Add option to upload log to webapp & option to download from browser as well as / instead of email.
-10. Add exclude Internal/Blocked logic from webapp back into commandline app
+10. ~~Add exclude Internal/Blocked logic from webapp back into commandline app~~ yargs implemented to allow various combinations of arguments.
