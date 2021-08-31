@@ -52,6 +52,16 @@ if (argv.log == 'IIS') {
 		});
 }
 
+// Test if output file is locked - if so no point running
+fs.open('./output.xlsx','r+', function(err,fd) {
+	if (err && err.code === 'EBUSY') {
+		console.log('Output file locked - try again later');
+		process.exit(1);
+	} else if (err == null || err.code != 'ENOENT') {
+		fs.close(fd);
+	}
+})
+
 var UniqueRecs = [];
 var CountRecs = [];
 var FirstDate = [];
@@ -79,7 +89,7 @@ rl.on('line', (string) => {
 	// Also good opportunity to test if we've asked to exclude bots
 		(argv.bot != "exclude"|| (argv.bot == "exclude" && checkedbot == "")) &&
 		// or we're only including bots
-		(bottype != "only" || (bottype == "only" && checkedbot != "") ) && 
+		(argv.bot != "only" || (argv.bot == "only" && checkedbot != "") ) && 
 		// Or we're excluding blocked IP addresses
 		(argv.blocked != "N" || (argv.blocked == "N" && checkedip != "Blocked Address") ) &&
 		// Or we're only after blocked IPs and this isn't one
@@ -119,7 +129,7 @@ rl.on('line', (string) => {
 				/* Notes.push(checkedip); */
 				//Debugging - check if there's a bot agent identifier but IP isn't in bot ranges
 				// don't bother if running in exclude mode as already checked earlier.
-				if (argv.bot != "ip" && argv.bot != "exclude"  && bottype != "only") {
+				if (argv.bot != "ip" && argv.bot != "exclude"  && argv.bot != "only") {
 					var checkedbot = checkbot(string,IPAdd,argv.bot);
 				}
 				if (checkedip != "" && checkedbot != "") {
