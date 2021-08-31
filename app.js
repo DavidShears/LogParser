@@ -24,6 +24,11 @@ if (argv.blocked == 'O' && argv.internal == 'O') {
 	return;
 }
 
+if (argv.bot == 'only' && (argv.internal == 'O' || argv.blocked == 'O')) {
+	console.log('bot set to only along with internal/blocked - cannot process');
+	return;
+}
+
 if (argv.log != 'IIS' && argv.mode != null) {
 	console.log('Mode passed without IIS log, mode will be ignored.');
 }
@@ -73,6 +78,8 @@ rl.on('line', (string) => {
 	if ((string.indexOf('#') !== 0) && 
 	// Also good opportunity to test if we've asked to exclude bots
 		(argv.bot != "exclude"|| (argv.bot == "exclude" && checkedbot == "")) &&
+		// or we're only including bots
+		(bottype != "only" || (bottype == "only" && checkedbot != "") ) && 
 		// Or we're excluding blocked IP addresses
 		(argv.blocked != "N" || (argv.blocked == "N" && checkedip != "Blocked Address") ) &&
 		// Or we're only after blocked IPs and this isn't one
@@ -112,7 +119,7 @@ rl.on('line', (string) => {
 				/* Notes.push(checkedip); */
 				//Debugging - check if there's a bot agent identifier but IP isn't in bot ranges
 				// don't bother if running in exclude mode as already checked earlier.
-				if (argv.bot != "ip" && argv.bot != "exclude") {
+				if (argv.bot != "ip" && argv.bot != "exclude"  && bottype != "only") {
 					var checkedbot = checkbot(string,IPAdd,argv.bot);
 				}
 				if (checkedip != "" && checkedbot != "") {

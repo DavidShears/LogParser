@@ -35,15 +35,15 @@ The following arguments can be passed in as well:
 
 If not passed then detailed output including IP/Status/Url will be provided.
 
-* --bot=(agent/ip/exclude) only test for botagent, only test for botip, or exclude bots based on agent
+* --bot=(agent/ip/exclude/only) only test for botagent, only test for botip, exclude bots based on agent, or only output bot records
 
 If not passed then both agent & ip will be used to identify bots
 
-* --internal=(Y/N/O) specifies whether IP addresses flagged as Internal should be included/excluded
+* --internal=(Y/N/O) specifies whether IP addresses flagged as Internal should be included/excluded, or the only records
 
 If not passed then defaults to Y
 
-* --blocked=(Y/N/O) specifies whether IP addresses flagged as Blocked should be included/excluded
+* --blocked=(Y/N/O) specifies whether IP addresses flagged as Blocked should be included/excluded, or the only records
 
 If not passed then defaults to Y
 

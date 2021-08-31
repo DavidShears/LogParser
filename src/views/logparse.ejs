@@ -34,11 +34,12 @@
       <div class="row">
         <div class="col-lg-12">
           <label for="botType">Bot inclusion:</label>
-          <select class="browser-default custom-select" id="botType">
+          <select class="browser-default custom-select" id="botType" onchange="checkinclusion()">
             <option selected value='default'>IP & agent</option>
             <option value='agent'>agent only</option>
             <option value='ip'>IP only</option>
             <option value='exclude'>No bots</option>
+            <option value='only'>Only bots</option>
           </select>
         </div>
       </div>

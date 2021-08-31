@@ -56,10 +56,11 @@ function checkmode(){
     }
 }
 
-// webapp function - checkblocked disables bots & internal if "only" selected
+// webapp function - check various "only" flags and condition fields accordingly
 function checkinclusion(){
     var blockedmode = document.getElementById("blockedType").value;
     var internalmode = document.getElementById("internalType").value;
+    var botmode = document.getElementById("botType").value;
     if (blockedmode == 'O') {
         document.getElementById("internalType").disabled = true;
         document.getElementById("internalType").value = 'N';
@@ -70,8 +71,12 @@ function checkinclusion(){
         document.getElementById("blockedType").value = 'N';
         document.getElementById("botType").disabled = true;
         document.getElementById("botType").value = 'exclude';
-    }
-    else {
+    } else if (botmode == 'only') {
+    document.getElementById("blockedType").disabled = true;
+    document.getElementById("blockedType").value = 'N';
+    document.getElementById("internalType").disabled = true;
+    document.getElementById("internalType").value = 'N';
+    } else {
         document.getElementById("blockedType").disabled = false;
         document.getElementById("internalType").disabled = false;
         document.getElementById("botType").disabled = false;

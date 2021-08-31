@@ -86,7 +86,7 @@ io.on('connection', function(socket){
                 var checkedip = checkip(IPAdd,bottype);
             }
             // likewise if we're excluding bots lets check it now
-            if (bottype == "exclude") {
+            if (bottype == "exclude" || bottype == "only") {
                 var checkedbot = checkbot(string,IPAdd,bottype);
             }
             // First test - remove header records by testing for #
@@ -94,6 +94,8 @@ io.on('connection', function(socket){
                 (string.indexOf('#') !== 0) &&
                 // Also good opportunity to test if we've asked to exclude bots
                 (bottype != "exclude" || (bottype == "exclude" && checkedbot == "") ) && 
+                // or we're only including bots
+                (bottype != "only" || (bottype == "only" && checkedbot != "") ) && 
                 // Or we're excluding blocked IP addresses
                 (blocked != "N" || (blocked == "N" && checkedip != "Blocked Address") ) &&
                 // Or we're only after blocked IPs and this isn't one
@@ -132,7 +134,8 @@ io.on('connection', function(socket){
                         }
                         //Check if there's a bot agent identifier but IP isn't in bot ranges
                         // don't bother if running in exclude mode as already checked earlier.
-                        if (bottype != "ip" && bottype != "exclude") {
+                        // or if we're in only bots
+                        if (bottype != "ip" && bottype != "exclude" && bottype != "only") {
                             var checkedbot = checkbot(string,IPAdd,bottype);
                         }
                         if (checkedip != "" && checkedbot != "") {
@@ -154,6 +157,7 @@ io.on('connection', function(socket){
                 reccnt += 1;
                 totalreccnt +=1;
             } else if ((bottype == "exclude" && checkedbot != "")
+                        || (bottype == "only" && checkedbot == "")         
                         || (blocked == "N" && checkedip == "Blocked Address")
                         || (blocked == "O" && checkedip != "Blocked Address")
                         || (internal == "N" && checkedip == "Internal Address")
