@@ -71,3 +71,4 @@ node "misc scripts"\pruner.js - to run a quick script aimed at identifying any b
 8. ~~Add browser interface to avoid need to specify arguments in commandline interface~~ webapp.js and associated ejs view created.
 9. Add option to upload log to webapp & option to download from browser as well as / instead of email.
 10. ~~Add exclude Internal/Blocked logic from webapp back into commandline app~~ yargs implemented to allow various combinations of arguments.
+11. Test for workbook lock earlier in the process, avoid running the whole script and then losing the output at the end.
