@@ -58,7 +58,7 @@ node webapp.js - runs a localhost http server on port 3007 as a front-end rather
 
 node "misc scripts"\pruner.js - to run a quick script aimed at identifying any botagents not already registered in bots.js (IIS only)
 
-
+node "misc scripts"\ipdump.js --log=(iis/joomla) --ip=(ipaddress) - quickly spit out all records, as they are, into a spreadsheet
 
 ## To-do:
 1. ~~Combine both sets in the output to give record & count side-by-side~~ Handled by ExcelJS (although could be neater inline processing.)

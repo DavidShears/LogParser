@@ -81,5 +81,7 @@ output*.xlsx
 ~$output*.xlsx
 pruned*.xlsx
 ~$pruned*.xlsx
+ipdump*.xlsx
+~$ipdump*.xlsx
 # Internal use only - list of IPs for Internal/Suspicious/Blocked arrays
 IPArrays.txt
