@@ -13,9 +13,12 @@ function logparse(){
     var internal = (document.getElementById("internalType").value);
     // Disable input until we're done processing
     lockscreen();
-
-    socket.emit('procfile', logtype, modetype, bottype, emailaddress, blocked, internal);
-
+    // First ask for check of file
+    socket.emit('checkfile',logtype);
+    // If we get the all clear, then process file
+    socket.on('filegood', function() {
+        socket.emit('procfile', logtype, modetype, bottype, emailaddress, blocked, internal);
+    })
     socket.on('progress', function(totalrecs,excluded) {
         // report on excluded records if there are any
         if (excluded != 0) {

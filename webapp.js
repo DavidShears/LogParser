@@ -38,34 +38,50 @@ io.on('connection', function(socket){
     var totalreccnt = 0;
     var exccnt = 0;
     var excludedreccnt = 0;
+
+    socket.on('checkfile',(logtype) => {
+        if ( (logtype == 'IIS' && fs.existsSync('IIS.log') )
+        || (logtype != 'IIS' && fs.existsSync('error.php') ) ) {
+            // Test if output file is locked - if so no point running
+            fs.open('./output.xlsx','r+', function(err,fd) {
+	            if (err && err.code === 'EBUSY') {
+		            socket.emit('error','Output file locked - try again later');
+	            } else if (err == null || err.code != 'ENOENT') {
+		            fs.close(fd);
+                    socket.emit('filegood');
+	            }
+            })
+            } else {
+                socket.emit('error','log file does not exist!');
+            }
+    });
+
+
     socket.on('procfile',(logtype,modetype,bottype,emailaddress,blocked,internal) => {
 
         if (logtype == 'IIS') {
-            // Check if file exists before building readline interface
-            if (fs.existsSync('IIS.log')) {
                 var rl = readline.createInterface({
                     input: fs.createReadStream('IIS.log'),
                     output: process.stdout,
                     terminal: false
                 })
-            } else {
-                socket.emit('error','log file does not exist!');
-                return;
-            };
         } else {
             // Check if file exists before building readline interface
-            if (fs.existsSync('error.php')) {
                 var rl = readline.createInterface({
                     input: fs.createReadStream('error.php'),
                     output: process.stdout,
                     terminal: false
                 })
-            } else {
-                socket.emit('error','log file does not exist!');
-                return;
-           }
         };
-    
+
+        // Test if output file is locked - if so no point running
+        fs.open('./output.xlsx','r+', function(err,fd) {
+	        if (err && err.code === 'EBUSY') {
+		        socket.emit('error','Output file locked - try again later');
+	        } else if (err == null || err.code != 'ENOENT') {
+		        fs.close(fd);
+	        }
+        })
         var UniqueRecs = [];
         var CountRecs = [];
         var FirstDate = [];
