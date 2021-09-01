@@ -6,8 +6,10 @@ function logparse(){
     var logtype = (document.getElementById("logType").value);
     var modetype = (document.getElementById("modeType").value);
     var bottype = (document.getElementById("botType").value);
-    if (document.getElementById("emailaddress") != null) {
+    if (document.getElementById("email") && document.getElementById("email").checked == true) {
         var emailaddress = (document.getElementById("emailaddress").value);
+    } else {
+        var emailaddress = "";
     }
     var blocked = (document.getElementById("blockedType").value);
     var internal = (document.getElementById("internalType").value);
@@ -109,7 +111,7 @@ function resetflags() {
     document.getElementById("internalType").value = 'Y';
     document.getElementById("botType").value = 'default';
     checkinclusion();
-    if (document.getElementById("emailaddress") != null) {
+    if (document.getElementById("emailaddress") ) {
         document.getElementById("email").disabled = false;
         document.getElementById("email").checked == false;
         checkmail();
@@ -118,7 +120,7 @@ function resetflags() {
 }
 
 function lockscreen() {
-    if (document.getElementById("emailaddress") != null) {
+    if (document.getElementById("emailaddress") ) {
         document.getElementById("emailaddress").disabled = true;
         document.getElementById("email").disabled = true;
     }
@@ -133,7 +135,7 @@ function lockscreen() {
 
 function unlockscreen() {
     document.getElementById("logType").disabled = false;
-    if (document.getElementById("emailaddress") != null) {
+    if (document.getElementById("emailaddress") ) {
         document.getElementById("email").disabled = false;
         checkmail();
     }

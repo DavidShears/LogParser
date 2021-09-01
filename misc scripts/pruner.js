@@ -36,12 +36,10 @@ rl.on('line', (string) => {
 	worksheet.columns = coldef;
 	worksheet.getRow(1).font = { name: "Calibri", size: 11, bold: true};
 	// Loop array of unique records
-	var counter = 0;
 	Recs.forEach(function(element){
 		const rowdef = [];
 		rowdef[1] = element;
 		worksheet.addRow(rowdef);
-		counter++;
 	})
 	workbook.xlsx.writeFile("pruned.xlsx");
 });
