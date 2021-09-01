@@ -24,16 +24,26 @@ if (argv.blocked == 'O' && argv.internal == 'O') {
 	return;
 }
 
+if ((argv.blocked && argv.blocked != 'N') && argv.internal == 'O') {
+	argv.blocked = 'N';
+	console.log('blocked IPs specified but internal set to Only - blocked ignored');
+}
+
+if ((argv.internal && argv.internal != 'N') && argv.blocked == 'O') {
+	argv.internal = 'N';
+	console.log('internal IPs specified but blocked set to Only - internal ignored');
+}
+
 if (argv.bot == 'only' && (argv.internal == 'O' || argv.blocked == 'O')) {
 	console.log('bot set to only along with internal/blocked - cannot process');
 	return;
 }
 
-if (argv.log != 'IIS' && argv.mode != null) {
+if (argv.log != 'IIS' && argv.mode) {
 	console.log('Mode passed without IIS log, mode will be ignored.');
 }
 
-if ((argv.bot != 'exclude' && argv.bot != null) && (argv.blocked == 'O' || argv.internal == 'O')) {
+if ((argv.bot != 'exclude' && argv.bot) && (argv.blocked == 'O' || argv.internal == 'O')) {
 	argv.bot == 'exclude';
 	console.log('bot passed as: ' + argv.bot + ' but Only flag set for Blocked/Internal, bot ignored');
 }
