@@ -27,6 +27,7 @@ var checkip = functions.checkip;
 var checkbot = functions.checkbot;
 var buildline = functions.buildline;
 var buildcols = functions.buildcols;
+var getip = functions.getip;
 
 webapp.use(express.static('includes'));
 
@@ -94,13 +95,7 @@ io.on('connection', function(socket){
             // if excluding blocked/internal addresses now a good time to find out if we have one
             // This also catches blocked/internal being set to only since the other flag will be N
             if (blocked == "N" || internal == "N") {
-                if (logtype == "IIS") {
-                    var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
-                    var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
-                } else {
-                    var IPStart = string.search(/(\d*\.){3}\d*/g);
-		            var IPAdd = string.substring(IPStart,string.indexOf('	',IPStart));
-                }
+                var IPAdd = getip(string,logtype);
                 var checkedip = checkip(IPAdd,bottype);
             }
             // likewise if we're excluding bots lets check it now

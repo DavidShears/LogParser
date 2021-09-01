@@ -10,6 +10,7 @@ var botagents = require('./bots.js').botagents;
 //buildline - accepts string from readline and builds for output
 function buildline(string,logtype,modetype){
 	// Extract IP address
+	var IPAdd = getip(string,logtype);
 	if (logtype == 'IIS') {
 		// Start of URL will be first instance of a forward slash
 		// End of URL will be before the port number, normally 443/80
@@ -25,11 +26,6 @@ function buildline(string,logtype,modetype){
 		var urlreq = string.substring(string.indexOf('/'),urlend);
 		// IIS not displaying ? in url request so put it back in
 		urlreq = urlreq.replace(" ","?");
-		// Figure out where IP address is - search for 3 sets of digits
-		// with a decimal inbetween, followed by a 4th set of digits.
-		// Must also have 10 spaces preceeding it to not pick up host IP
-		var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
-		var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
 		// Get HTTP status using Regex to find 3 digits followed by a series of 
 		// 5 spaces seperated by any number of digits
 		// 200 0 0 15669 344 546
@@ -53,8 +49,6 @@ function buildline(string,logtype,modetype){
 		}
 	// else use Joomla logic
 	} else {
-		var IPStart = string.search(/(\d*\.){3}\d*/g);
-		var IPAdd = string.substring(IPStart,string.indexOf('	',IPStart));
 		// Handle older version of Joomla logging
 		if (string.indexOf('Joomla FAILURE') !== -1) {
 			// Add 43 characters to length - gets us to error message
@@ -165,4 +159,18 @@ function checkbot(string,IPAdd,bottype) {
 	return("");
 }
 
-module.exports = {checkip,checkbot,buildline,buildcols};
+function getip(string,log) {
+	if (log == "IIS") {
+		// Figure out where IP address is - search for 3 sets of digits
+		// with a decimal inbetween, followed by a 4th set of digits.
+		// Must also have 10 spaces preceeding it to not pick up host IP
+		var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
+		var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
+	} else {
+		var IPStart = string.search(/(\d*\.){3}\d*/g);
+		var IPAdd = string.substring(IPStart,string.indexOf('	',IPStart));
+	}
+	return IPAdd;
+}
+
+module.exports = {checkip,checkbot,buildline,buildcols,getip};
