@@ -49,7 +49,9 @@ io.on('connection', function(socket){
 	            } else if (err == null || err.code != 'ENOENT') {
 		            fs.close(fd);
                     socket.emit('filegood');
-	            }
+	            } else {
+                    socket.emit('filegood');
+                }
             })
             } else {
                 socket.emit('error','log file does not exist!');
