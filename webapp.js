@@ -1,10 +1,5 @@
 //Initial setup
 const express = require('express');
-try {
-    const fileupload = require('express-fileupload');
-} catch (er) {
-    var fileupload = "";
-}
 const webapp = express();
 const http = require('http').Server(webapp);
 const io = require('socket.io')(http);
@@ -22,10 +17,17 @@ try {
             rejectUnauthorized: false
         }
     });
+    var nodemail = "Y";
 } catch (er) {
-    var nodemailer = "";
+    var nodemail = "N";
 }
-
+// Test whether express-fileupload is installed
+try {
+    var fileupload = require('express-fileupload');
+    var fileup = "Y";
+} catch (er) {
+    var fileup = "N";
+}
 
 var functions = require('./includes/logparse-process.js');
 var checkip = functions.checkip;
@@ -35,7 +37,7 @@ var buildcols = functions.buildcols;
 var getip = functions.getip;
 
 webapp.use(express.static('includes'));
-if (fileupload != "") {
+if (fileup == 'Y') {
     webapp.use(fileupload());
 }
 webapp.set('views','./src/views');
@@ -275,9 +277,11 @@ io.on('connection', function(socket){
 })
 
 webapp.get('/',function(req, res){
+    console.log('nodemail: ' + nodemail)
+    console.log('fileup: ' + fileup)
     res.render('logparse', {
-        nodemailer,
-        fileupload
+        nodemail,
+        fileup
     });
 });
 
@@ -306,8 +310,8 @@ webapp.post('/', (req, res) => {
                 console.log(err)
             } else {
                 res.render('logparse', {
-                    nodemailer,
-                    fileupload
+                    nodemail,
+                    fileup
                 });
             }
         })
