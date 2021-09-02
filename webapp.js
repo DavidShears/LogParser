@@ -263,7 +263,6 @@ io.on('connection', function(socket){
             })
             // Add error handling, primarily for if output file is locked
             .catch(err => {
-                console.log(err);
                 socket.emit('error',err.message);
             });
         });
@@ -275,6 +274,22 @@ webapp.get('/',function(req, res){
         nodemailer
     });
 });
+
+webapp.get('/download',function(req, res) {
+    res.download('./output.xlsx', 'output.xlsx', function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
+});
+
+webapp.post('/checkdownload',function(req, res) {
+    if (fs.existsSync('output.xlsx') ) {
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(404);
+    }
+})
 
 //http version of the listen
 http.listen(port, function(err){

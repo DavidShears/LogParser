@@ -147,3 +147,21 @@ function unlockscreen() {
     checkmode();
     checkinclusion();
 }
+
+function download() {
+    fetch('/checkdownload',{method:'POST'})
+    .then(function(response) {
+        if (response.ok) {
+            window.open('/download');
+        } else {
+            document.getElementById("results").value = 
+            response.statusText;           
+            return;
+        }
+    })
+    .catch(function(error) {
+        document.getElementById("results").value = 
+            error;           
+            return;
+    })
+}
