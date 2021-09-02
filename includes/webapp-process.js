@@ -129,6 +129,7 @@ function lockscreen() {
     document.getElementById("logType").disabled = true;
     document.getElementById("submitbutton").disabled = true;
     document.getElementById("resetbutton").disabled = true;
+    document.getElementById("downbutton").disabled = true;
     document.getElementById("blockedType").disabled = true;
     document.getElementById("internalType").disabled = true;
 }
@@ -141,6 +142,7 @@ function unlockscreen() {
     }
     document.getElementById("submitbutton").disabled = false;
     document.getElementById("resetbutton").disabled = false;
+    document.getElementById("downbutton").disabled = false;
     document.getElementById("blockedType").disabled = false;
     document.getElementById("internalType").disabled = false;
     document.getElementById("botType").disabled = false;
