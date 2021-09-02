@@ -85,6 +85,13 @@
         </div>
       </div>
     </div>
+    <% if (fileupload != "") { %>
+    <form action="/" method="POST" enctype="multipart/form-data">
+      <h4>Upload new log</h4>
+      <input type="file" name="file" id=""><br/>
+      <button>upload </button>
+    </form>
+    <%}%>
   </section> 
 
   <script src="logparse-process.js"></script>

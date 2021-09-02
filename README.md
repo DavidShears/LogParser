@@ -22,6 +22,7 @@ Optional dependencies exist for the webapp version of the script:
 * Expressjs/ejs - to handle the general process
 * socket.io - used to pass progress from the server to the client (useful on larger files)
 * nodemailer - used to allow email of spreadsheet once extract is complete
+* express-fileupload - used to handle upload of new Joomla/IIS log for processing
 
 ## Running
 
@@ -69,6 +70,6 @@ node "misc scripts"\ipdump.js --log=(iis/joomla) --ip=(ipaddress) - quickly spit
 6. ~~Amend checkip function to wildcard match, allow 123.123.123.x rather than having to list out each IP in the subnet.~~ Added draft wildcard logic for botIP matches
 7. ~~Identify suitable method to extract useragent so lookup against array possible rather than list of "if" statements in checkbot function.~~ Replaced with while loop over array.
 8. ~~Add browser interface to avoid need to specify arguments in commandline interface~~ webapp.js and associated ejs view created.
-9. Add option to upload log to webapp & option to download from browser as well as / instead of email.
+9. ~~Add option to upload log to webapp & option to download from browser as well as / instead of email.~~ - Basic upload & download logic added
 10. ~~Add exclude Internal/Blocked logic from webapp back into commandline app~~ yargs implemented to allow various combinations of arguments.
 11. ~~Test for workbook lock earlier in the process, avoid running the whole script and then losing the output at the end.~~ - Logic added to both commandline and webapp to handle.

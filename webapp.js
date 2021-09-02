@@ -1,5 +1,10 @@
 //Initial setup
 const express = require('express');
+try {
+    const fileupload = require('express-fileupload');
+} catch (er) {
+    var fileupload = "";
+}
 const webapp = express();
 const http = require('http').Server(webapp);
 const io = require('socket.io')(http);
@@ -30,7 +35,9 @@ var buildcols = functions.buildcols;
 var getip = functions.getip;
 
 webapp.use(express.static('includes'));
-
+if (fileupload != "") {
+    webapp.use(fileupload());
+}
 webapp.set('views','./src/views');
 webapp.set('view engine', 'ejs');
 
@@ -269,7 +276,8 @@ io.on('connection', function(socket){
 
 webapp.get('/',function(req, res){
     res.render('logparse', {
-        nodemailer
+        nodemailer,
+        fileupload
     });
 });
 
@@ -286,6 +294,23 @@ webapp.post('/checkdownload',function(req, res) {
         res.sendStatus(200);
     } else {
         res.sendStatus(404);
+    }
+})
+
+webapp.post('/', (req, res) => {
+    if (req.files) {
+        const file = req.files.file
+        const fileName = file.name
+        file.mv(`${__dirname}/${fileName}`, err => {
+            if (err) {
+                console.log(err)
+            } else {
+                res.render('logparse', {
+                    nodemailer,
+                    fileupload
+                });
+            }
+        })
     }
 })
 
