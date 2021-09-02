@@ -118,13 +118,11 @@ io.on('connection', function(socket){
                 // Or we're only after internal IPs and this isn't one
                 (internal != "O" || (internal == "O" && checkedip == "Internal Address") ) )
                 {
-                // Extract date and time
-                var datetime = string.substring(0,19);
                 var CurrentLine = buildline(string,logtype,modetype);
                 if (CurrentLine != "") {
                     // Test if record is already in array - if it is then increment counter and update last date
                     // If it isn't then add to arrays and stamp first date
-                    var DateNew = new Date(datetime);
+                    var DateNew = new Date(string.substring(0,19));
                     if (UniqueRecs.includes(CurrentLine)) {
                         CountRecs[UniqueRecs.indexOf(CurrentLine)] = CountRecs[UniqueRecs.indexOf(CurrentLine)] + 1;
                         // New test - although log normally in date/time order lets not assume that and only update
