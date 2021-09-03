@@ -247,6 +247,7 @@ io.on('connection', function(socket){
                 counter++;
             })
             workbook.xlsx.writeFile("output.xlsx").then(() => {
+                // If email address is not blank and nodemailer installed then attempt email
                 if (emailaddress != '') {
                     if (nodemailer != '') {
                         var message = {
@@ -276,23 +277,15 @@ io.on('connection', function(socket){
     })
 })
 
+// Default page display
 webapp.get('/',function(req, res){
-    console.log('nodemail: ' + nodemail)
-    console.log('fileup: ' + fileup)
     res.render('logparse', {
         nodemail,
         fileup
     });
 });
 
-webapp.get('/download',function(req, res) {
-    res.download('./output.xlsx', 'output.xlsx', function(err) {
-        if (err) {
-            console.log(err);
-        }
-    });
-});
-
+// Check the output exists before running a download request
 webapp.post('/checkdownload',function(req, res) {
     if (fs.existsSync('output.xlsx') ) {
         res.sendStatus(200);
@@ -301,20 +294,38 @@ webapp.post('/checkdownload',function(req, res) {
     }
 })
 
+// Handle download request once checkdownload confirms available
+webapp.get('/download',function(req, res) {
+    res.download('./output.xlsx', 'output.xlsx', function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
+});
+
+// Upload function for new log file
 webapp.post('/', (req, res) => {
     if (req.files) {
         const file = req.files.file
         const fileName = file.name
-        file.mv(`${__dirname}/${fileName}`, err => {
-            if (err) {
-                console.log(err)
-            } else {
-                res.render('logparse', {
-                    nodemail,
-                    fileup
-                });
-            }
-        })
+        // Check that filename is one we want
+        if (fileName == 'IIS.log' || fileName == 'error.php') {
+            file.mv(`${__dirname}/${fileName}`, err => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    res.render('logparse', {
+                        nodemail,
+                        fileup
+                    });
+                }
+            })
+        } else {
+            res.render('logparse', {
+                nodemail,
+                fileup
+            });
+        }
     }
 })
 

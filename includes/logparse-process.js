@@ -164,10 +164,10 @@ function getip(string,log) {
 		// Figure out where IP address is - search for 3 sets of digits
 		// with a decimal inbetween, followed by a 4th set of digits.
 		// Must also have 10 spaces preceeding it to not pick up host IP
-		var IPStart = string.search(/(\d*\.){3}\d*(?<=( (.*)){10})/g);
+		var IPStart = string.search(/(\d{1,3}\.){3}\d{1,3}(?<=( (.*)){10})/g);
 		var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
 	} else {
-		var IPStart = string.search(/(\d*\.){3}\d*/g);
+		var IPStart = string.search(/(\d{1,3}\.){3}\d{1,3}/g);
 		var IPAdd = string.substring(IPStart,string.indexOf('	',IPStart));
 	}
 	return IPAdd;
