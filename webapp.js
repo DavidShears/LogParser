@@ -119,13 +119,13 @@ io.on('connection', function(socket){
                 // or we're only including bots
                 (bottype != "only" || (bottype == "only" && checkedbot != "") ) && 
                 // Or we're excluding blocked IP addresses
-                (blocked != "N" || (blocked == "N" && checkedip != "Blocked Address") ) &&
+                (blocked != "N" || (blocked == "N" && checkedip != "Blocked Address!") ) &&
                 // Or we're only after blocked IPs and this isn't one
-                (blocked != "O" || (blocked == "O" && checkedip == "Blocked Address") ) &&
+                (blocked != "O" || (blocked == "O" && checkedip == "Blocked Address!") ) &&
                 // Or we're excluding internal IP addresses
-                (internal != "N" || (internal == "N" && checkedip != "Internal Address") ) &&
+                (internal != "N" || (internal == "N" && checkedip != "Internal Address!") ) &&
                 // Or we're only after internal IPs and this isn't one
-                (internal != "O" || (internal == "O" && checkedip == "Internal Address") ) )
+                (internal != "O" || (internal == "O" && checkedip == "Internal Address!") ) )
                 {
                 var CurrentLine = buildline(string,logtype,modetype);
                 if (CurrentLine != "") {
@@ -178,10 +178,10 @@ io.on('connection', function(socket){
                 totalreccnt +=1;
             } else if ((bottype == "exclude" && checkedbot != "")
                         || (bottype == "only" && checkedbot == "")         
-                        || (blocked == "N" && checkedip == "Blocked Address")
-                        || (blocked == "O" && checkedip != "Blocked Address")
-                        || (internal == "N" && checkedip == "Internal Address")
-                        || (internal == "O" && checkedip != "Internal Address")) {
+                        || (blocked == "N" && checkedip == "Blocked Address!")
+                        || (blocked == "O" && checkedip != "Blocked Address!")
+                        || (internal == "N" && checkedip == "Internal Address!")
+                        || (internal == "O" && checkedip != "Internal Address!")) {
                 exccnt +=1;
                 excludedreccnt +=1;
                 if (reccnt == 100 || exccnt == 100) {

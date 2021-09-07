@@ -121,23 +121,22 @@ function checkip(IPaddress,bottype){
 	// Allow a 3 part match i.e. 127.0.0.* - currently only for bots
 	var subnet = IPaddress.substring(0,IPaddress.lastIndexOf('.') + 1)
 	if (InternalIPs.includes(IPaddress) ) {
-		return("Internal Address");
+		return("Internal Address!");
 	} else if (SuspectIPs.includes(IPaddress) ) {
-		return("Monitored Address");
+		return("Monitored Address!");
 	} else if (badIPs.includes(IPaddress) ) {
-		return("Blocked Address");
+		return("Blocked Address!");
 	} else if (botIPs.includes(IPaddress) && bottype != "agent" && bottype != "exclude") {
-		return("Bot Address");
+		return("Bot Address!");
 	} else if (botIPs.includes(subnet) && botIPs[botIPs.indexOf(subnet)].substr(-1) == '.' 
 				&& bottype != "agent" && bottype != "exclude"){
-		return ("Bot Subnet");
+		return ("Bot Subnet!");
 	} else {
 		return("");
 	}
 };
 
-
-//Debugging function - check for various bot agents and see if we already have the IP address on record
+//Check for various bot agents and see if we already have the IP address on record
 function checkbot(string,IPAdd,bottype) {
 	let i = 0;
 	while (botagents[i]) {
@@ -167,6 +166,8 @@ function getip(string,log) {
 		var IPStart = string.search(/(\d{1,3}\.){3}\d{1,3}(?<=( (.*)){10})/g);
 		var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
 	} else {
+		// Joomla only has a single IP address in the record, so no need for
+		// additional checks. Uses a tab rather than a space after the IP address.
 		var IPStart = string.search(/(\d{1,3}\.){3}\d{1,3}/g);
 		var IPAdd = string.substring(IPStart,string.indexOf('	',IPStart));
 	}

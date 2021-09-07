@@ -4,8 +4,6 @@ const fs = require('fs');
 const readline = require('readline');
 var Excel = require('exceljs');
 
-
-
 // checkip & checkbot outsourced
 var functions = require('./includes/logparse-process.js');
 var checkip = functions.checkip;
@@ -96,13 +94,13 @@ rl.on('line', (string) => {
 		// or we're only including bots
 		(argv.bot != "only" || (argv.bot == "only" && checkedbot != "") ) && 
 		// Or we're excluding blocked IP addresses
-		(argv.blocked != "N" || (argv.blocked == "N" && checkedip != "Blocked Address") ) &&
+		(argv.blocked != "N" || (argv.blocked == "N" && checkedip != "Blocked Address!") ) &&
 		// Or we're only after blocked IPs and this isn't one
-		(argv.blocked != "O" || (argv.blocked == "O" && checkedip == "Blocked Address") ) &&
+		(argv.blocked != "O" || (argv.blocked == "O" && checkedip == "Blocked Address!") ) &&
 		// Or we're excluding internal IP addresses
-		(argv.internal != "N" || (argv.internal == "N" && checkedip != "Internal Address") ) &&
+		(argv.internal != "N" || (argv.internal == "N" && checkedip != "Internal Address!") ) &&
 		// Or we're only after internal IPs and this isn't one
-		(argv.internal != "O" || (argv.internal == "O" && checkedip == "Internal Address") ) )
+		(argv.internal != "O" || (argv.internal == "O" && checkedip == "Internal Address!") ) )
 		{
 		// Extract date and time
 		var CurrentLine = buildline(string,argv.log,argv.mode);
@@ -130,8 +128,7 @@ rl.on('line', (string) => {
 					var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
 					var checkedip = checkip(IPAdd,argv.bot);
 				}
-				/* Notes.push(checkedip); */
-				//Debugging - check if there's a bot agent identifier but IP isn't in bot ranges
+				// Check if there's a bot agent identifier but IP isn't in bot ranges
 				// don't bother if running in exclude mode as already checked earlier.
 				if (argv.bot != "ip" && argv.bot != "exclude"  && argv.bot != "only") {
 					var checkedbot = checkbot(string,IPAdd,argv.bot);
