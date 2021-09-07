@@ -24,6 +24,8 @@ Optional dependencies exist for the webapp version of the script:
 * nodemailer - used to allow email of spreadsheet once extract is complete
 * express-fileupload - used to handle upload of new Joomla/IIS log for processing
 
+Additionally node-fetch (V2) should be installed for the ipcheck.js script to run successfully.
+
 ## Running
 
 ### Command Line
@@ -60,6 +62,10 @@ node webapp.js - runs a localhost http server on port 3007 as a front-end rather
 node "misc scripts"\pruner.js - to run a quick script aimed at identifying any botagents not already registered in bots.js (IIS only)
 
 node "misc scripts"\ipdump.js --log=(iis/joomla) --ip=(ipaddress) - quickly spit out all records, as they are, into a spreadsheet
+
+node "misc scripts"\ipcheck.js --log=(iis/joomla) - reads log to build list of unique IPs and submits each one to AbuseIPDB, returns score/number of reports/number of reporters/last report date
+
+**Important Note** - You'll need to register an account on AbuseIPDB and request an API key that is then put into line 72 of the script file.
 
 ## To-do:
 1. ~~Combine both sets in the output to give record & count side-by-side~~ Handled by ExcelJS (although could be neater inline processing.)
