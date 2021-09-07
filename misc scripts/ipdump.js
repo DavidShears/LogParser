@@ -8,24 +8,26 @@ var Excel = require('exceljs');
 
 var argv = require('yargs/yargs')(process.argv.slice(2)).argv;
 
-switch(argv.log.toUpperCase()) {
-	case 'IIS':
-		var rl = readline.createInterface({
-			input: fs.createReadStream('IIS.log'),
-			output: process.stdout,
-			terminal: false
-		});
-		break;
-	case 'JOOMLA':
-		var rl = readline.createInterface({
-			input: fs.createReadStream('error.php'),
-			output: process.stdout,
-			terminal: false
-		});
-		break;
-	default:
-		console.log('no log type passed so cannot process')
-		process.exit(1);
+if (argv.log) {
+	switch(argv.log.toUpperCase()) {
+		case 'IIS':
+			var rl = readline.createInterface({
+				input: fs.createReadStream('IIS.log'),
+				output: process.stdout,
+				terminal: false
+			});
+			break;
+		case 'JOOMLA':
+			var rl = readline.createInterface({
+				input: fs.createReadStream('error.php'),
+				output: process.stdout,
+				terminal: false
+			});
+			break;		
+	} 
+}else {
+	console.log('no log type passed so cannot process')
+	process.exit(1);
 }
 
 if (argv.ip == null) {
