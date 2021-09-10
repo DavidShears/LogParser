@@ -1,5 +1,5 @@
 # LogParser
-Parsing error.php from Joomla (tested on 3.10.0, should also read logs back to 2.5.28) - Read all records and output a spreadsheet with all unique combinations of user/error along with count and last/first date it happened.
+Parsing error.php from Joomla (tested on 3.10.1, should also read logs back to 2.5.28) - Read all records and output a spreadsheet with all unique combinations of user/error along with count and last/first date it happened.
 
 Reads all records into a set of arrays, one for each data point, and then goes through array to dump each element as a row in the spreadsheet.
 
@@ -65,7 +65,7 @@ node "misc scripts"\ipdump.js --log=(iis/joomla) --ip=(ipaddress) - quickly spit
 
 node "misc scripts"\ipcheck.js --log=(iis/joomla) - reads log to build list of unique IPs and submits each one to AbuseIPDB, returns score/number of reports/number of reporters/last report date
 
-**Important Note** - You'll need to register an account on AbuseIPDB and request an API key that is then put into line 72 of the script file.
+**Important Note** - You'll need to register an account on AbuseIPDB and request an API key that is then put into line 75 of the script file.
 
 ## To-do:
 1. ~~Combine both sets in the output to give record & count side-by-side~~ Handled by ExcelJS (although could be neater inline processing.)

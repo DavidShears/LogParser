@@ -248,8 +248,7 @@ io.on('connection', function(socket){
             })
             workbook.xlsx.writeFile("output.xlsx").then(() => {
                 // If email address is not blank and nodemailer installed then attempt email
-                if (emailaddress != '') {
-                    if (nodemailer != '') {
+                if (emailaddress != '' && nodemail == 'Y') {
                         var message = {
                             from: "mitc@mnis.co.uk",
                             to: emailaddress,
@@ -263,9 +262,7 @@ io.on('connection', function(socket){
                             if (error) {
                                 console.log(error);
                             }
-                            
                         });
-                    }
                 }
                 socket.emit('finished',totalreccnt,excludedreccnt);
             })

@@ -23,7 +23,7 @@ rl.on('line', (string) => {
 	if (string.indexOf('Bot') != -1 || string.indexOf('bot') != -1) {
 		var unknown = checkbot(string);
 		if (unknown == '') {
-			Recs.push(string);	
+			Recs.push(string);
 		}
 	}
 })

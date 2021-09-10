@@ -24,6 +24,9 @@ if (argv.log) {
 				terminal: false
 			});
 			break;		
+		default:
+			console.log('invalid log type passed - cannot process')
+			process.exit(1);
 	} 
 }else {
 	console.log('no log type passed so cannot process')
