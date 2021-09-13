@@ -47,18 +47,29 @@ if ((argv.bot != 'exclude' && argv.bot) && (argv.blocked == 'O' || argv.internal
 	console.log('bot passed as: ' + argv.bot + ' but Only flag set for Blocked/Internal, bot ignored');
 }
 
-if (argv.log == 'IIS') {
-		var rl = readline.createInterface({
-			input: fs.createReadStream('IIS.log'),
-			output: process.stdout,
-			terminal: false
-		});
+if (argv.log) {
+	switch(argv.log.toUpperCase()) {
+		case 'IIS':
+			var rl = readline.createInterface({
+				input: fs.createReadStream('IIS.log'),
+				output: process.stdout,
+				terminal: false
+			});
+			break;	
+		default:
+			var rl = readline.createInterface({
+				input: fs.createReadStream('error.php'),
+				output: process.stdout,
+				terminal: false
+			});
+			break;
+	} 
 } else {
-		var rl = readline.createInterface({
-			input: fs.createReadStream('error.php'),
-			output: process.stdout,
-			terminal: false
-		});
+	var rl = readline.createInterface({
+		input: fs.createReadStream('error.php'),
+		output: process.stdout,
+		terminal: false
+	});
 }
 
 // Test if output file is locked - if so no point running
