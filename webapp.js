@@ -103,19 +103,24 @@ io.on('connection', function(socket){
         rl.on('line', (string) => {
             // if excluding blocked/internal addresses now a good time to find out if we have one
             // This also catches blocked/internal being set to only since the other flag will be N
-            if (blocked == "N" || internal == "N") {
+            if (blocked == "N" || internal == "N" || bottype == "excludesus") {
                 var IPAdd = getip(string,logtype);
                 var checkedip = checkip(IPAdd,bottype);
             }
             // likewise if we're excluding bots lets check it now
-            if (bottype == "exclude" || bottype == "only") {
+            if (bottype == "exclude" || bottype == "only" || bottype == "excludesus") {
+                var IPAdd = getip(string,logtype);
                 var checkedbot = checkbot(string,IPAdd,bottype);
             }
             // First test - remove header records by testing for #
             if (
                 (string.indexOf('#') !== 0) &&
                 // Also good opportunity to test if we've asked to exclude bots
-                (bottype != "exclude" || (bottype == "exclude" && checkedbot == "") ) && 
+                ((bottype != "exclude" && bottype != "excludesus") || 
+                ((bottype == "exclude" || bottype == "excludesus") && checkedbot == "") ) && 
+                // or we're also excluding suspected bots (IP match but no agent provided)
+		        (bottype != "excludesus" || (bottype == "excludesus" && checkedip.indexOf('Bot') == -1
+                && checkedbot.indexOf('New') == -1)) &&
                 // or we're only including bots
                 (bottype != "only" || (bottype == "only" && checkedbot != "") ) && 
                 // Or we're excluding blocked IP addresses
@@ -148,7 +153,7 @@ io.on('connection', function(socket){
                         FirstDate.push(DateNew);
                         LastDate.push(DateNew);
                         // if blocked/internal excluded then we've already done this test
-                        if (blocked != "N" && internal != "N") {
+                        if (blocked != "N" && internal != "N" && bottype != "excludesus") {
                             var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
 				            var checkedip = checkip(IPAdd,bottype);
                         }
@@ -176,12 +181,7 @@ io.on('connection', function(socket){
                 }
                 reccnt += 1;
                 totalreccnt +=1;
-            } else if ((bottype == "exclude" && checkedbot != "")
-                        || (bottype == "only" && checkedbot == "")         
-                        || (blocked == "N" && checkedip == "Blocked Address!")
-                        || (blocked == "O" && checkedip != "Blocked Address!")
-                        || (internal == "N" && checkedip == "Internal Address!")
-                        || (internal == "O" && checkedip != "Internal Address!")) {
+            } else if (string.indexOf('#') !== 0) {
                 exccnt +=1;
                 excludedreccnt +=1;
                 if (reccnt == 100 || exccnt == 100) {

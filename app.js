@@ -91,17 +91,22 @@ var Notes = [];
 rl.on('line', (string) => {
 	// if excluding blocked/internal addresses now a good time to find out if we have one
     // This also catches blocked/internal being set to only since the other flag will be N
-    if (argv.blocked == "N" || argv.internal == "N") {
+    if (argv.blocked == "N" || argv.internal == "N" || argv.bot == "excludesus") {
 		var IPAdd = getip(string,argv.log);
         var checkedip = checkip(IPAdd,argv.bot);
 	}
     if (argv.bot == "exclude") {
+		var IPAdd = getip(string,argv.log);
         var checkedbot = checkbot(string,IPAdd,argv.bot);
     }
 	// First test - remove header records by testing for #
 	if ((string.indexOf('#') !== 0) && 
 	// Also good opportunity to test if we've asked to exclude bots
-		(argv.bot != "exclude"|| (argv.bot == "exclude" && checkedbot == "")) &&
+		((argv.bot != "exclude" && argv.bot != "excludesus") 
+		|| ((argv.bot == "exclude" || argv.bot == "excludesus") && checkedbot == "")) &&
+		// or we're also excluding suspected bots (IP match but no agent provided)
+		(argv.bot != "excludesus" || (argv.bot == "excludesus" && checkedip.indexOf("Bot") == -1 
+		&& checkedbot.indexOf('New') == -1)) &&
 		// or we're only including bots
 		(argv.bot != "only" || (argv.bot == "only" && checkedbot != "") ) && 
 		// Or we're excluding blocked IP addresses
@@ -141,7 +146,7 @@ rl.on('line', (string) => {
 				}
 				// Check if there's a bot agent identifier but IP isn't in bot ranges
 				// don't bother if running in exclude mode as already checked earlier.
-				if (argv.bot != "ip" && argv.bot != "exclude"  && argv.bot != "only") {
+				if (argv.bot != "ip" && argv.bot != "exclude"  && argv.bot != "only" && bottype != "excludesus") {
 					var checkedbot = checkbot(string,IPAdd,argv.bot);
 				}
 				if (checkedip != "" && checkedbot != "") {

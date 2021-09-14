@@ -38,7 +38,7 @@ The following arguments can be passed in as well:
 
 If not passed then detailed output including IP/Status/Url will be provided.
 
-* --bot=(agent/ip/exclude/only) only test for botagent, only test for botip, exclude bots based on agent, or only output bot records
+* --bot=(agent/ip/exclude/excludesus/only) only test for botagent, only test for botip, exclude bots based on agent, exclude bots based on agent or IP, or only output bot records
 
 If not passed then both agent & ip will be used to identify bots
 
