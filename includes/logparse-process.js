@@ -73,7 +73,7 @@ function buildcols(logtype,modetype){
 	// If in IIS mode then include column for HTTP status code
 	if (logtype == 'IIS') {
 		// Build column headings depending on mode, all require IP address
-		coldef[counter] = { header: "IP Address", key:"IPADD"};
+		coldef[counter] = { header: "IP Address", key:"IPADD", width: 15};
 		counter++;
 		switch (modetype) {
 			case 'summstat':
@@ -96,21 +96,21 @@ function buildcols(logtype,modetype){
 		// All then have the final 4 columns the same
 		coldef[counter] = { header: "Times Found", key:"COUNT"};
 		counter++;
-		coldef[counter] = { header: "First Found", key:"FIRST"};
+		coldef[counter] = { header: "First Found", key:"FIRST", width: 11};
 		counter++;
-		coldef[counter] = { header: "Last Found", key:"LAST"};
+		coldef[counter] = { header: "Last Found", key:"LAST", width: 11};
 		counter++;
 		coldef[counter] = { header: "Notes", key:"NOTES"};
 	} else {
-		coldef[counter] = { header: "IP Address", key:"IPADD"}
+		coldef[counter] = { header: "IP Address", key:"IPADD", width: 15}
 		counter++;
 		coldef[counter] = { header: "Record", key:"RECORD"}
 		counter++;
 		coldef[counter] = { header: "Times Found", key:"COUNT"}
 		counter++;
-		coldef[counter] = { header: "First Found", key:"FIRST"}
+		coldef[counter] = { header: "First Found", key:"FIRST", width: 11}
 		counter++;
-		coldef[counter] = { header: "Last Found", key:"LAST"}
+		coldef[counter] = { header: "Last Found", key:"LAST", width: 11}
 		counter++;
 		coldef[counter] = { header: "Notes", key:"NOTES"}
 	}
