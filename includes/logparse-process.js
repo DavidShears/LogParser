@@ -174,4 +174,40 @@ function getip(string,log) {
 	return IPAdd;
 }
 
-module.exports = {checkip,checkbot,buildline,buildcols,getip};
+// New function to handle checking inclusion (my head hurt having it in (web)app.js )
+// Also splitting into individual if statements for now to make it easier to read
+function checkinclude(bottype,blocked,internal,checkedbot,checkedip) {
+	// excluding bots and checkbot found something
+	if ((bottype == 'exclude' || bottype == "excludesus") && checkedbot != "") {
+		return('N')
+	}
+	// excluding suspect bots and checkip found something
+	// checkbot finding something should be caught above
+	if ((bottype == 'excludesus') && (checkedip.indexOf('Bot') != -1)) {
+		return('N')
+	}
+	// or we're only including bots
+	if ((bottype == 'only') && checkedbot == '') {
+		return('N')
+	}
+	// Excluding blocked IPs?
+	if (blocked == 'N' && checkedip == 'Blocked Address!') {
+		return('N')
+	}
+	// Only blocked IPs?
+	if (blocked == 'O' && checkedip != 'Blocked Address!') {
+		return('N')
+	}
+	// Excluding internal IPs?
+	if (internal == 'N' && checkedip == 'Internal Address!') {
+		return('N')
+	}
+	// Only blocked IPs?
+	if (internal == 'O' && checkedip != 'Internal Address!') {
+		return('N')
+	}
+	// otherwise lets return a Y
+	return('Y')
+}
+
+module.exports = {checkip,checkbot,buildline,buildcols,getip,checkinclude};

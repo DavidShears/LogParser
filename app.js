@@ -11,6 +11,7 @@ var checkbot = functions.checkbot;
 var buildline = functions.buildline;
 var buildcols = functions.buildcols;
 var getip = functions.getip;
+var checkinclude = functions.checkinclude;
 
 // Add option to specify log type - if anything other than IIS assume original Joomla logic
 
@@ -100,23 +101,11 @@ rl.on('line', (string) => {
         var checkedbot = checkbot(string,IPAdd,argv.bot);
     }
 	// First test - remove header records by testing for #
-	if ((string.indexOf('#') !== 0) && 
-	// Also good opportunity to test if we've asked to exclude bots
-		((argv.bot != "exclude" && argv.bot != "excludesus") 
-		|| ((argv.bot == "exclude" || argv.bot == "excludesus") && checkedbot == "")) &&
-		// or we're also excluding suspected bots (IP match but no agent provided)
-		(argv.bot != "excludesus" || (argv.bot == "excludesus" && checkedip.indexOf("Bot") == -1 
-		&& checkedbot.indexOf('New') == -1)) &&
-		// or we're only including bots
-		(argv.bot != "only" || (argv.bot == "only" && checkedbot != "") ) && 
-		// Or we're excluding blocked IP addresses
-		(argv.blocked != "N" || (argv.blocked == "N" && checkedip != "Blocked Address!") ) &&
-		// Or we're only after blocked IPs and this isn't one
-		(argv.blocked != "O" || (argv.blocked == "O" && checkedip == "Blocked Address!") ) &&
-		// Or we're excluding internal IP addresses
-		(argv.internal != "N" || (argv.internal == "N" && checkedip != "Internal Address!") ) &&
-		// Or we're only after internal IPs and this isn't one
-		(argv.internal != "O" || (argv.internal == "O" && checkedip == "Internal Address!") ) )
+	if (string.indexOf('#') !== 0) {
+		var checkedinclude = checkinclude(argv.bot,argv.blocked,argv.internal,checkedbot,checkedip)
+	}
+	// Now if we got a Y back then lets proceed
+	if (checkedinclude == 'Y')
 		{
 		// Extract date and time
 		var CurrentLine = buildline(string,argv.log,argv.mode);

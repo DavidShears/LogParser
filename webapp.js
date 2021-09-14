@@ -35,6 +35,7 @@ var checkbot = functions.checkbot;
 var buildline = functions.buildline;
 var buildcols = functions.buildcols;
 var getip = functions.getip;
+var checkinclude = functions.checkinclude;
 
 webapp.use(express.static('includes'));
 if (fileup == 'Y') {
@@ -113,24 +114,11 @@ io.on('connection', function(socket){
                 var checkedbot = checkbot(string,IPAdd,bottype);
             }
             // First test - remove header records by testing for #
-            if (
-                (string.indexOf('#') !== 0) &&
-                // Also good opportunity to test if we've asked to exclude bots
-                ((bottype != "exclude" && bottype != "excludesus") || 
-                ((bottype == "exclude" || bottype == "excludesus") && checkedbot == "") ) && 
-                // or we're also excluding suspected bots (IP match but no agent provided)
-		        (bottype != "excludesus" || (bottype == "excludesus" && checkedip.indexOf('Bot') == -1
-                && checkedbot.indexOf('New') == -1)) &&
-                // or we're only including bots
-                (bottype != "only" || (bottype == "only" && checkedbot != "") ) && 
-                // Or we're excluding blocked IP addresses
-                (blocked != "N" || (blocked == "N" && checkedip != "Blocked Address!") ) &&
-                // Or we're only after blocked IPs and this isn't one
-                (blocked != "O" || (blocked == "O" && checkedip == "Blocked Address!") ) &&
-                // Or we're excluding internal IP addresses
-                (internal != "N" || (internal == "N" && checkedip != "Internal Address!") ) &&
-                // Or we're only after internal IPs and this isn't one
-                (internal != "O" || (internal == "O" && checkedip == "Internal Address!") ) )
+            if (string.indexOf('#') !== 0) {
+                var checkedinclude = checkinclude(bottype,blocked,internal,checkedbot,checkedip)
+            }
+            // Now if we got a Y back then lets proceed
+            if (checkedinclude == 'Y')
                 {
                 var CurrentLine = buildline(string,logtype,modetype);
                 if (CurrentLine != "") {
