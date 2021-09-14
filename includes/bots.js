@@ -285,6 +285,7 @@ var botagents = [
 	"tkbot",
 	"twitterbot",
 	"webprosbot",
+	"webwiki.co.uk",
 	"wonderbot",
 	"xforce-security",
 	"yacybot",
