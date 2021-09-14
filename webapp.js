@@ -194,7 +194,12 @@ io.on('connection', function(socket){
         .on('close', function() {
             // Set up workbook and worksheet
             var workbook = new Excel.Workbook();
-            var worksheet = workbook.addWorksheet("Error Logging");
+            // Minor thing - Joomla is specifically error logging, IIS isn't
+	        if (logtype == 'IIS') {
+		        var worksheet = workbook.addWorksheet("Traffic Logging");
+	        } else {
+		        var worksheet = workbook.addWorksheet("Error Logging");
+	        }
             // Call external function to generate column headers
 	        var coldef = buildcols(logtype,modetype);
             worksheet.columns = coldef;

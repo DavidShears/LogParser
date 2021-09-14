@@ -149,7 +149,12 @@ rl.on('line', (string) => {
 .on('close', function() {
 	// Set up workbook and worksheet
 	var workbook = new Excel.Workbook();
-	var worksheet = workbook.addWorksheet("Error Logging");
+	// Minor thing - Joomla is specifically error logging, IIS isn't
+	if (argv.log == 'IIS') {
+		var worksheet = workbook.addWorksheet("Traffic Logging");
+	} else {
+		var worksheet = workbook.addWorksheet("Error Logging");
+	}
 	// Call external function to generate column headers
 	var coldef = buildcols(argv.log,argv.mode);
     worksheet.columns = coldef;
