@@ -96,7 +96,7 @@ rl.on('line', (string) => {
 		var IPAdd = getip(string,argv.log);
         var checkedip = checkip(IPAdd,argv.bot);
 	}
-    if (argv.bot == "exclude") {
+    if (argv.bot == "exclude" || argv.bot == "only") {
 		var IPAdd = getip(string,argv.log);
         var checkedbot = checkbot(string,IPAdd,argv.bot);
     }
@@ -129,13 +129,14 @@ rl.on('line', (string) => {
 				FirstDate.push(DateNew);
 				LastDate.push(DateNew);
 				// if blocked/internal excluded then we've already done this test
-				if (argv.blocked != "N" && argv.internal != "N") {
+				if (argv.blocked != "N" && argv.internal != "N" && bottype != "excludesus") {
 					var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
 					var checkedip = checkip(IPAdd,argv.bot);
 				}
 				// Check if there's a bot agent identifier but IP isn't in bot ranges
 				// don't bother if running in exclude mode as already checked earlier.
-				if (argv.bot != "ip" && argv.bot != "exclude"  && argv.bot != "only" && bottype != "excludesus") {
+				if (argv.bot != "ip" && argv.bot != "exclude"  && argv.bot != "only") {
+					var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
 					var checkedbot = checkbot(string,IPAdd,argv.bot);
 				}
 				if (checkedip != "" && checkedbot != "") {

@@ -149,6 +149,7 @@ io.on('connection', function(socket){
                         // don't bother if running in exclude mode as already checked earlier.
                         // or if we're in only bots
                         if (bottype != "ip" && bottype != "exclude" && bottype != "only") {
+                            var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
                             var checkedbot = checkbot(string,IPAdd,bottype);
                         }
                         if (checkedip != "" && checkedbot != "") {
