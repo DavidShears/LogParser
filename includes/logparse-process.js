@@ -29,8 +29,10 @@ function buildline(string,logtype,modetype){
 		// Get HTTP status using Regex to find 3 digits followed by a series of 
 		// 5 spaces seperated by any number of digits
 		// 200 0 0 15669 344 546
-		var HTTPstart = string.search(/\d{3}(?=( (\d*)){5})/g);
-		var HTTPstat = string.substring(HTTPstart,HTTPstart + 3);
+		// 2021/09/16 - add a preceding white character to ensure we don't pick up a port
+		// on the website address
+		var HTTPstart = string.search(/\s\d{3}(?=( (\d*)){5})/g);
+		var HTTPstat = string.substring(HTTPstart + 1,HTTPstart + 4);
 		// Build CurrentLine from the various elements we've picked up
 		// If a mode has been specified, use that
 		switch (modetype) {
