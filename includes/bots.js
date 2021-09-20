@@ -280,6 +280,7 @@ var botagents = [
 	"serpstatbot",
 	"sidetrade+indexer+bot",
 	"siteauditbot",
+	"sitecheckerbotcrawler",
 	"slackbot",
 	"thinkbot",
 	"tkbot",
