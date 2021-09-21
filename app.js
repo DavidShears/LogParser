@@ -162,8 +162,7 @@ rl.on('line', (string) => {
 		var worksheet = workbook.addWorksheet("Error Logging");
 	}
 	// Call external function to generate column headers
-	var coldef = buildcols(argv.log,argv.mode);
-    worksheet.columns = coldef;
+	worksheet.columns = buildcols(argv.log,argv.mode);
 	worksheet.getRow(1).font = { name: "Calibri", size: 11, bold: true};
 	// Loop array of unique records
 	var counter = 0;
