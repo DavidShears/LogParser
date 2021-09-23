@@ -92,7 +92,9 @@ var Notes = [];
 rl.on('line', (string) => {
 	// if excluding blocked/internal addresses now a good time to find out if we have one
     // This also catches blocked/internal being set to only since the other flag will be N
-    if (argv.blocked == "N" || argv.internal == "N" || argv.bot == "excludesus") {
+	// above is true in webapp but not here
+    if (argv.blocked == "N" || argv.internal == "N" || argv.bot == "excludesus"
+	|| argv.blocked =="O" || argv.internal == "O") {
 		var IPAdd = getip(string,argv.log);
         var checkedip = checkip(IPAdd,argv.bot);
 	}
@@ -129,7 +131,7 @@ rl.on('line', (string) => {
 				FirstDate.push(DateNew);
 				LastDate.push(DateNew);
 				// if blocked/internal excluded then we've already done this test
-				if (argv.blocked != "N" && argv.internal != "N" && bottype != "excludesus") {
+				if (argv.blocked != "N" && argv.internal != "N" && argv.bot != "excludesus") {
 					var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
 					var checkedip = checkip(IPAdd,argv.bot);
 				}
