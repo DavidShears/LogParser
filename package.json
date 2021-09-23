@@ -24,7 +24,7 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
-    "node-fetch": "^2.6.2",
+    "node-fetch": "^2.6.5",
     "nodemailer": "^6.6.5",
     "socket.io": "^4.2.0"
   }
