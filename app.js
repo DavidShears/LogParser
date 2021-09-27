@@ -90,18 +90,10 @@ var LastDate = [];
 var Notes = [];
 
 rl.on('line', (string) => {
-	// if excluding blocked/internal addresses now a good time to find out if we have one
-    // This also catches blocked/internal being set to only since the other flag will be N
-	// above is true in webapp but not here
-    if (argv.blocked == "N" || argv.internal == "N" || argv.bot == "excludesus"
-	|| argv.blocked =="O" || argv.internal == "O") {
+	// Check ip & bot now to allow us to update the notes field if required
 		var IPAdd = getip(string,argv.log);
         var checkedip = checkip(IPAdd,argv.bot);
-	}
-    if (argv.bot == "exclude" || argv.bot == "only") {
-		var IPAdd = getip(string,argv.log);
         var checkedbot = checkbot(string,IPAdd,argv.bot);
-    }
 	// First test - remove header records by testing for #
 	if (string.indexOf('#') !== 0) {
 		var checkedinclude = checkinclude(argv.bot,argv.blocked,argv.internal,checkedbot,checkedip)
@@ -124,23 +116,22 @@ rl.on('line', (string) => {
 				} else if (DateNew < FirstDate[UniqueRecs.indexOf(CurrentLine)]) {
 					FirstDate[UniqueRecs.indexOf(CurrentLine)] = DateNew;
 				}
+				// New test - check whether we now have an ID on an IP Address that we didn't previously
+				if ((checkedip != "" || checkedbot != "") && Notes[UniqueRecs.indexOf(CurrentLine)] == "") {
+					if (checkedip != "" && checkedbot != "") {
+						Notes[UniqueRecs.indexOf(CurrentLine)] = (checkedip + ", " + checkedbot);
+					} else if (checkedip == "") {
+						Notes[UniqueRecs.indexOf(CurrentLine)] = (checkedbot);
+					} else if (checkedbot == "") {
+						Notes[UniqueRecs.indexOf(CurrentLine)] = (checkedip);
+					}
+				}
 			// Record not in array - write as long as there's an IP Address
 			} else {
 				UniqueRecs.push(CurrentLine);
 				CountRecs.push(1);
 				FirstDate.push(DateNew);
 				LastDate.push(DateNew);
-				// if blocked/internal excluded then we've already done this test
-				if (argv.blocked != "N" && argv.internal != "N" && argv.bot != "excludesus") {
-					var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
-					var checkedip = checkip(IPAdd,argv.bot);
-				}
-				// Check if there's a bot agent identifier but IP isn't in bot ranges
-				// don't bother if running in exclude mode as already checked earlier.
-				if (argv.bot != "ip" && argv.bot != "exclude"  && argv.bot != "only") {
-					var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
-					var checkedbot = checkbot(string,IPAdd,argv.bot);
-				}
 				if (checkedip != "" && checkedbot != "") {
 					Notes.push(checkedip + ", " + checkedbot);
 				} else if (checkedip == "") {

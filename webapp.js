@@ -102,17 +102,10 @@ io.on('connection', function(socket){
         var Notes = [];    
 
         rl.on('line', (string) => {
-            // if excluding blocked/internal addresses now a good time to find out if we have one
-            // This also catches blocked/internal being set to only since the other flag will be N
-            if (blocked == "N" || internal == "N" || bottype == "excludesus") {
-                var IPAdd = getip(string,logtype);
-                var checkedip = checkip(IPAdd,bottype);
-            }
-            // likewise if we're excluding bots lets check it now
-            if (bottype == "exclude" || bottype == "only" || bottype == "excludesus") {
-                var IPAdd = getip(string,logtype);
-                var checkedbot = checkbot(string,IPAdd,bottype);
-            }
+            // Check ip & bot now to allow us to update the notes field if required
+            var IPAdd = getip(string,logtype);
+            var checkedip = checkip(IPAdd,bottype);
+            var checkedbot = checkbot(string,IPAdd,bottype);
             // First test - remove header records by testing for #
             if (string.indexOf('#') !== 0) {
                 var checkedinclude = checkinclude(bottype,blocked,internal,checkedbot,checkedip)
@@ -134,24 +127,22 @@ io.on('connection', function(socket){
                         } else if (DateNew < FirstDate[UniqueRecs.indexOf(CurrentLine)]) {
                             FirstDate[UniqueRecs.indexOf(CurrentLine)] = DateNew;
                         }
+                        // New test - check whether we now have an ID on an IP Address that we didn't previously
+                        if ((checkedip != "" || checkedbot != "") && Notes[UniqueRecs.indexOf(CurrentLine)] == "") {
+                            if (checkedip != "" && checkedbot != "") {
+                                Notes[UniqueRecs.indexOf(CurrentLine)] = (checkedip + ", " + checkedbot);
+                            } else if (checkedip == "") {
+                                Notes[UniqueRecs.indexOf(CurrentLine)] = (checkedbot);
+                            } else if (checkedbot == "") {
+                                Notes[UniqueRecs.indexOf(CurrentLine)] = (checkedip);
+                            }
+                        }
                     // Record not in array - write as long as there's an IP Address
                     } else {
                         UniqueRecs.push(CurrentLine);
                         CountRecs.push(1);
                         FirstDate.push(DateNew);
                         LastDate.push(DateNew);
-                        // if blocked/internal excluded then we've already done this test
-                        if (blocked != "N" && internal != "N" && bottype != "excludesus") {
-                            var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
-				            var checkedip = checkip(IPAdd,bottype);
-                        }
-                        //Check if there's a bot agent identifier but IP isn't in bot ranges
-                        // don't bother if running in exclude mode as already checked earlier.
-                        // or if we're in only bots
-                        if (bottype != "ip" && bottype != "exclude" && bottype != "only") {
-                            var IPAdd = CurrentLine.substring(0,CurrentLine.indexOf(' '));
-                            var checkedbot = checkbot(string,IPAdd,bottype);
-                        }
                         if (checkedip != "" && checkedbot != "") {
                             Notes.push(checkedip + ", " + checkedbot);
                         } else if (checkedip == "") {
