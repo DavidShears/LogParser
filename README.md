@@ -55,7 +55,7 @@ node app.js --log=IIS --mode=summurl --bot=exclude --internal=N --blocked=N
 
 ### Browser Interface
 
-node webapp.js - runs a localhost http server on port 3007 as a front-end rather than using the commandline arguments above. Also allows email of spreadsheet once processing complete.
+node webapp.js - runs a localhost http server on port 3007 as a front-end rather than using the commandline arguments above. Also allows email of spreadsheet once processing complete, as well as uploading new version of the log file.
 
 ### Misc Scripts
 
@@ -65,7 +65,7 @@ node "misc scripts"\ipdump.js --log=(iis/joomla) --ip=(ipaddress) - quickly spit
 
 node "misc scripts"\ipcheck.js --log=(iis/joomla) - reads log to build list of unique IPs and submits each one to AbuseIPDB, returns score/number of reports/number of reporters/last report date
 
-**Important Note** - You'll need to register an account on AbuseIPDB and request an API key that is then put into line 75 of the script file.
+**Important Note** - You'll need to register an account on AbuseIPDB and request an API key that is then put into line 92 of the script file.
 
 ## To-do:
 1. ~~Combine both sets in the output to give record & count side-by-side~~ Handled by ExcelJS (although could be neater inline processing.)
@@ -79,3 +79,4 @@ node "misc scripts"\ipcheck.js --log=(iis/joomla) - reads log to build list of u
 9. ~~Add option to upload log to webapp & option to download from browser as well as / instead of email.~~ - Basic upload & download logic added
 10. ~~Add exclude Internal/Blocked logic from webapp back into commandline app~~ yargs implemented to allow various combinations of arguments.
 11. ~~Test for workbook lock earlier in the process, avoid running the whole script and then losing the output at the end.~~ - Logic added to both commandline and webapp to handle.
+12. Implement system for multi-user environment. Need to handle multiple log files and multiple output files, primarily for web browser mode.
