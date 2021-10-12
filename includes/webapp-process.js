@@ -13,13 +13,29 @@ function logparse(){
     }
     var blocked = (document.getElementById("blockedType").value);
     var internal = (document.getElementById("internalType").value);
+    if (document.getElementById("excludeImages").checked == true) {
+        var noimages = 'Y';
+    } else {
+        var noimages = 'N';
+    }
+    if (document.getElementById("excludeJS").checked == true) {
+        var nojs = 'Y';
+    } else {
+        var nojs = 'N';
+    }
+    if (document.getElementById("excludeCSS").checked == true) {
+        var nocss = 'Y';
+    } else {
+        var nocss = 'N';
+    }
     // Disable input until we're done processing
     lockscreen();
     // First ask for check of file
     socket.emit('checkfile',logtype);
     // If we get the all clear, then process file
     socket.on('filegood', function() {
-        socket.emit('procfile', logtype, modetype, bottype, emailaddress, blocked, internal);
+        socket.emit('procfile', logtype, modetype, bottype, emailaddress, blocked, internal, 
+        noimages, nojs, nocss);
     })
     socket.on('progress', function(totalrecs,excluded) {
         // report on excluded records if there are any
@@ -55,9 +71,18 @@ function checkmode(){
     var mode = document.getElementById("logType").value;
     if (mode == 'IIS') {
         document.getElementById("modeType").disabled = false;
+        document.getElementById("excludeImages").disabled = false;
+        document.getElementById("excludeJS").disabled = false;
+        document.getElementById("excludeCSS").disabled = false;
     }
     else {
         document.getElementById("modeType").disabled = true;
+        document.getElementById("excludeImages").disabled = true;
+        document.getElementById("excludeImages").checked = false;
+        document.getElementById("excludeJS").disabled = true;
+        document.getElementById("excludeJS").checked = false;
+        document.getElementById("excludeCSS").disabled = true;
+        document.getElementById("excludeCSS").checked = false;
     }
 }
 
@@ -132,6 +157,9 @@ function lockscreen() {
     document.getElementById("downbutton").disabled = true;
     document.getElementById("blockedType").disabled = true;
     document.getElementById("internalType").disabled = true;
+    document.getElementById("excludeImages").disabled = true;
+    document.getElementById("excludeJS").disabled = true;
+    document.getElementById("excludeCSS").disabled = true;
 }
 
 function unlockscreen() {

@@ -36,6 +36,7 @@ var buildline = functions.buildline;
 var buildcols = functions.buildcols;
 var getip = functions.getip;
 var checkinclude = functions.checkinclude;
+var checkexclude = functions.checkexclude;
 
 webapp.use(express.static('includes'));
 if (fileup == 'Y') {
@@ -70,8 +71,8 @@ io.on('connection', function(socket){
     });
 
 
-    socket.on('procfile',(logtype,modetype,bottype,emailaddress,blocked,internal) => {
-
+    socket.on('procfile',(logtype,modetype,bottype,emailaddress,blocked,internal,
+        noimages,nojs,nocss) => {
         if (logtype == 'IIS') {
                 var rl = readline.createInterface({
                     input: fs.createReadStream('IIS.log'),
@@ -110,8 +111,12 @@ io.on('connection', function(socket){
             if (string.indexOf('#') !== 0) {
                 var checkedinclude = checkinclude(bottype,blocked,internal,checkedbot,checkedip)
             }
+            var checkedexclude = 'N';
+            if (logtype == 'IIS' && (noimages == 'Y' || nojs == 'Y' || nocss == 'Y')) {
+                var checkedexclude = checkexclude(string,noimages,nojs,nocss);
+            }
             // Now if we got a Y back then lets proceed
-            if (checkedinclude == 'Y')
+            if (checkedinclude == 'Y' && checkedexclude == 'N')
                 {
                 var CurrentLine = buildline(string,logtype,modetype);
                 if (CurrentLine != "") {

@@ -212,4 +212,35 @@ function checkinclude(bottype,blocked,internal,checkedbot,checkedip) {
 	return('Y')
 }
 
-module.exports = {checkip,checkbot,buildline,buildcols,getip,checkinclude};
+// New function to handle checking exclusion based on images/js/css flags
+function checkexclude(string,noimages,nojs,nocss) {
+		// Below borrowed from buildline routine
+		// may move checkexclude within it once flags are added to commandline
+		// but for now since this is web-only we'll do it standalone.
+		var urlend = string.indexOf(' 443 ');
+		if (urlend == -1) {
+			var urlend = string.indexOf(' 80 ');
+		}
+		if (string.lastIndexOf(' - ',urlend) !== -1) {
+			var urlend = string.indexOf(' - ');
+		}
+		var urlreq = string.substring(string.indexOf('/'),urlend);
+		var tempstring = urlreq.toLowerCase();
+		if (tempstring.indexOf('.js') != -1 && nojs == 'Y') {
+			return('Y');
+		}
+		if (tempstring.indexOf('.css') != -1 && nocss == 'Y') {
+			return('Y');
+		}
+		if ((tempstring.indexOf('.png') != -1 ||
+		tempstring.indexOf('.gif') != -1 ||
+		tempstring.indexOf('.jpg') != -1 ||
+		tempstring.indexOf('.jpeg') != -1 ||
+		tempstring.indexOf('.svg') != -1 )
+		&& noimages == 'Y') {
+			return('Y');
+		}
+		return('N');
+}
+
+module.exports = {checkip,checkbot,buildline,buildcols,getip,checkinclude,checkexclude};
