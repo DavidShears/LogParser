@@ -67,6 +67,7 @@ var botIPs = [
 			"66.249.79.",
 			//ionos.de
 			"82.165.224.",
+			"198.251.73.",
 			"212.227.216.",
 			//LinkedInBot
 			"108.174.2.215",
@@ -189,6 +190,7 @@ var botIPs = [
 			"185.191.171.",
 			"85.208.98.",
 			//twitterbot ranges
+			"192.133.77.",
 			"199.16.157.",
 			"199.59.150.",
 			"192.133.77.14",
@@ -290,6 +292,7 @@ var botagents = [
 	"xforce-security",
 	"yacybot",
 	"yandexbot",
+	"yandeximages",
 	"zoominfobot"
 ]
 
