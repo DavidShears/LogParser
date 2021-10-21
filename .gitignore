@@ -85,5 +85,7 @@ ipdump*.xlsx
 ~$ipdump*.xlsx
 ipcheck*.xlsx
 ~$ipcheck*.xlsx
+crawlers*.xlsx
+~$crawlers*.xlsx
 # Internal use only - list of IPs for Internal/Suspicious/Blocked arrays
 IPArrays.txt

@@ -65,6 +65,8 @@ node "misc scripts"\ipdump.js --log=(iis/joomla) --ip=(ipaddress) - quickly spit
 
 node "misc scripts"\ipcheck.js --log=(iis/joomla) - reads log to build list of unique IPs and submits each one to AbuseIPDB, returns score/number of reports/number of reporters/last report date
 
+node "misc scripts"\crawlerLS.js - to run a script aimed at identifying the first and last time each botagent was seen (IIS only)
+
 **Important Note** - You'll need to register an account on AbuseIPDB and request an API key that is then put into line 92 of the script file.
 
 ## To-do:
