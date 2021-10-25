@@ -33,8 +33,8 @@ if (argv.log) {
 	process.exit(1);
 }
 
-if (argv.ip == null) {
-	console.log('no IP provided so cannot process');
+if (argv.match == null) {
+	console.log('no string provided so cannot process');
 	process.exit(1);
 }
 
@@ -42,7 +42,7 @@ var Recs = [];
 
 rl.on('line', (string) => {
 	// replace false positives, such as checking robots.txt and any files with 'bot' in the name
-	if (string.indexOf(argv.ip) != -1) {
+	if (string.indexOf(argv.match) != -1) {
 			Recs.push(string);	
 	}
 })
