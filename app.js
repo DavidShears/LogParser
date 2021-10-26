@@ -12,6 +12,7 @@ var buildline = functions.buildline;
 var buildcols = functions.buildcols;
 var getip = functions.getip;
 var checkinclude = functions.checkinclude;
+var checkexclude = functions.checkexclude;
 
 // Add option to specify log type - if anything other than IIS assume original Joomla logic
 
@@ -98,8 +99,24 @@ rl.on('line', (string) => {
 	if (string.indexOf('#') !== 0) {
 		var checkedinclude = checkinclude(argv.bot,argv.blocked,argv.internal,checkedbot,checkedip)
 	}
+	var checkedexclude = 'N';
+	if (argv.log == 'IIS' && (argv.noimages || argv.nojs || argv.nocss)) {
+		var noimages = 'N';
+		var nojs = 'N';
+		var nocss = 'N';
+		if (argv.noimages) {
+			noimages = 'Y'
+		}
+		if (argv.nojs) {
+			nojs = 'Y'
+		}
+		if (argv.nocss) {
+			nocss = 'Y'
+		}
+		var checkedexclude = checkexclude(string,noimages,nojs,nocss);
+	}
 	// Now if we got a Y back then lets proceed
-	if (checkedinclude == 'Y')
+	if (checkedinclude == 'Y' && checkedexclude == 'N')
 		{
 		// Extract date and time
 		var CurrentLine = buildline(string,argv.log,argv.mode);
