@@ -142,8 +142,8 @@ function checkip(IPaddress,bottype){
 //Check for various bot agents and see if we already have the IP address on record
 function checkbot(string,IPAdd,bottype) {
 	let i = 0;
+	var tempstring = string.toLowerCase();
 	while (botagents[i]) {
-		var tempstring = string.toLowerCase();
 		if (tempstring.indexOf(botagents[i]) != -1) {
 			if (bottype != "agent" && bottype != "exclude"){
 				var found = checkip(IPAdd);
