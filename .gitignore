@@ -81,8 +81,8 @@ output*.xlsx
 ~$output*.xlsx
 pruned*.xlsx
 ~$pruned*.xlsx
-ipdump*.xlsx
-~$ipdump*.xlsx
+stringdump*.xlsx
+~$stringdump*.xlsx
 ipcheck*.xlsx
 ~$ipcheck*.xlsx
 crawlers*.xlsx

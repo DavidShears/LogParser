@@ -60,5 +60,5 @@ rl.on('line', (string) => {
 		rowdef[1] = element;
 		worksheet.addRow(rowdef);
 	})
-	workbook.xlsx.writeFile("ipdump.xlsx");
+	workbook.xlsx.writeFile("stringdump.xlsx");
 });
