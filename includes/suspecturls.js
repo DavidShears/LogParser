@@ -4,6 +4,13 @@ var susURLs = [
 "wp-login",
 "admin",
 "config",
-"backoffice"
+"backoffice",
+"installer",
+"download",
+"upload",
+"passwd",
+"gutsevich",
+"githubusercontent",
+"\%20"
 ];
 module.exports = {susURLs}
