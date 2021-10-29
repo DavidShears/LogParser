@@ -6,6 +6,7 @@ var badIPs = [];
 // botIPs array moved to external javascript file
 var botIPs = require('./bots.js').botIPs;
 var botagents = require('./bots.js').botagents;
+var susURLs = require('./suspecturls.js').susURLs;
 
 //buildline - accepts string from readline and builds for output
 function buildline(string,logtype,modetype){
@@ -243,4 +244,17 @@ function checkexclude(string,noimages,nojs,nocss) {
 		return('N');
 }
 
-module.exports = {checkip,checkbot,buildline,buildcols,getip,checkinclude,checkexclude};
+// Check whether the url includes a substring on the suspect list
+function checksusurl(url) {
+	var urlreq = url.toLowerCase();
+	let i = 0;
+	while (susURLs[i]) {
+		if (urlreq.indexOf(susURLs[i]) != -1) {
+			return "Y";
+		}
+		i++;
+	}
+	return("N");
+}
+
+module.exports = {checkip,checkbot,buildline,buildcols,getip,checkinclude,checkexclude,checksusurl};

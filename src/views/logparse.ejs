@@ -23,7 +23,7 @@
       <div class="row">
         <div class="col-lg-12">
           <label for="modeType">Level of detail:</label>
-          <select class="browser-default custom-select" id="modeType" disabled="true">
+          <select class="browser-default custom-select" id="modeType" disabled="true" onchange="checkhighlight()">
             <option selected value='detail'>detailed</option>
             <option value='summurl'>IP & URL</option>
             <option value='summstat'>IP & status</option>
@@ -72,6 +72,8 @@
           <input type="checkbox" id="excludeJS" disabled="true">
           <label for="excludeCSS">Exclude CSS?</label>
           <input type="checkbox" id="excludeCSS" disabled="true">
+          <label for="highlightsus">Flag suspect URLs?</label>
+          <input type="checkbox" id="highlightsus" disabled="true">
         </div>
       </div>
       <% if (nodemail != "N") { %>

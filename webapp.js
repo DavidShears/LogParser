@@ -37,6 +37,7 @@ var buildcols = functions.buildcols;
 var getip = functions.getip;
 var checkinclude = functions.checkinclude;
 var checkexclude = functions.checkexclude;
+var checksusurl = functions.checksusurl;
 
 webapp.use(express.static('includes'));
 if (fileup == 'Y') {
@@ -72,7 +73,7 @@ io.on('connection', function(socket){
 
 
     socket.on('procfile',(logtype,modetype,bottype,emailaddress,blocked,internal,
-        noimages,nojs,nocss) => {
+        noimages,nojs,nocss,highlights) => {
         if (logtype == 'IIS') {
                 var rl = readline.createInterface({
                     input: fs.createReadStream('IIS.log'),
@@ -203,6 +204,10 @@ io.on('connection', function(socket){
                     case 'summurl':
                         rowdef[1] = element.substring(0,element.indexOf(' '));
                         rowdef[2] = element.substring(element.indexOf(' '));
+                        // Test whether url is on the suspect list
+                        if (highlights == 'Y') {
+                            var flag = checksusurl(rowdef[2])
+                        }
                         var nextcol = 3;
                         break;
                     case 'summip':
@@ -212,6 +217,10 @@ io.on('connection', function(socket){
                     default:
                         rowdef[1] = element.substring(0,element.indexOf(' '));
                         rowdef[2] = element.substring(element.indexOf(' '),element.lastIndexOf(' '));
+                        // Test whether url is on the suspect list
+                        if (highlights == 'Y') {
+                            var flag = checksusurl(rowdef[2])
+                        }
                         rowdef[3] = element.substring(element.lastIndexOf(' '));
                         var nextcol = 4;
                         break;
@@ -234,6 +243,15 @@ io.on('connection', function(socket){
                 }
                 worksheet.addRow(rowdef);
                 counter++;
+                // If we determined this is a suspect URL then set the URL cell to Orange
+                if (highlights == 'Y' && flag == 'Y') {
+                    var cell = ('B' + (counter + 1));
+                    worksheet.getCell(cell).fill = {
+                        type: 'pattern',
+                        pattern:'solid',
+                        fgColor:{argb:'FF8C01'},
+                    };
+                }
             })
             workbook.xlsx.writeFile("output.xlsx").then(() => {
                 // If email address is not blank and nodemailer installed then attempt email

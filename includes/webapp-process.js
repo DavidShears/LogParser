@@ -28,6 +28,11 @@ function logparse(){
     } else {
         var nocss = 'N';
     }
+    if (document.getElementById("highlightsus").checked == true) {
+        var highlights = 'Y';
+    } else {
+        var highlights = 'N';
+    }
     // Disable input until we're done processing
     lockscreen();
     // First ask for check of file
@@ -35,7 +40,7 @@ function logparse(){
     // If we get the all clear, then process file
     socket.on('filegood', function() {
         socket.emit('procfile', logtype, modetype, bottype, emailaddress, blocked, internal, 
-        noimages, nojs, nocss);
+        noimages, nojs, nocss, highlights);
     })
     socket.on('progress', function(totalrecs,excluded) {
         // report on excluded records if there are any
@@ -74,6 +79,7 @@ function checkmode(){
         document.getElementById("excludeImages").disabled = false;
         document.getElementById("excludeJS").disabled = false;
         document.getElementById("excludeCSS").disabled = false;
+        document.getElementById("highlightsus").disabled = false;
     }
     else {
         document.getElementById("modeType").disabled = true;
@@ -126,6 +132,17 @@ function checkmail(){
     }
 }
 
+// webapp function - checkhighlight toggles flag field
+function checkhighlight(){
+    if ((document.getElementById("modeType").value == 'detail' || document.getElementById("modeType").value == 'summurl') &&
+    (document.getElementById("logType").value == 'IIS')) {
+        document.getElementById("highlightsus").disabled = false;
+    }
+    else {
+        document.getElementById("highlightsus").disabled = true;
+    }
+}
+
 // webapp function - resetflags sets everything back to default behaviour
 function resetflags() {
     document.getElementById("logType").disabled = false;
@@ -160,6 +177,7 @@ function lockscreen() {
     document.getElementById("excludeImages").disabled = true;
     document.getElementById("excludeJS").disabled = true;
     document.getElementById("excludeCSS").disabled = true;
+    document.getElementById("highlightsus").disabled = true;
 }
 
 function unlockscreen() {
