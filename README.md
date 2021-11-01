@@ -54,8 +54,12 @@ If not passed then defaults to Y
 
 If not passed then the referenced file type is included
 
+* --highlight=Y Sets the URL field to orange if it includes a substring defined in suspecturls.js , only valid in IIS log mode.
+
+If not passed then defaults to N
+
 An example call using all the above would be:
-node app.js --log=IIS --mode=summurl --bot=exclude --internal=N --blocked=N --noimages --nojs --nocss
+node app.js --log=IIS --mode=summurl --bot=exclude --internal=N --blocked=N --noimages --nojs --nocss --highlight=Y
 
 ### Browser Interface
 

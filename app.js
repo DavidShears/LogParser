@@ -13,6 +13,7 @@ var buildcols = functions.buildcols;
 var getip = functions.getip;
 var checkinclude = functions.checkinclude;
 var checkexclude = functions.checkexclude;
+var checksusurl = functions.checksusurl;
 
 // Add option to specify log type - if anything other than IIS assume original Joomla logic
 
@@ -47,6 +48,15 @@ if (argv.log != 'IIS' && argv.mode) {
 if ((argv.bot != 'exclude' && argv.bot) && (argv.blocked == 'O' || argv.internal == 'O')) {
 	argv.bot == 'exclude';
 	console.log('bot passed as: ' + argv.bot + ' but Only flag set for Blocked/Internal, bot ignored');
+}
+
+if (argv.log != 'IIS' && (argv.noimages || argv.nocss || argv.nojs)) {
+	console.log('File type exclusion specified without IIS log, flags ignored');
+}
+
+if (argv.highlight =='Y' && (argv.mode == 'summstat' || argv.mode == 'summip')) {
+	console.log('Highlight suspect URL specified but mode excludes URL on output. Highlight ignored');
+	argv.highlight == 'N';
 }
 
 if (argv.log) {
@@ -189,6 +199,10 @@ rl.on('line', (string) => {
 				case 'summurl':
 					rowdef[1] = element.substring(0,element.indexOf(' '));
 					rowdef[2] = element.substring(element.indexOf(' '));
+					// Test whether url is on the suspect list
+					if (argv.highlight == 'Y') {
+						var flag = checksusurl(rowdef[2])
+					}
 					var nextcol = 3;
 					break;
 				case 'summip':
@@ -198,6 +212,10 @@ rl.on('line', (string) => {
 				default:
 					rowdef[1] = element.substring(0,element.indexOf(' '));
 					rowdef[2] = element.substring(element.indexOf(' '),element.lastIndexOf(' '));
+					// Test whether url is on the suspect list
+					if (argv.highlight == 'Y') {
+						var flag = checksusurl(rowdef[2])
+					}
 					rowdef[3] = element.substring(element.lastIndexOf(' '));
 					var nextcol = 4;
 					break;
@@ -220,6 +238,15 @@ rl.on('line', (string) => {
 		}
 		worksheet.addRow(rowdef);
 		counter++;
+		// If we determined this is a suspect URL then set the URL cell to Orange
+		if (argv.highlight == 'Y' && flag == 'Y') {
+			var cell = ('B' + (counter + 1));
+			worksheet.getCell(cell).fill = {
+				type: 'pattern',
+				pattern:'solid',
+				fgColor:{argb:'FF8C01'},
+			};
+		}
 	})
 	workbook.xlsx.writeFile("output.xlsx");
 });
