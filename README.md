@@ -75,18 +75,12 @@ node "misc scripts"\ipcheck.js --log=(iis/joomla) - reads log to build list of u
 
 **Important Note** - You'll need to register an account on AbuseIPDB and request an API key that is then put into line 92 of the script file.
 
+node "misc scripts"\ipreport.js --ip=(ip address) --cats=(comma seperated list of category numbers) --comment=("this is the text of the report") - accepts parameters to submit a report to AbuseIPDB, returns success/error to console.
+
+**Important Note** - You'll need to register an account on AbuseIPDB and request an API key that is then put into line 20 of the script file.
+
 node "misc scripts"\crawlerLS.js - to run a script aimed at identifying the first and last time each botagent was seen (IIS only)
 
 ## To-do:
-1. ~~Combine both sets in the output to give record & count side-by-side~~ Handled by ExcelJS (although could be neater inline processing.)
-2. ~~Currently capturing date & time, add "last date/time" to the output.~~ Extra logic added for first & last date found
-3. ~~Output somewhere other than console (either CSV file or email.)~~ Handled by ExcelJS
-4. ~~Optimize runtime, additional logic to handle non-date ordered logs and 404/403 exceptions appears to have raised the processing time.~~ Amending date handling took approx. 25% off runtime.
-5. ~~Find a unique identifier to avoid list of if statements for HTTP status (perhaps pass in the URL of the website as another parameter?)~~ Replace hardcoded list of HTTP status exceptions with regex statement
-6. ~~Amend checkip function to wildcard match, allow 123.123.123.x rather than having to list out each IP in the subnet.~~ Added draft wildcard logic for botIP matches
-7. ~~Identify suitable method to extract useragent so lookup against array possible rather than list of "if" statements in checkbot function.~~ Replaced with while loop over array.
-8. ~~Add browser interface to avoid need to specify arguments in commandline interface~~ webapp.js and associated ejs view created.
-9. ~~Add option to upload log to webapp & option to download from browser as well as / instead of email.~~ - Basic upload & download logic added
-10. ~~Add exclude Internal/Blocked logic from webapp back into commandline app~~ yargs implemented to allow various combinations of arguments.
-11. ~~Test for workbook lock earlier in the process, avoid running the whole script and then losing the output at the end.~~ - Logic added to both commandline and webapp to handle.
-12. Implement system for multi-user environment. Need to handle multiple log files and multiple output files, primarily for web browser mode.
+1. Implement system for multi-user environment. Need to handle multiple log files and multiple output files, primarily for web browser mode.
+2. Amend ipreport.js to accept an input file (csv?) to handle reporting in bulk
