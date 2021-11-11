@@ -249,6 +249,7 @@ var botagents = [
 	"dotbot",
 	"duckduckgo",
 	"exabot-thumbnails",
+	"ezooms.bot",
 	"fullstorybot",
 	"googlebot",
 	"indeedbot",
