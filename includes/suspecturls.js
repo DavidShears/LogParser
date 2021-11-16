@@ -1,7 +1,7 @@
 var susURLs = [
 "xmlrpc",
 "wlwmanifest",
-"wp-login",
+"login",
 "admin",
 "config",
 "backoffice",
@@ -9,8 +9,12 @@ var susURLs = [
 "download",
 "upload",
 "passwd",
+"password",
+"database",
 "gutsevich",
 "githubusercontent",
-"\%20"
+"\%20",
+"author=",
+"credentials"
 ];
 module.exports = {susURLs}
