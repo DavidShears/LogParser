@@ -166,7 +166,8 @@ function getip(string,log) {
 		// Figure out where IP address is - search for 3 sets of digits
 		// with a decimal inbetween, followed by a 4th set of digits.
 		// Must also have 10 spaces preceeding it to not pick up host IP
-		var IPStart = string.search(/(\d{1,3}\.){3}\d{1,3}(?<=( (.*)){10})/g);
+		// 2021-12-21 Reduce from 10 spaces to 5 to cope with more IIS log formats
+		var IPStart = string.search(/(\d{1,3}\.){3}\d{1,3}(?<=( (.*)){5})/g);
 		var IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
 	} else {
 		// Joomla only has a single IP address in the record, so no need for
