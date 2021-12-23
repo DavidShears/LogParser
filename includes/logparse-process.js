@@ -17,12 +17,15 @@ function buildline(string,logtype,modetype){
 		// End of URL will be before the port number, normally 443/80
 		// If URL is under a certain length then IIS appears to add a - before the port
 		// So test for both scenarios
+		// 2021/12/23 - Rework checking for - to make a more accurate match if there are multiple instances
 		var urlend = string.indexOf(' 443 ');
 		if (urlend == -1) {
 			var urlend = string.indexOf(' 80 ');
 		}
-		if (string.lastIndexOf(' - ',urlend) !== -1) {
-			var urlend = string.indexOf(' - ');
+		if (string.lastIndexOf(' - 443',urlend) !== -1 || string.lastIndexOf(' - 80',urlend) !== -1) {
+		/* if (string.lastIndexOf(' - ',urlend) !== -1) { */
+			/* var urlend = string.indexOf(' - '); */
+			var urlend = string.lastIndexOf(' - ',urlend);
 		}
 		var urlreq = string.substring(string.indexOf('/'),urlend);
 		// IIS not displaying ? in url request so put it back in
