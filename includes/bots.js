@@ -282,12 +282,14 @@ var botagents = [
 	"semrushbot",
 	"semanticbot",
 	"seolizer",
+	"seokicks",
 	"serpstatbot",
 	"sidetrade+indexer+bot",
 	"siteauditbot",
 	"sitecheckerbotcrawler",
 	"slackbot",
 	"slack-imgproxy",
+	"t3versionsbot",
 	"thinkbot",
 	"tkbot",
 	"translation-search-machine",
@@ -299,6 +301,7 @@ var botagents = [
 	"xforce-security",
 	"yacybot",
 	"yandexbot",
+	"yandexfavicons",
 	"yandeximages",
 	"zoominfobot"
 ]
