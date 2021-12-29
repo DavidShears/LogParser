@@ -44,7 +44,7 @@ var IntNotes = [];
 rl.on('line', (string) => {
 	// Exclude lines beginning with # as they're comments
 	if (string.indexOf('#') !== 0) {
-		var IPAdd = getip(string,argv.log);
+		var IPAdd = getip(string,argv.log.toUpperCase());
 		if (IPs.includes(IPAdd)) { 
 		} else if (IPAdd != null && IPAdd != '') {
 			IPs.push(IPAdd);
