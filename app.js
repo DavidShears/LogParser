@@ -59,6 +59,11 @@ if (argv.highlight =='Y' && (argv.mode == 'summstat' || argv.mode == 'summip')) 
 	argv.highlight == 'N';
 }
 
+if (argv.log != 'IIS' && argv.highlight == 'Y') {
+	console.log('Highlight suspect URL specified without IIS log, flag ignored');
+	argv.highlight == 'N';
+}
+
 if (argv.log) {
 	switch(argv.log.toUpperCase()) {
 		case 'IIS':
