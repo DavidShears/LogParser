@@ -222,12 +222,15 @@ function checkexclude(string,noimages,nojs,nocss) {
 		// Below borrowed from buildline routine
 		// may move checkexclude within it once flags are added to commandline
 		// but for now since this is web-only we'll do it standalone.
+		// 2021/12/31 - Rework checking to match updated buildline logic
 		var urlend = string.indexOf(' 443 ');
 		if (urlend == -1) {
 			var urlend = string.indexOf(' 80 ');
 		}
-		if (string.lastIndexOf(' - ',urlend) !== -1) {
-			var urlend = string.indexOf(' - ');
+		if (string.lastIndexOf(' - 443',urlend) !== -1 || string.lastIndexOf(' - 80',urlend) !== -1) {
+		/* if (string.lastIndexOf(' - ',urlend) !== -1) { */
+			/* var urlend = string.indexOf(' - '); */
+			var urlend = string.lastIndexOf(' - ',urlend);
 		}
 		var urlreq = string.substring(string.indexOf('/'),urlend);
 		var tempstring = urlreq.toLowerCase();
