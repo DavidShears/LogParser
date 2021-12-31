@@ -10,7 +10,7 @@ Notes array exists to allow classification of IP addresses as:
 * Suspicious - Used for watching IPs that have not been blocked yet, but may need to be
 * Bots - Can be recorded as exact IP, or with the last element wildcarded. Optional function (checkbot) exists to scan for known useragent strings and flag accordingly.
 
-Also has the option to pass in 'IIS' to instead parse IIS logs (tested on IIS 8.5) and a webapp version to give a basic GUI frontend.
+Also has the option to pass in 'IIS' to instead parse IIS logs (tested on IIS 8.5 and 10.0) and a webapp version to give a basic GUI frontend.
 
 Tested on 142mb IIS file for detailed output with approx runtime of 12 minutes.
 
