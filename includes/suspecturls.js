@@ -5,7 +5,7 @@ var susURLs = [
 "admin",
 "config",
 "backoffice",
-"installer",
+"install",
 "download",
 "upload",
 "passwd",
@@ -15,6 +15,8 @@ var susURLs = [
 "githubusercontent",
 "\%20",
 "author=",
-"credentials"
+"credentials",
+"alfacgiapi",
+".env"
 ];
 module.exports = {susURLs}
