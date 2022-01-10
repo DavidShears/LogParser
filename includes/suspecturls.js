@@ -17,6 +17,8 @@ var susURLs = [
 "author=",
 "credentials",
 "alfacgiapi",
-".env"
+".env",
+"evil.php",
+"phpinfo"
 ];
 module.exports = {susURLs}
