@@ -18,9 +18,10 @@ function buildline(string,logtype,modetype){
 		// If URL is under a certain length then IIS appears to add a - before the port
 		// So test for both scenarios
 		// 2021/12/23 - Rework checking for - to make a more accurate match if there are multiple instances
-		var urlend = string.indexOf(' 443 ');
+		// 2022/01/11 - Add - to end of initial 443/80 check to handle odd chance of it appearing in bytes/time taken/etc
+		var urlend = string.indexOf(' 443 -');
 		if (urlend == -1) {
-			var urlend = string.indexOf(' 80 ');
+			var urlend = string.indexOf(' 80 -');
 		}
 		if (string.lastIndexOf(' - 443',urlend) !== -1 || string.lastIndexOf(' - 80',urlend) !== -1) {
 		/* if (string.lastIndexOf(' - ',urlend) !== -1) { */
@@ -244,7 +245,8 @@ function checkexclude(string,noimages,nojs,nocss) {
 		tempstring.indexOf('.gif') != -1 ||
 		tempstring.indexOf('.jpg') != -1 ||
 		tempstring.indexOf('.jpeg') != -1 ||
-		tempstring.indexOf('.svg') != -1 )
+		tempstring.indexOf('.svg') != -1  ||
+		tempstring.indexOf('.ico') != -1 )
 		&& noimages == 'Y') {
 			return('Y');
 		}
