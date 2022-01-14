@@ -81,6 +81,8 @@ node "misc scripts"\ipreport.js --ip=(ip address) --cats=(comma seperated list o
 
 node "misc scripts"\crawlerLS.js - to run a script aimed at identifying the first and last time each botagent was seen (IIS only)
 
+node "misc scripts"\modsecurity.js - script to run over audit log file from ModSecurity for IIS as used in Plesk control panel (tested on v2.9.2)
+
 ## To-do:
 1. Implement system for multi-user environment. Need to handle multiple log files and multiple output files, primarily for web browser mode.
 2. Amend ipreport.js to accept an input file (csv?) to handle reporting in bulk
