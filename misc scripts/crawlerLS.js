@@ -44,8 +44,8 @@ rl.on('line', (string) => {
 	var worksheet = workbook.addWorksheet("Bot Records");
 	var coldef = [];
 	coldef[0] = { header: "BotAgent", key:"BOTAGENT"};
-	coldef[1] = { header: "First Seen", key:"FIRST"};
-	coldef[2] = { header: "Last Seen", key:"LAST"};
+	coldef[1] = { header: "First Seen", key:"FIRST", width: 11};
+	coldef[2] = { header: "Last Seen", key:"LAST", width: 11};
 	worksheet.columns = coldef;
 	worksheet.getRow(1).font = { name: "Calibri", size: 11, bold: true};
 	// Loop array of unique records

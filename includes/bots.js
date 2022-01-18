@@ -303,6 +303,7 @@ var botagents = [
 	"yandexbot",
 	"yandexfavicons",
 	"yandeximages",
+	"zaldomosearchbot",
 	"zoominfobot"
 ]
 
