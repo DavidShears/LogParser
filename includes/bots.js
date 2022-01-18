@@ -194,8 +194,11 @@ var botIPs = [
 			"199.16.157.",
 			"199.59.150.",
 			"192.133.77.14",
+			//Velen.io
+			"35.210.119.13",
 			// WebWiki
 			"144.76.222.78",
+			"144.76.108.212",
 			//Yandex
 			"213.180.203.107",
 			//Zoominfo
@@ -248,6 +251,8 @@ var botagents = [
 	"domcopbot",
 	"dotbot",
 	"duckduckgo",
+	"evc-batch",
+	"e.ventures",
 	"exabot-thumbnails",
 	"ezooms.bot",
 	"fullstorybot",
@@ -257,6 +262,7 @@ var botagents = [
 	"linguee",
 	"linkedinbot",
 	"livelapbot",
+	"ltx71",
 	"komodia",
 	"mail.ru_bot",
 	"matchorybot",
@@ -290,10 +296,12 @@ var botagents = [
 	"slackbot",
 	"slack-imgproxy",
 	"t3versionsbot",
+	"the+knowledge+ai",
 	"thinkbot",
 	"tkbot",
 	"translation-search-machine",
 	"twitterbot",
+	"velenpublicwebcrawler",
 	"vuhuvbot",
 	"webprosbot",
 	"webwiki.co.uk",
