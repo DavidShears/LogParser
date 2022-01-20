@@ -17,11 +17,16 @@ var Recs = [];
 var botagents = require('../includes/bots.js').botagents;
 
 rl.on('line', (string) => {
-	// replace false positives, such as checking robots.txt and any files with 'bot' in the name
-	string = string.replace(/robots.txt/gi,"");
+	// replace false positives, such as any files with 'bot' in the name
+	// robots.txt can be excluded as well, although odds are if something is accessing it then it's a bot?
+	//string = string.replace(/robots.txt/gi,"");
 	string = string.replace(/bottom/gi,"");
-	if (string.indexOf('Bot') != -1 || string.indexOf('bot') != -1) {
-		var unknown = checkbot(string);
+	// convert string to lowercase to make matching easier
+	var tempstring = string.toLowerCase();
+	// now check for the term 'bot' and 'crawler'
+	if (string.indexOf('bot') != -1 
+	|| string.indexOf('crawler') != -1) {
+		var unknown = checkbot(tempstring);
 		if (unknown == '') {
 			Recs.push(string);
 		}
@@ -49,8 +54,7 @@ rl.on('line', (string) => {
 function checkbot(string) {
 	let i = 0;
 	while (botagents[i]) {
-		var tempstring = string.toLowerCase();
-		if (tempstring.indexOf(botagents[i]) != -1) {
+		if (string.indexOf(botagents[i]) != -1) {
 				return(botagents[i] + " address!");
 			}
 		i++;
