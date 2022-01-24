@@ -1,4 +1,4 @@
-// Script to strip out non-bot traffic based on scanning for the word "bot"
+// Script to strip out non-bot traffic based on scanning for common identifiers
 
 // Readline
 
@@ -23,9 +23,10 @@ rl.on('line', (string) => {
 	string = string.replace(/bottom/gi,"");
 	// convert string to lowercase to make matching easier
 	var tempstring = string.toLowerCase();
-	// now check for the term 'bot' and 'crawler'
+	// now check for the term 'bot', 'crawler', 'spider'
 	if (string.indexOf('bot') != -1 
-	|| string.indexOf('crawler') != -1) {
+	|| string.indexOf('crawler') != -1
+	|| string.indexOf('spider') != -1) {
 		var unknown = checkbot(tempstring);
 		if (unknown == '') {
 			Recs.push(string);
