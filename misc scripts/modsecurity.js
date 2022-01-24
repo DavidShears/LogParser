@@ -32,6 +32,8 @@ rl.on('line', (string) => {
 	// Handle different segments of the log
 	// If 127.0.0.1 then this is the datetime and IP line
 	if (string.indexOf('127.0.0.1') != -1) {
+		// Note that there are two IP addresses on the line, below will capture the first one
+		// which is (normally?) the one we want.
 		IPStart = string.search(/(\d{1,3}\.){3}\d{1,3}(?<=( (.*)){2})/g);
 		IPAdd = string.substring(IPStart,string.indexOf(' ',IPStart));
 		DateNew = new Date(string.substring(1,12) + ' ' + string.substring(14,21));

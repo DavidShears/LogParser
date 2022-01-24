@@ -1,5 +1,8 @@
 // Script to determine last time a web crawler was seen based on user agent
 
+// Note that this means if a crawler can be triggered from multiple locations or multiple users
+// then those will be grouped together.
+
 // Readline
 
 const fs = require('fs');
