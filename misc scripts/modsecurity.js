@@ -24,6 +24,9 @@ var CountRecs = [];
 var FirstDate = [];
 var LastDate = [];
 var Notes = [];
+var IDs = [];
+var messages = [];
+var HTTPCodes = [];
 var DateNew = '';
 var IPAdd = '';
 var checkedip = '';
@@ -42,6 +45,28 @@ rl.on('line', (string) => {
 	// If Message: then this is the details of why the record is in the log
 	// Good time to update the holding arrays
 	if (string.indexOf('Message:') != -1) {
+		// Strip out certain elements of the string that we aren't interested in
+		// first off the location of the conf file
+		/* string = string.replace("\[file \"C:\\/Program Files (x86)/Plesk/ModSecurity/rules/tortix/hg_rules.conf\"\]",""); */
+		// Grab the ID number triggered - and remove from the main string
+		IDStart = string.indexOf("\[id \"");
+		IDNumb = string.substring(IDStart + 5,string.indexOf('\"\]',IDStart));
+		/* string = string.replace(IDNumb,"");
+		string = string.replace("\[id \"\"\]",""); */
+		// Grab the message - and remove from the main string
+		MsgStart = string.indexOf("\[msg \"");
+		MsgTxt = string.substring(MsgStart + 6,string.indexOf('\"\]',MsgStart));
+		/* string = string.replace(MsgTxt,"");
+		string = string.replace("\[msg \"\"\]",""); */
+		// Grab the HTTP status if applicable - and remove from the main string
+		HTTPStart = string.indexOf("(phase");
+		if (HTTPStart != -1) {
+			HTTPcode = string.substring(HTTPStart -4,HTTPStart -1);
+		/* string = string.replace(HTTPcode,"");
+			string = string.replace("Access denied with code", ""); */
+		} else {
+			HTTPcode = "";
+		}
 		var CurrentLine = string.substring(9);
 		if (UniqueRecs.includes(CurrentLine) && IPAdds.includes(IPAdd)) {
 			CountRecs[UniqueRecs.indexOf(CurrentLine)] = CountRecs[UniqueRecs.indexOf(CurrentLine)] + 1;
@@ -59,6 +84,9 @@ rl.on('line', (string) => {
 			CountRecs.push(1);
 			FirstDate.push(DateNew);
 			LastDate.push(DateNew);
+			IDs.push(IDNumb);
+			messages.push(MsgTxt);
+			HTTPCodes.push(HTTPcode);
 			if (checkedip != '') {
 				Notes.push(checkedip);
 			} else {
@@ -75,7 +103,13 @@ rl.on('line', (string) => {
 	var nextcol = 0;
 	coldef[nextcol] = { header: "IP Address", key:"IPADD", width: 15};
 	nextcol++;
-	coldef[nextcol] = { header: "Record", key:"RECORD"};
+	coldef[nextcol] = { header: "ID Number", key:"IDNUMB", width: 11};
+	nextcol++;
+	coldef[nextcol] = { header: "HTTP Code", key:"HTTP", width: 11};
+	nextcol++;
+	/* coldef[nextcol] = { header: "Record", key:"RECORD"};
+	nextcol++; */
+	coldef[nextcol] = { header: "Message Text", key:"MSGTXT"};
 	nextcol++;
 	coldef[nextcol] = { header: "Times Found", key:"COUNT"};
 	nextcol++;
@@ -93,7 +127,13 @@ rl.on('line', (string) => {
 		const rowdef = [];
 		rowdef[nextcol] = IPAdds[counter];
 		nextcol++;
-		rowdef[nextcol] = element;
+		rowdef[nextcol] = IDs[counter];
+		nextcol++;
+		rowdef[nextcol] = HTTPCodes[counter];
+		nextcol++;
+		/* rowdef[nextcol] = element;
+		nextcol++; */
+		rowdef[nextcol] = messages[counter];
 		nextcol++;
 		rowdef[nextcol] = CountRecs[counter];
 		nextcol++;
