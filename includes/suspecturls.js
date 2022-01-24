@@ -5,6 +5,7 @@ var susURLs = [
     "alfacgiapi",
     "author=",
     "backoffice",
+    "backup",
     "config",
     "credentials",
     "database",
