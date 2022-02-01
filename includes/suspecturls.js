@@ -2,7 +2,8 @@
 // primarily as it might indicate bad intent on the part of the requester
 var susURLs = [
     "admin",
-    "alfacgiapi",
+    "alfa",
+    "alfindex",
     "author=",
     "backoffice",
     "backup",
@@ -15,6 +16,7 @@ var susURLs = [
     "gutsevich",
     "install",
     "login",
+    "owa",
     "passwd",
     "password",
     "phpinfo",
@@ -22,8 +24,12 @@ var susURLs = [
     "pma",
     "upload",
     "wlwmanifest",
+    "wso.php",
+    "wwwroot",
     "xmlrpc",
     "\%20",
-    ".env"
+    ".env",
+    ".sql",
+    "1ogin",
 ];
 module.exports = {susURLs}
