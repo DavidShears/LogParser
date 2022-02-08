@@ -15,16 +15,23 @@ var checkinclude = functions.checkinclude;
 var checkexclude = functions.checkexclude;
 var checksusurl = functions.checksusurl;
 
-// Add option to specify log type - if anything other than IIS assume original Joomla logic
-
 // Try using yargs to handle combinations of parameters
 var argv = require('yargs/yargs')(process.argv.slice(2)).argv;
 
 // Test if valid combination of arguments provided
+
+// Cannot have multiple flags set to only - error and stop
 if (argv.blocked == 'O' && argv.internal == 'O') {
 	console.log('Both blocked & Internal set to only - cannot process');
 	return;
 }
+
+if (argv.bot == 'only' && (argv.internal == 'O' || argv.blocked == 'O')) {
+	console.log('bot set to only along with internal/blocked - cannot process');
+	return;
+}
+
+// If a flag set to only, and another one set to Y, then warn and set to N
 
 if ((argv.blocked && argv.blocked != 'N') && argv.internal == 'O') {
 	argv.blocked = 'N';
@@ -36,22 +43,27 @@ if ((argv.internal && argv.internal != 'N') && argv.blocked == 'O') {
 	console.log('internal IPs specified but blocked set to Only - internal ignored');
 }
 
-if (argv.bot == 'only' && (argv.internal == 'O' || argv.blocked == 'O')) {
-	console.log('bot set to only along with internal/blocked - cannot process');
-	return;
-}
+// Some flags only valid if processing IIS log, warn but continue
 
 if (argv.log != 'IIS' && argv.mode) {
 	console.log('Mode passed without IIS log, mode will be ignored.');
 }
 
-if ((argv.bot != 'exclude' && argv.bot) && (argv.blocked == 'O' || argv.internal == 'O')) {
-	argv.bot == 'exclude';
-	console.log('bot passed as: ' + argv.bot + ' but Only flag set for Blocked/Internal, bot ignored');
+if (argv.log != 'IIS' && argv.highlight == 'Y') {
+	console.log('Highlight suspect URL specified without IIS log, flag ignored');
+	argv.highlight == 'N';
 }
 
 if (argv.log != 'IIS' && (argv.noimages || argv.nocss || argv.nojs)) {
 	console.log('File type exclusion specified without IIS log, flags ignored');
+}
+
+// Any other misc validation checks
+
+if ((argv.bot && (argv.bot != 'exclude' && argv.bot != 'excludesus'))
+	 && (argv.blocked == 'O' || argv.internal == 'O')) {
+	argv.bot == 'exclude';
+	console.log('bot passed as: ' + argv.bot + ' but Only flag set for Blocked/Internal, bot ignored');
 }
 
 if (argv.highlight =='Y' && (argv.mode == 'summstat' || argv.mode == 'summip')) {
@@ -59,10 +71,7 @@ if (argv.highlight =='Y' && (argv.mode == 'summstat' || argv.mode == 'summip')) 
 	argv.highlight == 'N';
 }
 
-if (argv.log != 'IIS' && argv.highlight == 'Y') {
-	console.log('Highlight suspect URL specified without IIS log, flag ignored');
-	argv.highlight == 'N';
-}
+// Add option to specify log type - if anything other than IIS assume original Joomla logic
 
 if (argv.log) {
 	switch(argv.log.toUpperCase()) {
