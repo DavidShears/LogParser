@@ -89,6 +89,8 @@ function checkmode(){
         document.getElementById("excludeJS").checked = false;
         document.getElementById("excludeCSS").disabled = true;
         document.getElementById("excludeCSS").checked = false;
+        document.getElementById("highlightsus").disabled = true;
+        document.getElementById("highlightsus").checked = false;
     }
 }
 
