@@ -28,6 +28,11 @@ function logparse(){
     } else {
         var nocss = 'N';
     }
+    if (document.getElementById("excludeTemp").checked == true) {
+        var notemp = 'Y';
+    } else {
+        var notemp = 'N';
+    }
     if (document.getElementById("highlightsus").checked == true) {
         var highlights = 'Y';
     } else {
@@ -40,7 +45,7 @@ function logparse(){
     // If we get the all clear, then process file
     socket.on('filegood', function() {
         socket.emit('procfile', logtype, modetype, bottype, emailaddress, blocked, internal, 
-        noimages, nojs, nocss, highlights);
+        noimages, nojs, nocss, notemp, highlights);
     })
     socket.on('progress', function(totalrecs,excluded) {
         // report on excluded records if there are any
@@ -79,6 +84,7 @@ function checkmode(){
         document.getElementById("excludeImages").disabled = false;
         document.getElementById("excludeJS").disabled = false;
         document.getElementById("excludeCSS").disabled = false;
+        document.getElementById("excludeTemp").disabled = false;
         document.getElementById("highlightsus").disabled = false;
     }
     else {
@@ -89,6 +95,8 @@ function checkmode(){
         document.getElementById("excludeJS").checked = false;
         document.getElementById("excludeCSS").disabled = true;
         document.getElementById("excludeCSS").checked = false;
+        document.getElementById("excludeTemp").disabled = true;
+        document.getElementById("excludeTemp").checked = false;
         document.getElementById("highlightsus").disabled = true;
         document.getElementById("highlightsus").checked = false;
     }
@@ -179,6 +187,7 @@ function lockscreen() {
     document.getElementById("excludeImages").disabled = true;
     document.getElementById("excludeJS").disabled = true;
     document.getElementById("excludeCSS").disabled = true;
+    document.getElementById("excludeTemp").disabled = true;
     document.getElementById("highlightsus").disabled = true;
 }
 

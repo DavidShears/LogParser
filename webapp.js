@@ -73,7 +73,7 @@ io.on('connection', function(socket){
 
 
     socket.on('procfile',(logtype,modetype,bottype,emailaddress,blocked,internal,
-        noimages,nojs,nocss,highlights) => {
+        noimages,nojs,nocss,notemp,highlights) => {
         if (logtype == 'IIS') {
                 var rl = readline.createInterface({
                     input: fs.createReadStream('IIS.log'),
@@ -113,8 +113,8 @@ io.on('connection', function(socket){
                 var checkedinclude = checkinclude(bottype,blocked,internal,checkedbot,checkedip)
             }
             var checkedexclude = 'N';
-            if (logtype == 'IIS' && (noimages == 'Y' || nojs == 'Y' || nocss == 'Y')) {
-                var checkedexclude = checkexclude(string,noimages,nojs,nocss);
+            if (logtype == 'IIS' && (noimages == 'Y' || nojs == 'Y' || nocss == 'Y' || notemp == 'Y')) {
+                var checkedexclude = checkexclude(string,noimages,nojs,nocss,notemp);
             }
             // Now if we got a Y back then lets proceed
             if (checkedinclude == 'Y' && checkedexclude == 'N')

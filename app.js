@@ -54,7 +54,7 @@ if (argv.log != 'IIS' && argv.highlight == 'Y') {
 	argv.highlight == 'N';
 }
 
-if (argv.log != 'IIS' && (argv.noimages || argv.nocss || argv.nojs)) {
+if (argv.log != 'IIS' && (argv.noimages || argv.nocss || argv.nojs || argv.notemp)) {
 	console.log('File type exclusion specified without IIS log, flags ignored');
 }
 
@@ -124,10 +124,11 @@ rl.on('line', (string) => {
 		var checkedinclude = checkinclude(argv.bot,argv.blocked,argv.internal,checkedbot,checkedip)
 	}
 	var checkedexclude = 'N';
-	if (argv.log == 'IIS' && (argv.noimages || argv.nojs || argv.nocss)) {
+	if (argv.log == 'IIS' && (argv.noimages || argv.nojs || argv.nocss || argv.notemp)) {
 		var noimages = 'N';
 		var nojs = 'N';
 		var nocss = 'N';
+		var notemp = 'N';
 		if (argv.noimages) {
 			noimages = 'Y'
 		}
@@ -137,7 +138,10 @@ rl.on('line', (string) => {
 		if (argv.nocss) {
 			nocss = 'Y'
 		}
-		var checkedexclude = checkexclude(string,noimages,nojs,nocss);
+		if (argv.notemp) {
+			notemp = 'Y'
+		}
+		var checkedexclude = checkexclude(string,noimages,nojs,nocss,notemp);
 	}
 	// Now if we got a Y back then lets proceed
 	if (checkedinclude == 'Y' && checkedexclude == 'N')

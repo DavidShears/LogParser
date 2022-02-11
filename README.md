@@ -54,12 +54,16 @@ If not passed then defaults to Y
 
 If not passed then the referenced file type is included
 
+* --notemp used to exclude any files in a folder /cache/
+
+If not passed then the files are included
+
 * --highlight=Y Sets the URL field to orange if it includes a substring defined in suspecturls.js , only valid in IIS log mode.
 
 If not passed then defaults to N
 
 An example call using all the above would be:
-node app.js --log=IIS --mode=summurl --bot=exclude --internal=N --blocked=N --noimages --nojs --nocss --highlight=Y
+node app.js --log=IIS --mode=summurl --bot=exclude --internal=N --blocked=N --noimages --nojs --nocss --notemp --highlight=Y
 
 ### Browser Interface
 
