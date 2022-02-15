@@ -263,6 +263,7 @@ var botagents = [
 	"domcopbot",
 	"dotbot",
 	"duckduckgo",
+	"entfer.com",
 	"evc-batch",
 	"e.ventures",
 	"exabot-thumbnails",
