@@ -71,7 +71,7 @@ node webapp.js - runs a localhost http server on port 3007 as a front-end rather
 
 ### Misc Scripts
 
-node "misc scripts"\pruner.js - to run a quick script aimed at identifying any botagents not already registered in bots.js (IIS only)
+node "misc scripts"\pruner.js - to run a quick script aimed at identifying any botagents not already registered in bots.js (IIS only) accepts optional --noblocked and --nointernal arguments to exclude based on checkip results.
 
 node "misc scripts"\stringdump.js --log=(iis/joomla) --match=(ipaddress) - quickly spit out all records, as they are, into a spreadsheet. Previously named ipdump.js but now usable to match any type of substring.
 
