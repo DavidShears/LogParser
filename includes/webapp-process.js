@@ -81,24 +81,48 @@ function checkmode(){
     var mode = document.getElementById("logType").value;
     if (mode == 'IIS') {
         document.getElementById("modeType").disabled = false;
+        document.getElementById("modeType").hidden = false;
+        document.getElementById("modelbl").hidden = false;
         document.getElementById("excludeImages").disabled = false;
+        document.getElementById("excludeImages").hidden = false;
+        document.getElementById("exImglbl").hidden = false;
         document.getElementById("excludeJS").disabled = false;
+        document.getElementById("excludeJS").hidden = false;
+        document.getElementById("exJSlbl").hidden = false;
         document.getElementById("excludeCSS").disabled = false;
+        document.getElementById("excludeCSS").hidden = false;
+        document.getElementById("exCSSlbl").hidden = false;
         document.getElementById("excludeTemp").disabled = false;
+        document.getElementById("excludeTemp").hidden = false;
+        document.getElementById("exTmplbl").hidden = false;
         document.getElementById("highlightsus").disabled = false;
+        document.getElementById("highlightsus").hidden = false;
+        document.getElementById("exsuslbl").hidden = false;
     }
     else {
         document.getElementById("modeType").disabled = true;
+        document.getElementById("modeType").hidden = true;
+        document.getElementById("modelbl").hidden = true;
         document.getElementById("excludeImages").disabled = true;
+        document.getElementById("excludeImages").hidden = true;
         document.getElementById("excludeImages").checked = false;
+        document.getElementById("exImglbl").hidden = true;
         document.getElementById("excludeJS").disabled = true;
+        document.getElementById("excludeJS").hidden = true;
         document.getElementById("excludeJS").checked = false;
+        document.getElementById("exJSlbl").hidden = true;
         document.getElementById("excludeCSS").disabled = true;
+        document.getElementById("excludeCSS").hidden = true;
         document.getElementById("excludeCSS").checked = false;
+        document.getElementById("exCSSlbl").hidden = true;
         document.getElementById("excludeTemp").disabled = true;
+        document.getElementById("excludeTemp").hidden = true;
         document.getElementById("excludeTemp").checked = false;
+        document.getElementById("exTmplbl").hidden = true;
         document.getElementById("highlightsus").disabled = true;
+        document.getElementById("highlightsus").hidden = true;
         document.getElementById("highlightsus").checked = false;
+        document.getElementById("exsuslbl").hidden = true;
     }
 }
 
