@@ -219,7 +219,7 @@ function checkinclude(bottype,blocked,internal,checkedbot,checkedip) {
 }
 
 // New function to handle checking exclusion based on images/js/css flags
-function checkexclude(string,noimages,nojs,nocss,notemp) {
+function checkexclude(string,noimages,nojs,nocss,notemp,extarr) {
 		// Below borrowed from buildline routine
 		// may move checkexclude within it once flags are added to commandline
 		// but for now since this is web-only we'll do it standalone.
@@ -252,6 +252,15 @@ function checkexclude(string,noimages,nojs,nocss,notemp) {
 		}
 		if (tempstring.indexOf('/cache/') != -1 && notemp == 'Y') {
 			return('Y');
+		}
+		if (extarr && extarr != '') {
+			let i = 0;
+			while (extarr[i]) {
+				if (tempstring.indexOf('.' + extarr[i]) != -1) {
+					return('Y');
+				}
+				i++;
+			}
 		}
 		return('N');
 }

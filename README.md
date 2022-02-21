@@ -58,12 +58,16 @@ If not passed then the referenced file type is included
 
 If not passed then the files are included
 
+* --extensions=(comma list, without dot) - excludes the extensions specified, for example --extensions=pdf,txt would exclude those files
+
+If not passed then the files are included
+
 * --highlight=Y Sets the URL field to orange if it includes a substring defined in suspecturls.js , only valid in IIS log mode.
 
 If not passed then defaults to N
 
 An example call using all the above would be:
-node app.js --log=IIS --mode=summurl --bot=exclude --internal=N --blocked=N --noimages --nojs --nocss --notemp --highlight=Y
+node app.js --log=IIS --mode=summurl --bot=exclude --internal=N --blocked=N --noimages --nojs --nocss --notemp --extensions=pdf,txt --highlight=Y
 
 ### Browser Interface
 

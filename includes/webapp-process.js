@@ -38,6 +38,9 @@ function logparse(){
     } else {
         var highlights = 'N';
     }
+    if (document.getElementById("excludeOther").value != '') {
+        var extensions = document.getElementById("excludeOther").value
+    }
     // Disable input until we're done processing
     lockscreen();
     // First ask for check of file
@@ -45,7 +48,7 @@ function logparse(){
     // If we get the all clear, then process file
     socket.on('filegood', function() {
         socket.emit('procfile', logtype, modetype, bottype, emailaddress, blocked, internal, 
-        noimages, nojs, nocss, notemp, highlights);
+        noimages, nojs, nocss, notemp, highlights,extensions);
     })
     socket.on('progress', function(totalrecs,excluded) {
         // report on excluded records if there are any
@@ -95,6 +98,9 @@ function checkmode(){
         document.getElementById("excludeTemp").disabled = false;
         document.getElementById("excludeTemp").hidden = false;
         document.getElementById("exTmplbl").hidden = false;
+        document.getElementById("excludeOther").disabled = false;
+        document.getElementById("excludeOther").hidden = false;
+        document.getElementById("exOthlbl").hidden = false;
         document.getElementById("highlightsus").disabled = false;
         document.getElementById("highlightsus").hidden = false;
         document.getElementById("exsuslbl").hidden = false;
@@ -119,6 +125,10 @@ function checkmode(){
         document.getElementById("excludeTemp").hidden = true;
         document.getElementById("excludeTemp").checked = false;
         document.getElementById("exTmplbl").hidden = true;
+        document.getElementById("excludeOther").disabled = true;
+        document.getElementById("excludeOther").hidden = true;
+        document.getElementById("excludeOther").checked = false;
+        document.getElementById("exOthlbl").hidden = true;
         document.getElementById("highlightsus").disabled = true;
         document.getElementById("highlightsus").hidden = true;
         document.getElementById("highlightsus").checked = false;
@@ -212,6 +222,7 @@ function lockscreen() {
     document.getElementById("excludeJS").disabled = true;
     document.getElementById("excludeCSS").disabled = true;
     document.getElementById("excludeTemp").disabled = true;
+    document.getElementById("excludeOther").disabled = true;
     document.getElementById("highlightsus").disabled = true;
 }
 
