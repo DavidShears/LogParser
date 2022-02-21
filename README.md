@@ -1,5 +1,5 @@
 # LogParser
-Parsing error.php from Joomla (tested on 3.10.5, should also read logs back to 2.5.28) - Read all records and output a spreadsheet with all unique combinations of user/error along with count and last/first date it happened.
+Parsing error.php from Joomla (tested on 3.10.6, should also read logs back to 2.5.28) - Read all records and output a spreadsheet with all unique combinations of user/error along with count and last/first date it happened.
 
 Reads all records into a set of arrays, one for each data point, and then goes through array to dump each element as a row in the spreadsheet.
 

@@ -264,6 +264,7 @@ var botagents = [
 	"dotbot",
 	"duckduckgo",
 	"entfer.com",
+	"ev-crawler",
 	"evc-batch",
 	"e.ventures",
 	"exabot-thumbnails",

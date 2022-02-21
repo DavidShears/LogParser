@@ -1,6 +1,7 @@
 // These are substrings which if discovered in the URL should be flagged for closer investigation
 // primarily as it might indicate bad intent on the part of the requester
 var susURLs = [
+    "1=1",
     "admin",
     "alfa",
     "alfindex",
