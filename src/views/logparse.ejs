@@ -60,9 +60,10 @@
         </select>
         </div>
       </div>
-      <div class="row">
+      <div class="row" id="excludeline" hidden="true" disabled="true">
         <div class="col-lg-12">
-          <label id= "exImglbl" for="excludeImages" hidden="true"><Strong>Exclude</Strong> Images?</label>
+          <!-- 2022/02/23 below commented out, excludeline now used to control hidden/disabled -->
+          <!-- <label id= "exImglbl" for="excludeImages" hidden="true"><Strong>Exclude</Strong> Images?</label>
           <input type="checkbox" id="excludeImages" disabled="true" hidden="true">
           <label id= "exJSlbl" for="excludeJS" hidden="true">Javascript?</label>
           <input type="checkbox" id="excludeJS" disabled="true" hidden="true">
@@ -71,7 +72,17 @@
           <label id= "exTmplbl" for="excludeTemp" hidden="true">Cache?</label>
           <input type="checkbox" id="excludeTemp" disabled="true" hidden="true">
           <label id= "exOthlbl" for="excludeOther" hidden="true">Specify Other:</label>
-          <input type="text" id="excludeOther" disabled="true" hidden="true" placeholder="comma list, no dot">
+          <input type="text" id="excludeOther" disabled="true" hidden="true" placeholder="comma list, no dot"> -->
+          <label id= "exImglbl" for="excludeImages"><Strong>Exclude</Strong> Images?</label>
+          <input type="checkbox" id="excludeImages">
+          <label id= "exJSlbl" for="excludeJS">Javascript?</label>
+          <input type="checkbox" id="excludeJS">
+          <label id= "exCSSlbl" for="excludeCSS">CSS?</label>
+          <input type="checkbox" id="excludeCSS">
+          <label id= "exTmplbl" for="excludeTemp">Cache?</label>
+          <input type="checkbox" id="excludeTemp">
+          <label id= "exOthlbl" for="excludeOther">Specify Other:</label>
+          <input type="text" id="excludeOther" placeholder="comma list, no dot">
         </div>
       </div>
       <div class="row">

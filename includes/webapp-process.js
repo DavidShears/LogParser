@@ -82,13 +82,14 @@ function logparse(){
 }
 
 // webapp function - checkmode disables non-applicable fields for Joomla processing
+// 2022/02/23 - use excludeline ID to handle hide&disable of all flags on that line
 function checkmode(){
     var mode = document.getElementById("logType").value;
     if (mode == 'IIS') {
         document.getElementById("modeType").disabled = false;
         document.getElementById("modeType").hidden = false;
         document.getElementById("modelbl").hidden = false;
-        document.getElementById("excludeImages").disabled = false;
+        /* document.getElementById("excludeImages").disabled = false;
         document.getElementById("excludeImages").hidden = false;
         document.getElementById("exImglbl").hidden = false;
         document.getElementById("excludeJS").disabled = false;
@@ -102,7 +103,9 @@ function checkmode(){
         document.getElementById("exTmplbl").hidden = false;
         document.getElementById("excludeOther").disabled = false;
         document.getElementById("excludeOther").hidden = false;
-        document.getElementById("exOthlbl").hidden = false;
+        document.getElementById("exOthlbl").hidden = false; */
+        document.getElementById("excludeline").disabled = false;
+        document.getElementById("excludeline").hidden = false;
         document.getElementById("highlightsus").disabled = false;
         document.getElementById("highlightsus").hidden = false;
         document.getElementById("exsuslbl").hidden = false;
@@ -111,26 +114,29 @@ function checkmode(){
         document.getElementById("modeType").disabled = true;
         document.getElementById("modeType").hidden = true;
         document.getElementById("modelbl").hidden = true;
-        document.getElementById("excludeImages").disabled = true;
+        /* document.getElementById("excludeImages").disabled = true;
         document.getElementById("excludeImages").hidden = true;
-        document.getElementById("excludeImages").checked = false;
         document.getElementById("exImglbl").hidden = true;
         document.getElementById("excludeJS").disabled = true;
         document.getElementById("excludeJS").hidden = true;
-        document.getElementById("excludeJS").checked = false;
         document.getElementById("exJSlbl").hidden = true;
         document.getElementById("excludeCSS").disabled = true;
         document.getElementById("excludeCSS").hidden = true;
-        document.getElementById("excludeCSS").checked = false;
         document.getElementById("exCSSlbl").hidden = true;
         document.getElementById("excludeTemp").disabled = true;
         document.getElementById("excludeTemp").hidden = true;
-        document.getElementById("excludeTemp").checked = false;
         document.getElementById("exTmplbl").hidden = true;
         document.getElementById("excludeOther").disabled = true;
         document.getElementById("excludeOther").hidden = true;
+        document.getElementById("exOthlbl").hidden = true; */
+        // 2022/02/23 - still manually un-check each flag, belt and braces
+        document.getElementById("excludeImages").checked = false;
+        document.getElementById("excludeJS").checked = false;
+        document.getElementById("excludeTemp").checked = false;
+        document.getElementById("excludeCSS").checked = false;
         document.getElementById("excludeOther").checked = false;
-        document.getElementById("exOthlbl").hidden = true;
+        document.getElementById("excludeline").disabled = true;
+        document.getElementById("excludeline").hidden = true;
         document.getElementById("highlightsus").disabled = true;
         document.getElementById("highlightsus").hidden = true;
         document.getElementById("highlightsus").checked = false;
