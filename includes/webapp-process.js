@@ -40,6 +40,8 @@ function logparse(){
     }
     if (document.getElementById("excludeOther").value != '') {
         var extensions = document.getElementById("excludeOther").value
+    } else {
+        var extensions = '';
     }
     // Disable input until we're done processing
     lockscreen();
