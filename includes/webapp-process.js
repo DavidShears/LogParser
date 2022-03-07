@@ -226,10 +226,11 @@ function lockscreen() {
     document.getElementById("downbutton").disabled = true;
     document.getElementById("blockedType").disabled = true;
     document.getElementById("internalType").disabled = true;
-    document.getElementById("excludeImages").disabled = true;
+    /* document.getElementById("excludeImages").disabled = true;
     document.getElementById("excludeJS").disabled = true;
     document.getElementById("excludeCSS").disabled = true;
-    document.getElementById("excludeTemp").disabled = true;
+    document.getElementById("excludeTemp").disabled = true; */
+    document.getElementById("excludeline").disabled = true;
     document.getElementById("excludeOther").disabled = true;
     document.getElementById("highlightsus").disabled = true;
 }
