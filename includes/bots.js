@@ -324,6 +324,7 @@ var botagents = [
 	"sitecheckerbotcrawler",
 	"slackbot",
 	"slack-imgproxy",
+	"smtbot",
 	"sogou+web+spider",
 	"spaziodati",
 	"spiderling",
