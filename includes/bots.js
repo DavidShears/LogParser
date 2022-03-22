@@ -267,6 +267,7 @@ var botagents = [
 	"ev-crawler",
 	"evc-batch",
 	"e.ventures",
+	"exabot",
 	"exabot-thumbnails",
 	"ezooms.bot",
 	"facebookexternalhit",
