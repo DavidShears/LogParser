@@ -278,6 +278,7 @@ var botagents = [
 	"googlebot",
 	"google-safety",
 	"indeedbot",
+	"inetdex-bot",
 	"ioncrawl",
 	"leechcraft",
 	"linguee",
