@@ -360,4 +360,7 @@ var botagents = [
 	"zoominfobot"
 ]
 
-module.exports = {botIPs,botagents}
+// If a bot has a disallow statement in robots.txt then this will help identify whether they're listening
+var botblocked = [];
+
+module.exports = {botIPs,botagents,botblocked}

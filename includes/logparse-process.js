@@ -6,6 +6,7 @@ var badIPs = [];
 // botIPs array moved to external javascript file
 var botIPs = require('./bots.js').botIPs;
 var botagents = require('./bots.js').botagents;
+var botblocked = require('./bots.js').botblocked;
 var susURLs = require('./suspecturls.js').susURLs;
 
 //buildline - accepts string from readline and builds for output
@@ -147,22 +148,39 @@ function checkip(IPaddress,bottype){
 function checkbot(string,IPAdd,bottype) {
 	let i = 0;
 	var tempstring = string.toLowerCase();
-	while (botagents[i]) {
+	var returnstring = "";
+	while (botagents[i] && returnstring == "") {
 		if (tempstring.indexOf(botagents[i]) != -1) {
 			if (bottype != "agent" && bottype != "exclude"){
 				var found = checkip(IPAdd);
 				if (found == '') {
-					return("New " + botagents[i] + " address!");
+					/* return("New " + botagents[i] + " address!"); */
+					returnstring = ("New " + botagents[i] + " address!");
 				} else {
-					return(botagents[i] + " address!");
+					/* return(botagents[i] + " address!"); */
+					returnstring = (botagents[i] + " address!");
 				}
 			} else {
-				return(botagents[i] + " address!");
+				/* return(botagents[i] + " address!"); */
+				returnstring = (botagents[i] + " address!");
 			}
 		}
 		i++;
 	}
-	return("");
+	/* return(""); */
+	// now also check the botblocked array to see if this bot has been told to take a hike
+	if (returnstring == "") {
+		return("");
+	}
+	i = 0;
+	while (botblocked[i]) {
+		if(tempstring.indexOf(botblocked[i]) != -1) {
+			returnstring = returnstring + " bad bot!";
+			return(returnstring)
+		}
+		i++;
+	}
+	return(returnstring);
 }
 
 function getip(string,log) {

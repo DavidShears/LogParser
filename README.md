@@ -1,5 +1,5 @@
 # LogParser
-Parsing error.php from Joomla (tested on 3.10.6, should also read logs back to 2.5.28) - Read all records and output a spreadsheet with all unique combinations of user/error along with count and last/first date it happened.
+Parsing error.php from Joomla (tested on 3.10.8, should also read logs back to 2.5.28) - Read all records and output a spreadsheet with all unique combinations of user/error along with count and last/first date it happened.
 
 Reads all records into a set of arrays, one for each data point, and then goes through array to dump each element as a row in the spreadsheet.
 
@@ -8,7 +8,8 @@ Notes array exists to allow classification of IP addresses as:
 * Internal - self descriptive
 * Blocked - self descriptive
 * Suspicious - Used for watching IPs that have not been blocked yet, but may need to be
-* Bots - Can be recorded as exact IP, or with the last element wildcarded. Optional function (checkbot) exists to scan for known useragent strings and flag accordingly.
+* Bot(IPs/agents) - Can be recorded as exact IP, or with the last element wildcarded. Optional function (checkbot) exists to scan for known useragent strings and flag accordingly.
+* BotBlocked - if a disallow statement exists in robots.txt then the bot can be added here, checkbot will then return if the bot is in this array.
 
 Also has the option to pass in 'IIS' to instead parse IIS logs (tested on IIS 8.5 and 10.0) and a webapp version to give a basic GUI frontend.
 
@@ -94,3 +95,4 @@ node "misc scripts"\modsecurity.js - script to run over audit log file from ModS
 ## To-do:
 1. Implement system for multi-user environment. Need to handle multiple log files and multiple output files, primarily for web browser mode.
 2. Amend ipreport.js to accept an input file (csv?) to handle reporting in bulk
+3. Cleanup botblocked logic, maybe colour code the notes field as well.
