@@ -277,6 +277,7 @@ var botagents = [
 	"grover",
 	"googlebot",
 	"google-safety",
+	"igarashi.yosuke",
 	"indeedbot",
 	"inetdex-bot",
 	"ioncrawl",
