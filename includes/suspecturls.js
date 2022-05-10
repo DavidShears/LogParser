@@ -13,6 +13,7 @@ var susURLs = [
 	"bypass",
     "config",
     "credentials",
+    "d3wl7",
     "daksldlkdsadas",
     "database",
     "download",
