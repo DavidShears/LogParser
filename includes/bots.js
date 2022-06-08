@@ -304,6 +304,7 @@ var botagents = [
 	"netsystemsresearch",
 	"nicecrawler",
 	"nimbostratus-bot",
+	"nmap+scripting+engine",
 	"nominet.uk",
 	"nutch",
 	"oncrawl",
