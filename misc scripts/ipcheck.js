@@ -10,6 +10,7 @@ var checkip = functions.checkip;
 var getip = functions.getip;
 
 var botagents = require('../includes/bots.js').botagents;
+var botblocked = require('../includes/bots.js').botblocked;
 
 var argv = require('yargs/yargs')(process.argv.slice(2)).argv;
 
@@ -117,15 +118,30 @@ rl.on('line', (string) => {
 });
 
 // same stripdown version of checkbot from pruner.js
+// reworked to include badbot logic
 
 function checkbot(string) {
 	let i = 0;
+	var tempstring = string.toLowerCase();
+	var returnstring = "";
 	while (botagents[i]) {
-		var tempstring = string.toLowerCase();
 		if (tempstring.indexOf(botagents[i]) != -1) {
-				return(botagents[i] + " address!");
+				/* return(botagents[i] + " address!"); */
+				returnstring = (botagents[i] + " address!");
 			}
 		i++;
 		}
-	return("");
+		/* return(""); */
+	if (returnstring == "") {
+		return("");
+	}
+	i = 0;
+	while (botblocked[i]) {
+		if(tempstring.indexOf(botblocked[i]) != -1) {
+			returnstring = returnstring + " bad bot!";
+			return(returnstring)
+		}
+		i++;
+	}
+	return(returnstring);	
 }
