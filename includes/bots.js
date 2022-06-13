@@ -274,6 +274,7 @@ var botagents = [
 	"ezooms.bot",
 	"facebookexternalhit",
 	"fullstorybot",
+	"gaisbot",
 	"grover",
 	"googlebot",
 	"google-safety",
