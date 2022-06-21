@@ -275,6 +275,7 @@ var botagents = [
 	"facebookexternalhit",
 	"fullstorybot",
 	"gaisbot",
+	"graydon+bot",
 	"grover",
 	"googlebot",
 	"google-safety",
