@@ -334,6 +334,7 @@ var botagents = [
 	"sidetrade+indexer+bot",
 	"siteauditbot",
 	"sitecheckerbotcrawler",
+	"snap+url+preview+service",
 	"skypeuripreview",
 	"slackbot",
 	"slack-imgproxy",
