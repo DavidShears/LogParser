@@ -1,5 +1,6 @@
-// These are substrings which if discovered in the URL should be flagged for closer investigation
-// primarily as it might indicate bad intent on the part of the requester
+// These are substrings which if discovered in the URL should be flagged for closer investigation, as it might indicate bad intent on the part of the requester
+// You could also include where people are searching for a software package you don't use
+// For example - if your website is not in WordPress/Drupal/Joomla/etc, then any attempts to access associated files would be suspect in your environment.
 var susURLs = [
     "1=1",
     "3x=3x",
@@ -9,8 +10,11 @@ var susURLs = [
     "author=",
     "backoffice",
     "backup",
+	"bala=up",
+	"beence",
     "biif",
 	"bypass",
+	"byp4ss",
     "config",
     "credentials",
     "d3wl7",
@@ -25,20 +29,26 @@ var susURLs = [
 	"hack",
     "install",
     "login",
+	"NmRtJOUjAdutReQj/scRjKUhleBpzmTyO",
     "owa",
     "passwd",
     "password",
     "phpinfo",
     "phpmyadmin",
+	"phpshells",
     "pma",
 	"symbpass",
 	"t2rghf.jpg",
     "upload",
     "wlwmanifest",
+	"writetofile",
     "wso.php",
+	"wsoshell",
     "wwwroot",
     "xmlrpc",
+	"xploit",
     "\%20",
+	"\%2A",
     ".env",
     ".sql",
     "1ogin",
