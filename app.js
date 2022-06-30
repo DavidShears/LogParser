@@ -269,6 +269,14 @@ rl.on('line', (string) => {
 				fgColor:{argb:'FF8C01'},
 			};
 		}
+		if (rowdef[nextcol].indexOf('bad bot') != -1) {
+			row = worksheet.getRow(counter + 1);
+			row.getCell('NOTES').fill = {
+				type: 'pattern',
+				pattern:'solid',
+				fgColor:{argb:'c83232'},
+			};    
+		}
 	})
 	workbook.xlsx.writeFile("output.xlsx");
 });

@@ -22,3 +22,5 @@ General notes taken out of the readme file once completed. Nearest you'll find t
   * yargs implemented to allow various combinations of arguments.
 * Test for workbook lock earlier in the process, avoid running the whole script and then losing the output at the end.
   * Logic added to both commandline and webapp to handle.
+* colour code notes field for 'botblocked'
+  * Code added
