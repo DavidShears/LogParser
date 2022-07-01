@@ -251,12 +251,18 @@ rl.on('line', (string) => {
 			nextcol++;
 			rowdef[nextcol] = Notes[counter];
 		} else {
-			rowdef[1] = element.substring(0,element.indexOf(' '));
-			rowdef[2] = element.substring(element.indexOf(' '));
-			rowdef[3] = CountRecs[counter];
-			rowdef[4] = FirstDate[counter];
-			rowdef[5] = LastDate[counter];
-			rowdef[6] = Notes[counter];
+			var nextcol = 1;
+			rowdef[nextcol] = element.substring(0,element.indexOf(' '));
+			nextcol++;
+			rowdef[nextcol] = element.substring(element.indexOf(' '));
+			nextcol++;
+			rowdef[nextcol] = CountRecs[counter];
+			nextcol++;
+			rowdef[nextcol] = FirstDate[counter];
+			nextcol++;
+			rowdef[nextcol] = LastDate[counter];
+			nextcol++;
+			rowdef[nextcol] = Notes[counter];
 		}
 		worksheet.addRow(rowdef);
 		counter++;
