@@ -243,6 +243,7 @@ var botagents = [
 	"bl.uk_lddc_bot",
 	"bot@linkfluence.com",
 	"brightbot",
+	"brightedge+crawler",
 	"bytespider",
 	"ccbot",
 	"centuryb.o.t9",
