@@ -1,6 +1,8 @@
 # LogParser
 Parsing error.php from Joomla (tested on 3.10.10, should also read logs back to 2.5.28) - Read all records and output a spreadsheet with all unique combinations of user/error along with count and last/first date it happened.
 
+Also has the option to pass in 'IIS' to instead parse IIS logs (tested on IIS 8.5 and 10.0) and a webapp version to give a basic GUI frontend.
+
 Reads all records into a set of arrays, one for each data point, and then goes through array to dump each element as a row in the spreadsheet.
 
 Notes array exists to allow classification of IP addresses as:
@@ -9,14 +11,10 @@ Notes array exists to allow classification of IP addresses as:
 * Blocked - self descriptive
 * Suspicious - Used for watching IPs that have not been blocked yet, but may need to be
 * Bot(IPs/agents) - Can be recorded as exact IP, or with the last element wildcarded. Optional function (checkbot) exists to scan for known useragent strings and flag accordingly.
-* BotBlocked - if a disallow statement exists in robots.txt then the bot can be added here, checkbot will then return if the bot is in this array.
-
-Also has the option to pass in 'IIS' to instead parse IIS logs (tested on IIS 8.5 and 10.0) and a webapp version to give a basic GUI frontend.
-
-Tested on 142mb IIS file for detailed output with approx runtime of 12 minutes.
+* BotBlocked - if a disallow statement exists in robots.txt then the bot can be added here, checkbot will then return if the bot is in this array. Notes field will also be colour coded if this criteria is matched.
 
 ## Requirements
-ExcelJS is used to generate spreadsheet output in both command line and webapp modes.
+ExcelJS is used to generate spreadsheet output in both command line and webapp modes along with the various 'misc scripts'.
 Yargs is used in the command line application to handle the various arguments that can be passed in.
 
 Optional dependencies exist for the webapp version of the script:
@@ -25,7 +23,7 @@ Optional dependencies exist for the webapp version of the script:
 * nodemailer - used to allow email of spreadsheet once extract is complete
 * express-fileupload - used to handle upload of new Joomla/IIS log for processing
 
-Additionally node-fetch (V2) should be installed for the ipcheck.js script to run successfully.
+Additionally node-fetch (V2) should be installed for the ipcheck and ipreport scripts to run successfully.
 
 ## Running
 
@@ -35,6 +33,7 @@ node app.js - trigger original Joomla logic
 
 The following arguments can be passed in as well:
 * --log=IIS will trigger IIS logic instead of Joomla
+
 * --mode=(summstat/summurl/summip) summarise by either IP & HTTP Status, IP & url requested, or just IP. Only applicable when --log=IIS
 
 If not passed then detailed output including IP/Status/Url will be provided.
@@ -72,7 +71,12 @@ node app.js --log=IIS --mode=summurl --bot=exclude --internal=N --blocked=N --no
 
 ### Browser Interface
 
-node webapp.js - runs a localhost http server on port 3007 as a front-end rather than using the commandline arguments above. Also allows email of spreadsheet once processing complete, as well as uploading new version of the log file.
+node webapp.js - runs a localhost http server on port 3007 as a front-end rather than using the commandline arguments above. 
+
+A few features in the webapp implementation that aren't in the command line:
+* Allows email of spreadsheet once processing complete (if nodemailer installed) 
+* Uploading new version of the log file.
+* Basic validation (don't show --mode options unless running in IIS, hide email options if nodemailer not installed, etc)
 
 ### Misc Scripts
 
@@ -80,13 +84,13 @@ node "misc scripts"\pruner.js - to run a quick script aimed at identifying any b
 
 node "misc scripts"\stringdump.js --log=(iis/joomla) --match=(ipaddress) - quickly spit out all records, as they are, into a spreadsheet. Previously named ipdump.js but now usable to match any type of substring.
 
-node "misc scripts"\ipcheck.js --log=(iis/joomla) - reads log to build list of unique IPs and submits each one to AbuseIPDB, returns score/number of reports/number of reporters/last report date
+node "misc scripts"\ipcheck.js --log=(iis/joomla) - reads log to build list of unique IPs and submits each one to AbuseIPDB, returns score/number of reports/number of reporters/last report date in Excel output file.
 
 **Important Note** - You'll need to register an account on AbuseIPDB and request an API key that is then put into line 92 of the script file.
 
 node "misc scripts"\ipreport.js --ip=(ip address) --cats=(comma seperated list of category numbers) --comment=("this is the text of the report") - accepts parameters to submit a report to AbuseIPDB, returns success/error to console.
 
-**Important Note** - You'll need to register an account on AbuseIPDB and request an API key that is then put into line 20 of the script file.
+**Important Note** - You'll need to register an account on AbuseIPDB and request an API key that is then put into line 26 of the script file.
 
 node "misc scripts"\crawlerLS.js - to run a script aimed at identifying the first and last time each botagent was seen (IIS only)
 
@@ -94,5 +98,5 @@ node "misc scripts"\modsecurity.js - script to run over audit log file from ModS
 
 ## To-do:
 1. Implement system for multi-user environment. Need to handle multiple log files and multiple output files, primarily for web browser mode.
-2. Amend ipreport.js to accept an input file (csv?) to handle reporting in bulk
+2. Amend ipreport.js to accept an input file (csv) to handle reporting using bulk-report API
 3. Cleanup botblocked logic
