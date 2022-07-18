@@ -319,6 +319,7 @@ var botagents = [
 	"petalbot",
 	"proximic",
 	"qwantify",
+	"rogerbot",
 	"rssingbot",
 	"saasmax",
 	"safednsbot",
