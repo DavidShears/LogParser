@@ -244,6 +244,7 @@ var botagents = [
 	"bot@linkfluence.com",
 	"brightbot",
 	"brightedge+crawler",
+	"builtwith",
 	"bytespider",
 	"ccbot",
 	"centuryb.o.t9",
